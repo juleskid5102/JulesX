@@ -8,6 +8,9 @@ import Leads from './pages/Leads'
 import Projects from './pages/Projects'
 import Orders from './pages/Orders'
 import Settings from './pages/Settings'
+import AdminServices from './pages/AdminServices'
+import AdminSiteSettings from './pages/AdminSiteSettings'
+import AdminContent from './pages/AdminContent'
 
 import { PWAInstallPrompt } from './components/PWAInstallPrompt'
 
@@ -44,6 +47,9 @@ export default function App() {
           <Route path="leads" element={<Leads />} />
           <Route path="projects" element={<Projects />} />
           <Route path="orders" element={<Orders />} />
+          <Route path="services" element={<AdminServices />} />
+          <Route path="site-settings" element={<AdminSiteSettings />} />
+          <Route path="content" element={<AdminContent />} />
           <Route path="settings" element={<Settings />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

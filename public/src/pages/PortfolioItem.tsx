@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import Reveal from '../components/ui/Reveal'
 import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
-import { PROJECTS, type Project } from '../config/site'
+import { type Project } from '../config/site'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
 
@@ -14,44 +14,39 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
 export default function PortfolioItem() {
   const { id } = useParams<{ id: string }>()
   const [project, setProject] = useState<Project | null>(null)
-  const [allProjects, setAllProjects] = useState<Project[]>(PROJECTS)
+  const [allProjects, setAllProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Try API first, fallback to PROJECTS
     fetch(`${API_BASE}/api/public/portfolio`)
       .then(async (res) => {
         if (!res.ok) throw new Error('API error')
         const data: any = await res.json()
         const list = Array.isArray(data) ? data : data.projects || data.data || []
-        if (list.length > 0) {
-          const mapped = list.map((p: any) => ({
-            id: p.id || p.slug || '',
-            title: p.title || p.name || '',
-            category: p.category || p.type || '',
-            year: p.year || '',
-            image: p.image || p.thumbnail || p.images?.[0] || '',
-            colSpan: 7, aspect: 'aspect-video', showArrow: true,
-            type: p.type || p.category || '',
-            date: p.date || '',
-            field: p.field || '',
-            description: p.description || '',
-            challenge: p.challenge || '',
-            solution: p.solution || '',
-            duration: p.duration || '',
-            stack: p.stack || '',
-            lighthouse: p.lighthouse || '',
-            gallery: p.gallery || p.images || [],
-            techTags: p.techTags || p.tags || [],
-          }))
-          setAllProjects(mapped)
-          setProject(mapped.find((p: Project) => p.id === id) || null)
-        } else {
-          setProject(PROJECTS.find(p => p.id === id) || null)
-        }
+        const mapped = list.map((p: any) => ({
+          id: p.id || p.slug || '',
+          title: p.title || p.name || '',
+          category: p.category || p.type || '',
+          year: p.year || '',
+          image: p.image || p.thumbnail || p.images?.[0] || '',
+          colSpan: 7, aspect: 'aspect-video', showArrow: true,
+          type: p.type || p.category || '',
+          date: p.date || '',
+          field: p.field || '',
+          description: p.description || '',
+          challenge: p.challenge || '',
+          solution: p.solution || '',
+          duration: p.duration || '',
+          stack: p.stack || '',
+          lighthouse: p.lighthouse || '',
+          gallery: p.gallery || p.images || [],
+          techTags: p.techTags || p.tags || [],
+        }))
+        setAllProjects(mapped)
+        setProject(mapped.find((p: Project) => p.id === id) || null)
       })
       .catch(() => {
-        setProject(PROJECTS.find(p => p.id === id) || null)
+        // No fallback — show not found
       })
       .finally(() => setLoading(false))
   }, [id])

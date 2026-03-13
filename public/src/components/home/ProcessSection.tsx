@@ -1,36 +1,58 @@
+import { useEffect, useState } from 'react'
 import Reveal from '../ui/Reveal'
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
+
 /**
- * ProcessSection — EXACT from 01-homepage.html lines 75-101
- * 
- * Source: <section class="bg-white py-32 px-6 md:px-24 border-b border-slate-100">
- *   <span class="text-sm font-bold tracking-[0.3em] text-primary uppercase">
- *   Grid: grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-200
+ * ProcessSection — From 01-homepage.html lines 75-101
+ * Data fetched from /api/public/process-steps
  */
-const steps = [
-  {
-    number: '(01)',
-    title: 'Khám Phá',
-    description: 'Xác định mục tiêu cốt lõi, yêu cầu kỹ thuật và phạm vi dự án thông qua nghiên cứu chuyên sâu.',
-  },
-  {
-    number: '(02)',
-    title: 'Thiết Kế',
-    description: 'Tạo ra các giao diện tối giản, chất lượng cao và bản mẫu tập trung vào trải nghiệm người dùng.',
-  },
-  {
-    number: '(03)',
-    title: 'Phát Triển',
-    description: 'Xây dựng hệ thống mạnh mẽ với mã nguồn sạch, có khả năng mở rộng và công nghệ hiện đại.',
-  },
-  {
-    number: '(04)',
-    title: 'Ra Mắt',
-    description: 'Kiểm tra hiệu năng cuối cùng, tối ưu hóa và triển khai sản phẩm lên môi trường thực tế.',
-  },
-]
+
+interface ProcessStep {
+  number: string
+  title: string
+  description: string
+}
 
 export default function ProcessSection() {
+  const [steps, setSteps] = useState<ProcessStep[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch(`${API_BASE}/api/public/process-steps`)
+      .then(async (res) => {
+        if (!res.ok) throw new Error('Failed to load')
+        const data = await res.json()
+        setSteps(Array.isArray(data) ? data : [])
+      })
+      .catch((err) => {
+        console.error('ProcessSection fetch error:', err)
+      })
+      .finally(() => setLoading(false))
+  }, [])
+
+  if (loading) {
+    return (
+      <section className="bg-white py-32 px-6 md:px-24 border-b border-slate-100">
+        <div className="mb-16">
+          <div className="h-4 w-40 bg-slate-200 animate-pulse" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-200">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="py-12 md:px-10 animate-pulse space-y-4">
+              <div className="h-12 w-16 bg-slate-100" />
+              <div className="h-6 w-24 bg-slate-200" />
+              <div className="h-4 w-full bg-slate-200" />
+              <div className="h-4 w-5/6 bg-slate-200" />
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  if (steps.length === 0) return null
+
   return (
     <section className="bg-white py-32 px-6 md:px-24 border-b border-slate-100">
       <Reveal>

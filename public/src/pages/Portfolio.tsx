@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import Reveal from '../components/ui/Reveal'
 import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
-import { PROJECTS, type Project } from '../config/site'
+import { type Project } from '../config/site'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
 
@@ -12,41 +12,40 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
  * NOW WIRED to GET /api/public/portfolio with fallback to PROJECTS
  */
 export default function Portfolio() {
-  const [projects, setProjects] = useState<Project[]>(PROJECTS)
+  const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     fetch(`${API_BASE}/api/public/portfolio`)
       .then(async (res) => {
-        if (!res.ok) throw new Error('API error')
+        if (!res.ok) throw new Error('Không thể tải dự án')
         const data: any = await res.json()
         const list = Array.isArray(data) ? data : data.projects || data.data || []
-        if (list.length > 0) {
-          setProjects(list.map((p: any) => ({
-            id: p.id || p.slug || '',
-            title: p.title || p.name || '',
-            category: p.category || p.type || '',
-            year: p.year || String(new Date(p.created_at || p.createdAt || Date.now()).getFullYear()),
-            image: p.image || p.thumbnail || p.images?.[0] || '',
-            colSpan: 7,
-            aspect: 'aspect-video',
-            showArrow: true,
-            type: p.type || p.category || '',
-            date: p.date || '',
-            field: p.field || '',
-            description: p.description || '',
-            challenge: p.challenge || '',
-            solution: p.solution || '',
-            duration: p.duration || '',
-            stack: p.stack || '',
-            lighthouse: p.lighthouse || '',
-            gallery: p.gallery || p.images || [],
-            techTags: p.techTags || p.tags || [],
-          })))
-        }
+        setProjects(list.map((p: any) => ({
+          id: p.id || p.slug || '',
+          title: p.title || p.name || '',
+          category: p.category || p.type || '',
+          year: p.year || String(new Date(p.created_at || p.createdAt || Date.now()).getFullYear()),
+          image: p.image || p.thumbnail || p.images?.[0] || '',
+          colSpan: 7,
+          aspect: 'aspect-video',
+          showArrow: true,
+          type: p.type || p.category || '',
+          date: p.date || '',
+          field: p.field || '',
+          description: p.description || '',
+          challenge: p.challenge || '',
+          solution: p.solution || '',
+          duration: p.duration || '',
+          stack: p.stack || '',
+          lighthouse: p.lighthouse || '',
+          gallery: p.gallery || p.images || [],
+          techTags: p.techTags || p.tags || [],
+        })))
       })
-      .catch(() => {
-        // Silently fall back to hardcoded PROJECTS
+      .catch((err) => {
+        setError(err.message || 'Lỗi kết nối')
       })
       .finally(() => setLoading(false))
   }, [])
@@ -57,6 +56,19 @@ export default function Portfolio() {
         <Navbar />
         <div className="flex items-center justify-center pt-48 pb-32">
           <div className="w-8 h-8 border-2 border-primary/20 border-t-primary rounded-full animate-spin" />
+        </div>
+        <Footer />
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="bg-[#f6f6f8] text-slate-900 min-h-screen">
+        <Navbar />
+        <div className="flex flex-col items-center justify-center pt-48 pb-32">
+          <span className="material-symbols-outlined text-red-400 text-[48px] mb-4">error</span>
+          <p className="text-slate-500">{error}</p>
         </div>
         <Footer />
       </div>

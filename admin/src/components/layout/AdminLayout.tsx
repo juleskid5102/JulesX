@@ -10,9 +10,12 @@ import { useAuth } from '../../hooks/useAuth'
 const NAV_ITEMS = [
   { to: '/', icon: 'grid_view', label: 'Dashboard', end: true },
   { to: '/leads', icon: 'person_add', label: 'Leads' },
-  { to: '/projects', icon: 'work', label: 'Projects' },
-  { to: '/orders', icon: 'shopping_cart', label: 'Orders' },
-  { to: '/settings', icon: 'settings', label: 'Settings' },
+  { to: '/projects', icon: 'work', label: 'Dự Án' },
+  { to: '/orders', icon: 'shopping_cart', label: 'Đơn Hàng' },
+  { to: '/services', icon: 'design_services', label: 'Dịch Vụ' },
+  { to: '/content', icon: 'article', label: 'Nội Dung' },
+  { to: '/site-settings', icon: 'language', label: 'Cài Đặt Web' },
+  { to: '/settings', icon: 'settings', label: 'Cài Đặt' },
 ]
 
 export default function AdminLayout() {

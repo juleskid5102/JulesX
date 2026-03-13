@@ -1,52 +1,111 @@
 import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import Reveal from '../components/ui/Reveal'
 import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
+
 /**
- * Services — EXACT from 07-services.html
- *
- * Structure:
- * - Hero: max-w-[1440px], text-5xl md:text-6xl lg:text-[5rem]
- * - Service rows with background images, hover effects via CSS (.service-row)
- * - Technology grid: opacity-70, font-heading text-2xl
- * - CTA: hover:scale-105 active:scale-95
+ * Services — EXACT layout from 07-services.html
+ * Data fetched from /api/public/services + /api/public/technologies
  */
 
-const services = [
-  {
-    number: '01',
-    title: 'Thiết Kế Sản Phẩm',
-    description: 'Chuyên thiết kế giao diện người dùng tinh tế, tối giản nhưng mang tính ứng dụng cao. Chúng tôi tập trung vào trải nghiệm người dùng để tạo ra những sản phẩm số không chỉ đẹp mắt mà còn hiệu quả.',
-    tags: ['UI/UX Design', 'Prototyping', 'Design Systems', 'Wireframing'],
-    bgImage: "https://images.unsplash.com/photo-1561070791-2526d30994b5?q=80&w=2000&auto=format&fit=crop",
-  },
-  {
-    number: '02',
-    title: 'Phát Triển Website',
-    description: 'Xây dựng website chuẩn SEO, hiệu suất cao với các công nghệ hiện đại nhất. Từ trang web doanh nghiệp đến các ứng dụng web phức tạp, chúng tôi đảm bảo mã nguồn sạch và tối ưu.',
-    tags: ['React & Next.js', 'Front-end Development', 'CMS Integration', 'Web Animations'],
-    bgImage: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2000&auto=format&fit=crop",
-  },
-  {
-    number: '03',
-    title: 'Hệ Thống Thương Mại',
-    description: 'Giải pháp thương mại điện tử toàn diện giúp tăng doanh thu hiệu quả. Tích hợp thanh toán an toàn, quản lý kho hàng và tối ưu hóa quy trình mua sắm cho khách hàng.',
-    tags: ['Shopify Custom', 'WooCommerce', 'Payment Gateways', 'Inventory Sync'],
-    bgImage: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=2000&auto=format&fit=crop",
-  },
-  {
-    number: '04',
-    title: 'Giải Pháp SaaS',
-    description: 'Thiết kế và phát triển các nền tảng phần mềm dưới dạng dịch vụ (SaaS) có khả năng mở rộng cao. Kiến trúc đa người dùng, bảo mật dữ liệu và hiệu năng tối đa.',
-    tags: ['Full-stack Development', 'Cloud Architecture', 'API Development', 'Database Design'],
-    bgImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2000&auto=format&fit=crop",
-  },
-]
-
-const technologies = ['React', 'Next.js', 'Tailwind', 'Node.js', 'Figma', 'TypeScript', 'Vercel', 'Prisma']
+interface Service {
+  id?: string
+  number: string
+  title: string
+  description: string
+  tags: string[]
+  bgImage: string
+}
 
 export default function Services() {
+  const [services, setServices] = useState<Service[]>([])
+  const [technologies, setTechnologies] = useState<string[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const [svcRes, techRes] = await Promise.all([
+          fetch(`${API_BASE}/api/public/services`),
+          fetch(`${API_BASE}/api/public/technologies`),
+        ])
+        if (!svcRes.ok) throw new Error('Failed to load services')
+        if (!techRes.ok) throw new Error('Failed to load technologies')
+
+        const svcData = await svcRes.json()
+        const techData = await techRes.json()
+
+        setServices(Array.isArray(svcData) ? svcData : [])
+        setTechnologies(
+          Array.isArray(techData)
+            ? techData.map((t: any) => t.name || t.title || t)
+            : []
+        )
+      } catch (err: any) {
+        setError(err.message || 'Không thể tải dữ liệu')
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="bg-background-light text-slate-900 font-display min-h-screen antialiased">
+        <Navbar />
+        <main className="pt-32">
+          <section className="max-w-[1440px] mx-auto px-8 pt-32 pb-24">
+            <div className="animate-pulse space-y-4">
+              <div className="h-4 w-24 bg-slate-200" />
+              <div className="h-16 w-3/4 bg-slate-200" />
+            </div>
+          </section>
+          <section className="border-t border-slate-200">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="border-b border-slate-200 py-20 px-8 max-w-[1440px] mx-auto">
+                <div className="animate-pulse flex gap-12">
+                  <div className="w-1/2 space-y-4">
+                    <div className="h-6 w-12 bg-slate-200" />
+                    <div className="h-10 w-3/4 bg-slate-200" />
+                  </div>
+                  <div className="w-1/2 space-y-4">
+                    <div className="h-4 w-full bg-slate-200" />
+                    <div className="h-4 w-5/6 bg-slate-200" />
+                    <div className="flex gap-3">
+                      <div className="h-8 w-24 bg-slate-200" />
+                      <div className="h-8 w-24 bg-slate-200" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </section>
+        </main>
+        <Footer />
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="bg-background-light text-slate-900 font-display min-h-screen antialiased">
+        <Navbar />
+        <main className="pt-32">
+          <section className="max-w-[1440px] mx-auto px-8 py-32 text-center">
+            <span className="material-symbols-outlined text-red-400 text-[48px] mb-4 block">error</span>
+            <p className="text-slate-500">{error}</p>
+          </section>
+        </main>
+        <Footer />
+      </div>
+    )
+  }
+
   return (
     <div className="bg-background-light text-slate-900 font-display min-h-screen antialiased">
       <Navbar />
@@ -64,7 +123,7 @@ export default function Services() {
           </Reveal>
         </section>
 
-        {/* Service Rows — exact from 07-services.html lines 71-152 */}
+        {/* Service Rows */}
         <section className="border-t border-slate-200">
           {services.map((service) => (
             <div key={service.number} className="service-row relative border-b border-slate-200 group transition-colors duration-500 overflow-hidden">
@@ -82,7 +141,7 @@ export default function Services() {
                     {service.description}
                   </p>
                   <div className="flex flex-wrap gap-3">
-                    {service.tags.map((tag) => (
+                    {(service.tags || []).map((tag) => (
                       <span key={tag} className="px-4 py-2 border border-slate-200 text-sm font-medium text-slate-700">{tag}</span>
                     ))}
                   </div>
@@ -92,19 +151,21 @@ export default function Services() {
           ))}
         </section>
 
-        {/* Technology Grid — exact from 07-services.html lines 153-165 */}
-        <Reveal>
-          <section className="max-w-[1440px] mx-auto px-8 py-32 border-b border-slate-200">
-            <h2 className="font-heading text-3xl font-bold text-slate-900 mb-16 text-center">Công Nghệ Sử Dụng</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-16 max-w-4xl mx-auto opacity-70">
-              {technologies.map((tech) => (
-                <div key={tech} className="flex items-center justify-center font-heading text-2xl font-semibold tracking-wider uppercase">{tech}</div>
-              ))}
-            </div>
-          </section>
-        </Reveal>
+        {/* Technology Grid */}
+        {technologies.length > 0 && (
+          <Reveal>
+            <section className="max-w-[1440px] mx-auto px-8 py-32 border-b border-slate-200">
+              <h2 className="font-heading text-3xl font-bold text-slate-900 mb-16 text-center">Công Nghệ Sử Dụng</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-16 max-w-4xl mx-auto opacity-70">
+                {technologies.map((tech) => (
+                  <div key={tech} className="flex items-center justify-center font-heading text-2xl font-semibold tracking-wider uppercase">{tech}</div>
+                ))}
+              </div>
+            </section>
+          </Reveal>
+        )}
 
-        {/* CTA — exact from 07-services.html lines 166-175 */}
+        {/* CTA */}
         <Reveal>
           <section className="py-40 px-8 bg-white text-center">
             <div className="max-w-3xl mx-auto flex flex-col items-center">

@@ -1,96 +1,122 @@
-// ContactFAB — Floating Action Button (Zalo, Messenger, Phone)
-// Adapted for Jules Studio — uses static config, no API call
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
-const SOCIAL_LINKS = [
-  {
-    label: 'Zalo',
-    url: 'https://zalo.me/0901234567', // TODO: Thay link Zalo thực tế
-    bg: 'bg-blue-600',
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-      </svg>
-    ),
-  },
-  {
-    label: 'Messenger',
-    url: 'https://m.me/julesstudio', // TODO: Thay link Messenger thực tế
-    bg: 'bg-blue-500',
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
-      </svg>
-    ),
-  },
+const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
+
+/**
+ * ContactFAB — Floating Action Button with social channels
+ * Adapted from contact-fab.md pattern
+ * Channels fetched from /api/public/site-settings { fabChannels }
+ */
+
+interface FabChannel {
+  name: string
+  icon: string
+  url: string
+  color: string
+}
+
+const DEFAULT_CHANNELS: FabChannel[] = [
+  { name: 'Zalo', icon: 'chat', url: 'https://zalo.me/', color: '#0068FF' },
+  { name: 'Messenger', icon: 'forum', url: 'https://m.me/', color: '#00B2FF' },
+  { name: 'Điện thoại', icon: 'call', url: 'tel:', color: '#25D366' },
+  { name: 'Email', icon: 'mail', url: 'mailto:', color: '#EA4335' },
 ]
 
 export function ContactFAB() {
   const [open, setOpen] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
+  const [channels, setChannels] = useState<FabChannel[]>([])
+  const [loading, setLoading] = useState(true)
+  const fabRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
+    fetch(`${API_BASE}/api/public/site-settings`)
+      .then(async (res) => {
+        if (!res.ok) throw new Error('Failed')
+        const data = await res.json()
+        if (data.fabChannels && Array.isArray(data.fabChannels) && data.fabChannels.length > 0) {
+          setChannels(data.fabChannels)
+        } else {
+          // Build from contact info
+          const ch: FabChannel[] = []
+          if (data.social?.zalo) ch.push({ name: 'Zalo', icon: 'chat', url: data.social.zalo, color: '#0068FF' })
+          if (data.social?.messenger) ch.push({ name: 'Messenger', icon: 'forum', url: data.social.messenger, color: '#00B2FF' })
+          if (data.phone) ch.push({ name: 'Gọi điện', icon: 'call', url: `tel:${data.phone}`, color: '#25D366' })
+          if (data.email) ch.push({ name: 'Email', icon: 'mail', url: `mailto:${data.email}`, color: '#EA4335' })
+          setChannels(ch.length > 0 ? ch : DEFAULT_CHANNELS)
+        }
+      })
+      .catch(() => setChannels(DEFAULT_CHANNELS))
+      .finally(() => setLoading(false))
+  }, [])
+
+  // Close on outside click
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (fabRef.current && !fabRef.current.contains(e.target as Node)) {
         setOpen(false)
       }
     }
-    if (open) document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
-  }, [open])
+    document.addEventListener('click', handleClick)
+    return () => document.removeEventListener('click', handleClick)
+  }, [])
 
-  const radius = 75
-  const angleStep = SOCIAL_LINKS.length > 1 ? 90 / (SOCIAL_LINKS.length - 1) : 0
+  if (loading || channels.length === 0) return null
 
   return (
-    <div ref={ref} className="fixed bottom-6 right-6 z-50">
-      {/* Sub-buttons */}
-      {SOCIAL_LINKS.map((btn, idx) => {
-        const angle = 180 + (idx * angleStep)
-        const rad = (angle * Math.PI) / 180
-        const x = Math.cos(rad) * radius
-        const y = Math.sin(rad) * radius
-
-        return (
-          <a
-            key={btn.label}
-            href={btn.url}
-            target="_blank"
-            rel="noreferrer"
-            title={btn.label}
-            style={{
-              bottom: `${-y}px`,
-              right: `${-x}px`,
-              opacity: open ? 1 : 0,
-              transform: open ? 'scale(1)' : 'scale(0.3)',
-              transitionDelay: open ? `${idx * 50}ms` : '0ms',
-              pointerEvents: open ? 'auto' : 'none',
-            }}
-            className={`absolute w-12 h-12 rounded-full text-white shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110 ${btn.bg}`}
-          >
-            {btn.icon}
-          </a>
-        )
-      })}
-
-      {/* Main Button */}
+    <div ref={fabRef} className="fixed bottom-6 right-6 z-50 flex flex-col-reverse items-center gap-3">
+      {/* Main FAB button */}
       <button
         onClick={() => setOpen(!open)}
-        className={`relative w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 ${
-          open ? 'bg-slate-900 rotate-45' : 'bg-gradient-to-r from-primary to-indigo-500 hover:scale-105'
-        }`}
+        className="w-14 h-14 rounded-full bg-primary text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
+        style={{ transform: open ? 'rotate(45deg)' : 'rotate(0deg)', transition: 'transform 0.3s ease' }}
+        title="Liên hệ"
       >
-        {!open && (
-          <div className="absolute inset-0 rounded-full bg-primary animate-ping opacity-30" />
-        )}
-        <svg xmlns="http://www.w3.org/2000/svg" width={open ? 28 : 24} height={open ? 28 : 24} viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          {open ? (
-            <path d="M12 5v14M5 12h14" />
-          ) : (
-            <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
-          )}
-        </svg>
+        <span className="material-symbols-outlined text-2xl">
+          {open ? 'close' : 'chat'}
+        </span>
       </button>
+
+      {/* Channel items — fan out */}
+      {channels.map((ch, i) => (
+        <a
+          key={ch.name}
+          href={ch.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-12 h-12 rounded-full text-white shadow-md flex items-center justify-center transition-all duration-300"
+          style={{
+            backgroundColor: ch.color,
+            opacity: open ? 1 : 0,
+            transform: open ? 'scale(1) translateY(0)' : 'scale(0.5) translateY(16px)',
+            transitionDelay: open ? `${i * 60}ms` : '0ms',
+            pointerEvents: open ? 'auto' : 'none',
+          }}
+          title={ch.name}
+        >
+          <span className="material-symbols-outlined text-xl">{ch.icon}</span>
+        </a>
+      ))}
+
+      {/* Label tooltip */}
+      {open && channels.map((ch, i) => (
+        <span
+          key={`label-${ch.name}`}
+          className="absolute right-16 text-sm font-medium bg-slate-900 text-white px-3 py-1.5 rounded-md whitespace-nowrap shadow-lg transition-all duration-300"
+          style={{
+            bottom: `${(i + 1) * 60 + 8}px`,
+            opacity: open ? 1 : 0,
+            transform: open ? 'translateX(0)' : 'translateX(8px)',
+            transitionDelay: `${i * 60 + 100}ms`,
+          }}
+        >
+          {ch.name}
+        </span>
+      ))}
+
+      {/* Pulse animation when closed */}
+      {!open && (
+        <span className="absolute bottom-0 right-0 w-14 h-14 rounded-full bg-primary/20 animate-ping pointer-events-none" />
+      )}
     </div>
   )
 }

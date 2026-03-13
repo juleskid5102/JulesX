@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Reveal from '../ui/Reveal'
-import { CONTACT } from '../../config/site'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
 
 /**
  * ContactSection — From 01-homepage.html
- * NOW WIRED to POST /api/public/contact
+ * Contact info fetched from /api/public/site-settings
+ * Form POSTs to /api/public/contact
  */
 export default function ContactSection() {
   const [formData, setFormData] = useState({
@@ -18,6 +18,29 @@ export default function ContactSection() {
   const [loading, setLoading] = useState(false)
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
+
+  // Contact info from API
+  const [contactInfo, setContactInfo] = useState<{
+    email: string
+    phone: string
+    address: string
+  }>({ email: '', phone: '', address: '' })
+  const [infoLoading, setInfoLoading] = useState(true)
+
+  useEffect(() => {
+    fetch(`${API_BASE}/api/public/site-settings`)
+      .then(async (res) => {
+        if (!res.ok) throw new Error('Failed')
+        const data = await res.json()
+        setContactInfo({
+          email: data.email || data.contactEmail || '',
+          phone: data.phone || data.contactPhone || '',
+          address: data.address || data.contactAddress || '',
+        })
+      })
+      .catch(() => { /* silent */ })
+      .finally(() => setInfoLoading(false))
+  }, [])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
@@ -70,20 +93,34 @@ export default function ContactSection() {
               Gửi thông tin liên hệ, chúng tôi sẽ phản hồi trong 24 giờ.
             </p>
 
-            <div className="space-y-8">
-              <div>
-                <span className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Email</span>
-                <p className="text-xl font-medium">{CONTACT.email}</p>
+            {infoLoading ? (
+              <div className="space-y-8 animate-pulse">
+                <div className="h-4 w-40 bg-slate-200" />
+                <div className="h-4 w-32 bg-slate-200" />
+                <div className="h-4 w-48 bg-slate-200" />
               </div>
-              <div>
-                <span className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Điện thoại</span>
-                <p className="text-xl font-medium">{CONTACT.phone}</p>
+            ) : (
+              <div className="space-y-8">
+                {contactInfo.email && (
+                  <div>
+                    <span className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Email</span>
+                    <p className="text-xl font-medium">{contactInfo.email}</p>
+                  </div>
+                )}
+                {contactInfo.phone && (
+                  <div>
+                    <span className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Điện thoại</span>
+                    <p className="text-xl font-medium">{contactInfo.phone}</p>
+                  </div>
+                )}
+                {contactInfo.address && (
+                  <div>
+                    <span className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Địa chỉ</span>
+                    <p className="text-xl font-medium">{contactInfo.address}</p>
+                  </div>
+                )}
               </div>
-              <div>
-                <span className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Địa chỉ</span>
-                <p className="text-xl font-medium">{CONTACT.address}</p>
-              </div>
-            </div>
+            )}
           </div>
         </Reveal>
 
