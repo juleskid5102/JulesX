@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Jules Studio Registration Page</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&amp;family=Manrope:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6366F1",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0A0A0A",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "heading": ["Syne", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "2px",
+                        "lg": "2px",
+                        "xl": "2px",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .grid-pattern {
+            background-image: radial-gradient(circle, #ffffff10 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden">
+<!-- Navbar -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-background-dark border-b border-slate-200 dark:border-slate-800 px-6 lg:px-12 py-4">
+<div class="max-w-[1440px] mx-auto flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="bg-black text-white p-1.5 flex items-center justify-center">
+<span class="material-symbols-outlined !text-[20px]">deployed_code</span>
+</div>
+<h1 class="font-heading text-lg font-bold tracking-tight">JULES STUDIO</h1>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-[10px] uppercase tracking-[0.2em] font-medium hover:text-primary transition-colors" href="#">DỰ ÁN</a>
+<a class="text-[10px] uppercase tracking-[0.2em] font-medium hover:text-primary transition-colors" href="#">DỊCH VỤ</a>
+<a class="text-[10px] uppercase tracking-[0.2em] font-medium hover:text-primary transition-colors" href="#">BÁO GIÁ</a>
+<a class="text-[10px] uppercase tracking-[0.2em] font-medium hover:text-primary transition-colors" href="#">LIÊN HỆ</a>
+<a class="text-[10px] uppercase tracking-[0.2em] font-medium text-primary tracking-[0.2em]" href="#">ĐĂNG NHẬP</a>
+</nav>
+<button class="bg-black dark:bg-white text-white dark:text-black px-6 py-2.5 text-[10px] font-bold uppercase tracking-widest hover:opacity-90 transition-opacity">
+                BẮT ĐẦU DỰ ÁN
+            </button>
+</div>
+</header>
+<!-- Main Content: Split Layout -->
+<main class="min-h-screen flex flex-col md:flex-row pt-20">
+<!-- Left Panel: Benefits -->
+<div class="w-full md:w-1/2 bg-background-dark flex flex-col justify-center px-8 lg:px-24 py-20 relative overflow-hidden">
+<div class="absolute inset-0 grid-pattern pointer-events-none opacity-40"></div>
+<div class="relative z-10">
+<h2 class="font-heading text-6xl lg:text-8xl text-white leading-none mb-12 tracking-tighter">
+                    TẠO<br/>TÀI KHOẢN
+                </h2>
+<ul class="space-y-6 max-w-md">
+<li class="flex items-center gap-4 text-slate-400 font-normal text-lg">
+<span class="material-symbols-outlined text-primary !text-[24px]">check</span>
+                        Theo dõi tiến độ dự án realtime
+                    </li>
+<li class="flex items-center gap-4 text-slate-400 font-normal text-lg">
+<span class="material-symbols-outlined text-primary !text-[24px]">check</span>
+                        Tải hợp đồng &amp; tài liệu
+                    </li>
+<li class="flex items-center gap-4 text-slate-400 font-normal text-lg">
+<span class="material-symbols-outlined text-primary !text-[24px]">check</span>
+                        Chat trực tiếp với team
+                    </li>
+</ul>
+</div>
+</div>
+<!-- Right Panel: Registration Form -->
+<div class="w-full md:w-1/2 bg-white dark:bg-slate-50 flex flex-col justify-center px-8 lg:px-24 py-20">
+<div class="max-w-[480px] w-full mx-auto">
+<h3 class="font-heading text-4xl text-black mb-10">Đăng Ký</h3>
+<form class="space-y-8">
+<div class="relative group">
+<input class="peer block w-full appearance-none border-0 border-b-2 border-slate-200 bg-transparent py-4 px-0 text-black focus:border-black focus:outline-none focus:ring-0 text-lg" id="fullname" placeholder=" " type="text"/>
+<label class="absolute top-4 -z-10 origin-[0] -translate-y-8 scale-75 transform text-slate-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-8 peer-focus:scale-75 peer-focus:text-black" for="fullname">Họ và Tên</label>
+</div>
+<div class="relative group">
+<input class="peer block w-full appearance-none border-0 border-b-2 border-slate-200 bg-transparent py-4 px-0 text-black focus:border-black focus:outline-none focus:ring-0 text-lg" id="email" placeholder=" " type="email"/>
+<label class="absolute top-4 -z-10 origin-[0] -translate-y-8 scale-75 transform text-slate-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-8 peer-focus:scale-75 peer-focus:text-black" for="email">Email</label>
+</div>
+<div class="relative group">
+<input class="peer block w-full appearance-none border-0 border-b-2 border-slate-200 bg-transparent py-4 px-0 text-black focus:border-black focus:outline-none focus:ring-0 text-lg" id="phone" placeholder=" " type="tel"/>
+<label class="absolute top-4 -z-10 origin-[0] -translate-y-8 scale-75 transform text-slate-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-8 peer-focus:scale-75 peer-focus:text-black" for="phone">Số điện thoại</label>
+</div>
+<div class="relative group">
+<input class="peer block w-full appearance-none border-0 border-b-2 border-slate-200 bg-transparent py-4 px-0 text-black focus:border-black focus:outline-none focus:ring-0 text-lg pr-10" id="password" placeholder=" " type="password"/>
+<label class="absolute top-4 -z-10 origin-[0] -translate-y-8 scale-75 transform text-slate-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-8 peer-focus:scale-75 peer-focus:text-black" for="password">Mật khẩu</label>
+<span class="material-symbols-outlined absolute right-0 top-4 text-slate-400 cursor-pointer hover:text-black transition-colors">visibility</span>
+</div>
+<div class="relative group">
+<input class="peer block w-full appearance-none border-0 border-b-2 border-slate-200 bg-transparent py-4 px-0 text-black focus:border-black focus:outline-none focus:ring-0 text-lg" id="confirm_password" placeholder=" " type="password"/>
+<label class="absolute top-4 -z-10 origin-[0] -translate-y-8 scale-75 transform text-slate-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-8 peer-focus:scale-75 peer-focus:text-black" for="confirm_password">Xác nhận mật khẩu</label>
+</div>
+<div class="pt-6 space-y-4">
+<button class="w-full bg-black text-white py-5 text-sm font-bold uppercase tracking-widest hover:bg-slate-900 transition-colors" type="submit">
+                            ĐĂNG KÝ
+                        </button>
+<div class="relative flex items-center py-4">
+<div class="flex-grow border-t border-slate-200"></div>
+<span class="flex-shrink mx-4 text-xs font-bold text-slate-400 uppercase tracking-widest">HOẶC</span>
+<div class="flex-grow border-t border-slate-200"></div>
+</div>
+<button class="w-full border-2 border-slate-200 bg-white text-black py-4 text-sm font-bold flex items-center justify-center gap-3 hover:bg-slate-50 transition-colors" type="button">
+<svg class="w-5 h-5" viewbox="0 0 24 24">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+</svg>
+                            Đăng ký với Google
+                        </button>
+</div>
+<p class="text-center pt-8 text-slate-500 text-sm">
+                        Đã có tài khoản? <a class="text-black font-bold border-b border-black hover:text-primary hover:border-primary transition-colors" href="#">Đăng nhập</a>
+</p>
+</form>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-black text-white py-12 px-6">
+<div class="max-w-[1440px] mx-auto flex flex-col items-center gap-6">
+<div class="flex items-center gap-2 opacity-50 grayscale">
+<div class="bg-white text-black p-1 flex items-center justify-center">
+<span class="material-symbols-outlined !text-[14px]">deployed_code</span>
+</div>
+<h4 class="font-heading text-xs font-bold tracking-tight">JULES STUDIO</h4>
+</div>
+<p class="text-[10px] text-slate-500 uppercase tracking-widest text-center">
+                © 2026 Jules Studio. Mọi quyền được bảo lưu.
+            </p>
+</div>
+</footer>
+</body></html>

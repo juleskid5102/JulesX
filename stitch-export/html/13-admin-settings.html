@@ -1,0 +1,211 @@
+<html><head><meta charset="utf-8"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&amp;family=Manrope:wght@400;500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#6366F1",
+          "background-light": "#ffffff",
+          "background-dark": "#101022",
+        },
+        fontFamily: {
+          "display": ["Manrope", "sans-serif"],
+          "heading": ["Syne", "sans-serif"]
+        },
+        borderRadius: {
+          "DEFAULT": "2px",
+          "lg": "2px",
+          "xl": "2px",
+          "full": "9999px"
+        },
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+  body {
+    font-family: 'Manrope', sans-serif;
+  }
+  h1, h2, h3, .font-syne {
+    font-family: 'Syne', sans-serif;
+  }
+</style>
+</head><body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex">
+<!-- Sidebar -->
+<aside class="w-[260px] border-r border-slate-200 dark:border-slate-800 flex flex-col h-screen sticky top-0 bg-white dark:bg-background-dark">
+<div class="p-6">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-xl">code</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white font-syne uppercase">Jules Studio</h1>
+</div>
+</div>
+<nav class="flex-1 mt-4 px-3 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 rounded transition-colors group" href="#">
+<span class="material-symbols-outlined text-[22px]">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 rounded transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">person_add</span>
+<span class="text-sm font-medium">Leads</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 rounded transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">business_center</span>
+<span class="text-sm font-medium">Dự Án</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 rounded transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">shopping_cart</span>
+<span class="text-sm font-medium">Đơn Hàng</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-primary bg-primary/5 border-l-2 border-primary rounded-r transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px] fill-1">settings</span>
+<span class="text-sm font-bold">Cài Đặt</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 rounded transition-colors" href="#">
+<span class="material-symbols-outlined text-[22px]">move_to_inbox</span>
+<span class="text-sm font-medium">Intake</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 px-2 py-2">
+<img alt="Admin user avatar" class="w-8 h-8 rounded-full" data-alt="User profile avatar circle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCT_FwNm17S8IxrDR9Gj8PVVcTNJpI-UxGYJE95HQhGVsMPUIFpxrlUCbH6RjsxrDA9HMnjRwzqo61Kl_Mt5YQBqH4yF-1fCQVFJ5xLAbqYiXQro8WgOKv8aV0NVWd0eIJV_wbN4gb3DeULz0HKd04ZmN60y07vxPTZAi2pA8rdmJD7njHunUCNGBlGIm6nhX57IXHD6T9rZa_Q51pi3LUF0Inq4s-qgjK89JKZKIh_fFO33FAFY-e__W6qDy7_kA3KTT_triRT2ALe"/>
+<div class="flex flex-col min-w-0">
+<p class="text-sm font-bold truncate">Admin User</p>
+<p class="text-xs text-slate-500 truncate">Quản trị viên</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col min-w-0 bg-slate-50/50 dark:bg-background-dark/50">
+<!-- Top Bar -->
+<header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark flex items-center justify-between px-8 sticky top-0 z-10">
+<div class="w-full max-w-md relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-900 border-none focus:ring-1 focus:ring-primary rounded text-sm transition-all" placeholder="Tìm kiếm hệ thống..." type="text"/>
+</div>
+<div class="flex items-center gap-6">
+<button class="relative text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full border-2 border-white dark:border-background-dark">3</span>
+</button>
+<div class="w-px h-6 bg-slate-200 dark:border-slate-800"></div>
+<div class="flex items-center gap-3 cursor-pointer group">
+<span class="text-sm font-medium group-hover:text-primary transition-colors">Jules Admin</span>
+<img alt="Header profile" class="w-8 h-8 rounded-full border border-slate-200" data-alt="Small circular user profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwV_RLFrKwyiS9nX1xDYhrcHv0ld-T1FHug5-hBw0J9AFGpsju1NTiK0jKPpzrbe6K-yRbnHtiGItKJdi0EZRI3OooF5qujpept7gfqjtR9FVPH-tfTz4qtQipwZVYabhAtwcToy-HFwTq3XFMvbkX3mrKaBI4RX7l1OhojzRq7M2gol4Zsrl4RbcLpTdHlMleBJlVSYYMwumXlQYyUFjksMtzRgFvUJLytbQcsBrimAymTn2YkwOjc3mPyrgvfZz31_PfAttsmRhc"/>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="p-10 max-w-5xl w-full mx-auto">
+<div class="mb-8">
+<h2 class="text-4xl font-bold font-syne mb-6">Cài Đặt</h2>
+<!-- Tabs -->
+<div class="flex border-b border-slate-200 dark:border-slate-800 gap-8">
+<button class="pb-4 text-sm font-bold border-b-2 border-primary text-primary">Thông Tin Công Ty</button>
+<button class="pb-4 text-sm font-medium text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors">Cấu Hình Báo Giá</button>
+<button class="pb-4 text-sm font-medium text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors">Quản Lý Module</button>
+</div>
+</div>
+<!-- Settings Sections -->
+<div class="space-y-12">
+<!-- Section: Thông Tin Cơ Bản -->
+<section>
+<h3 class="text-lg font-bold font-syne mb-6 pb-2 border-b border-slate-100 dark:border-slate-800">Thông Tin Cơ Bản</h3>
+<div class="grid grid-cols-2 gap-x-8 gap-y-6">
+<div class="space-y-2">
+<label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Tên Công Ty</label>
+<input class="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:border-primary focus:ring-0 rounded text-sm font-medium" type="text" value="Jules Studio"/>
+</div>
+<div class="space-y-2">
+<label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Email Liên Hệ</label>
+<input class="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:border-primary focus:ring-0 rounded text-sm font-medium" type="email" value="hello@jules.studio"/>
+</div>
+<div class="space-y-2">
+<label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Số Điện Thoại</label>
+<input class="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:border-primary focus:ring-0 rounded text-sm font-medium" type="text" value="+84 (0) 900 123 456"/>
+</div>
+<div class="space-y-2">
+<label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Địa Chỉ</label>
+<input class="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:border-primary focus:ring-0 rounded text-sm font-medium" type="text" value="TP. Hồ Chí Minh, Việt Nam"/>
+</div>
+</div>
+</section>
+<!-- Section: Mạng Xã Hội -->
+<section>
+<h3 class="text-lg font-bold font-syne mb-6 pb-2 border-b border-slate-100 dark:border-slate-800">Mạng Xã Hội</h3>
+<div class="space-y-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 flex items-center justify-center bg-slate-100 dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800">
+<span class="material-symbols-outlined text-slate-600">public</span>
+</div>
+<div class="flex-1 space-y-1">
+<label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Facebook URL</label>
+<input class="w-full px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:border-primary focus:ring-0 rounded text-sm" placeholder="https://facebook.com/julesstudio" type="url"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 flex items-center justify-center bg-slate-100 dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800">
+<span class="material-symbols-outlined text-slate-600">chat_bubble</span>
+</div>
+<div class="flex-1 space-y-1">
+<label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Zalo OA</label>
+<input class="w-full px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:border-primary focus:ring-0 rounded text-sm" placeholder="https://zalo.me/julesstudio" type="url"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 flex items-center justify-center bg-slate-100 dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-800">
+<span class="material-symbols-outlined text-slate-600">code</span>
+</div>
+<div class="flex-1 space-y-1">
+<label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">GitHub</label>
+<input class="w-full px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:border-primary focus:ring-0 rounded text-sm" placeholder="https://github.com/jules-studio" type="url"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Logo & Branding -->
+<section>
+<h3 class="text-lg font-bold font-syne mb-6 pb-2 border-b border-slate-100 dark:border-slate-800">Logo &amp; Branding</h3>
+<div class="flex items-start gap-8">
+<div class="w-32 h-32 bg-slate-100 dark:bg-slate-900 border-2 border-dashed border-slate-300 dark:border-slate-700 flex items-center justify-center rounded group cursor-pointer overflow-hidden relative">
+<div class="text-slate-400 group-hover:text-primary transition-colors flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-3xl">image</span>
+<span class="text-[10px] font-bold uppercase tracking-tight">Current Logo</span>
+</div>
+<div class="absolute inset-0 bg-slate-200/50 dark:bg-slate-800/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-[2px]">
+<span class="material-symbols-outlined text-white">edit</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col justify-center h-32">
+<p class="text-sm text-slate-500 mb-4">Sử dụng logo dạng vector (SVG) hoặc PNG nền trong suốt. Kích thước khuyến nghị: 512x512px.</p>
+<button class="w-fit flex items-center gap-2 px-6 py-2 border-2 border-primary text-primary font-bold text-sm hover:bg-primary hover:text-white transition-all rounded uppercase tracking-wider">
+<span class="material-symbols-outlined text-lg">upload</span>
+                Tải Logo Mới
+              </button>
+</div>
+</div>
+</section>
+<!-- Final Action -->
+<div class="pt-8 border-t border-slate-200 dark:border-slate-800 flex justify-end">
+<button class="px-10 py-4 bg-primary text-white font-bold text-sm uppercase tracking-widest hover:bg-primary/90 hover:shadow-lg shadow-primary/20 transition-all rounded">
+            Lưu Thay Đổi
+          </button>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="mt-auto p-10 border-t border-slate-200 dark:border-slate-800 text-center">
+<p class="text-xs text-slate-400 font-medium">© 2024 Jules Studio Internal CRM. All rights reserved.</p>
+</footer>
+</main>
+
+```</body></html>

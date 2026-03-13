@@ -1,0 +1,211 @@
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Syne:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6366F1",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101122",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                        "syne": ["Syne", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .syne-font {
+            font-family: 'Syne', sans-serif;
+        }
+        .letter-spacing-widest {
+            letter-spacing: 0.2em;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<!-- Navbar -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="bg-slate-900 dark:bg-slate-100 p-1.5 rounded">
+<span class="material-symbols-outlined text-white dark:text-slate-900 text-[20px]">deployed_code</span>
+</div>
+<h1 class="syne-font font-bold text-lg tracking-tight">JULES STUDIO</h1>
+</div>
+<nav class="hidden md:flex items-center gap-10">
+<a class="text-[10px] font-medium tracking-widest hover:text-primary transition-colors" href="#">DỰ ÁN</a>
+<a class="text-[10px] font-medium tracking-widest hover:text-primary transition-colors" href="#">DỊCH VỤ</a>
+<a class="text-[10px] font-medium tracking-widest hover:text-primary transition-colors" href="#">BÁO GIÁ</a>
+<a class="text-[10px] font-medium tracking-widest hover:text-primary transition-colors" href="#">LIÊN HỆ</a>
+<a class="text-[10px] font-medium tracking-widest hover:text-primary transition-colors" href="#">ĐĂNG NHẬP</a>
+</nav>
+<button class="bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-[10px] font-bold tracking-widest px-6 py-3 rounded hover:bg-primary dark:hover:bg-primary transition-all">
+                BẮT ĐẦU DỰ ÁN
+            </button>
+</div>
+</header>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="w-full aspect-[16/9] overflow-hidden">
+<div class="w-full h-full bg-cover bg-center" data-alt="Modern web application dashboard interface screenshot" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCz543JiQry8SHNbwUbVqZ_T5irLLWvzsfH6wAfONGkhNu9es6batwRcYN8-yK1lK_pkYbvUzLyTLY2-ykyUZ5NaJJkIQTBqlJZr316ePV7gvTU8Y5FDBcxaS-rS3oGq6ulpvrfEw_A8jZil9R2lri0YTmMc6i2shuXlUrftAnbP9pZlin5WL_d6RT3iNMfaOQCncIEopAW925kucZk82MuWYPfpvPsy5Jv5qkigHQnyXFj2lkkjpG3q3OVJi4NuOjiU5QGgoGYW0-b')">
+</div>
+</section>
+<!-- Project Header -->
+<section class="max-w-7xl mx-auto px-6 py-16 md:py-24">
+<h2 class="syne-font font-bold text-6xl md:text-8xl text-slate-900 dark:text-slate-100 mb-8">Mâm Cúng Thanh Huấn</h2>
+<div class="flex flex-wrap gap-x-12 gap-y-4">
+<div class="flex flex-col">
+<span class="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-1">Loại hình</span>
+<span class="text-sm font-medium tracking-widest uppercase">Web Application</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-1">Thời gian</span>
+<span class="text-sm font-medium tracking-widest uppercase">Tháng 2, 2026</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-1">Lĩnh vực</span>
+<span class="text-sm font-medium tracking-widest uppercase">E-commerce / Tín ngưỡng</span>
+</div>
+</div>
+</section>
+<!-- Description Grid -->
+<section class="max-w-7xl mx-auto px-6 py-16 border-t border-slate-200 dark:border-slate-800">
+<div class="grid grid-cols-1 md:grid-cols-10 gap-16">
+<div class="md:col-span-6">
+<h3 class="syne-font text-2xl mb-8 uppercase tracking-widest text-primary">Overview</h3>
+<p class="text-xl leading-relaxed text-slate-600 dark:text-slate-400 font-display">
+                        Mâm Cúng Thanh Huấn là một nền tảng thương mại điện tử chuyên biệt, kết nối nét đẹp văn hóa truyền thống với sự tiện lợi của công nghệ hiện đại. Dự án tập trung vào việc tối ưu hóa trải nghiệm người dùng trong việc đặt hàng các lễ vật tâm linh, đảm bảo tính trang trọng và chính xác tuyệt đối.
+                    </p>
+</div>
+<div class="md:col-span-4 space-y-8">
+<div class="border-l-2 border-slate-200 dark:border-slate-800 pl-6">
+<p class="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-2">Duration</p>
+<p class="text-2xl font-bold syne-font">6 Tuần</p>
+</div>
+<div class="border-l-2 border-slate-200 dark:border-slate-800 pl-6">
+<p class="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-2">Stack</p>
+<p class="text-2xl font-bold syne-font">React + Firebase</p>
+</div>
+<div class="border-l-2 border-slate-200 dark:border-slate-800 pl-6">
+<p class="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-2">Lighthouse</p>
+<p class="text-2xl font-bold syne-font">98 Score</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Challenge & Solution -->
+<section class="max-w-7xl mx-auto px-6 py-16 md:py-32 grid grid-cols-1 md:grid-cols-2 gap-20">
+<div>
+<h3 class="syne-font font-bold text-4xl mb-8 uppercase">THÁCH THỨC</h3>
+<p class="text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                    Làm thế nào để số hóa một quy trình mang tính truyền thống cao mà không làm mất đi sự trang trọng vốn có? Thách thức nằm ở việc thiết kế một giao diện vừa đơn giản cho mọi lứa tuổi, vừa đảm bảo tính thẩm mỹ cao cấp của một dịch vụ đặc thù.
+                </p>
+</div>
+<div>
+<h3 class="syne-font font-bold text-4xl mb-8 uppercase">GIẢI PHÁP</h3>
+<p class="text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+                    Chúng tôi áp dụng phong cách thiết kế tối giản cực đoan (Exaggerated Minimalism), tập trung vào hình ảnh sản phẩm sắc nét và các khoảng trắng rộng rãi. Quy trình đặt hàng được chia nhỏ thành từng bước trực quan, tích hợp thanh toán nhanh và quản lý đơn hàng thời gian thực qua Firebase.
+                </p>
+</div>
+</section>
+<!-- Gallery -->
+<section class="max-w-7xl mx-auto px-6 py-16">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="md:col-span-2 aspect-[4/3] bg-slate-200 dark:bg-slate-800 overflow-hidden rounded">
+<img class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" data-alt="Main interface of food ordering app in grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgrBfQL8wa9mlDuQcDEiVY1va5cf3AQyWVmVB62H9-V5wPcEYqUt5MJNh7PDouDnXpPqYET9MaCBV3hrCXRLt0RqHFSZG7GG2-XcR1Sd6fG7c-HorqmFM1JW0FnlJHX_uoH_gtHXswhUC3pwmU-CnRW2IzAcy78S0FiZ1V23oWBPWzhQY138MeVCgEJg6zyiO8q529icTv7E7dJYxMaxbUPXmq4nbkPD1Xibf6IdgjVvx9HOksPZkkVg3_FgDZZ779xFw90K9agXuq"/>
+</div>
+<div class="flex flex-col gap-6">
+<div class="flex-1 bg-slate-200 dark:bg-slate-800 overflow-hidden rounded">
+<img class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" data-alt="Mobile view of products listing" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFM96t-SwHY6Gg0wWiemUygdmCGLxqi2xvlTsmmjupalqrtAyVV706fR7I58QhBXK7KMrwaqTnPIEDVPWHxR34hjxZGxCbjxg-Zq_wjtU8xqSwtK-hg720pZP1hW8WcIjsU5ebNIZh4fz-sPCG2UcQjQYgEZh9brIaDOxJh_CFu4HYpN78RQ8vMHW5HkxeqrTmZRyS3JkRmZXUg17Jzg1Tw8XWAuHRgDVHS6kuOmCfeDFz1elPFIdhdcXg8E8jV8240FokXke5pFx9"/>
+</div>
+<div class="flex-1 bg-slate-200 dark:bg-slate-800 overflow-hidden rounded">
+<img class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" data-alt="Checkout process interface design" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtoThaF9RbSxnHXnjEE1s1ANEcvZCg94vuqDKu7IouTU3AN1TYeBqBi-hO97CRKQnnPnDS9ecnNY9lP2C5zWMBvZ97qQ5S6VV80MSqaZlOA_Vh-sr14fa8th2FZF9rIvSCJ-kt0OUYpi-7NbrcImsQCVSQh5ncetlA05az1GfvAHUQy93vK_HkHq5TyGi3a6ugqzb-qQxgpcifQtYrM8pP9n32ZtJZjTUD2xHWWU88_8YCwJ8C04HwTBCLUl5_AkK5WajsynmsS-lE"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Tech Tags -->
+<section class="max-w-7xl mx-auto px-6 py-16 flex flex-wrap gap-4 justify-center">
+<span class="px-6 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold tracking-[0.3em] uppercase hover:bg-primary hover:text-white transition-colors">REACT</span>
+<span class="px-6 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold tracking-[0.3em] uppercase hover:bg-primary hover:text-white transition-colors">NEXT.JS</span>
+<span class="px-6 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold tracking-[0.3em] uppercase hover:bg-primary hover:text-white transition-colors">FIREBASE</span>
+<span class="px-6 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold tracking-[0.3em] uppercase hover:bg-primary hover:text-white transition-colors">TAILWIND CSS</span>
+<span class="px-6 py-2 border border-slate-200 dark:border-slate-800 text-[10px] font-bold tracking-[0.3em] uppercase hover:bg-primary hover:text-white transition-colors">CLOUDFLARE</span>
+</section>
+<!-- Project Navigation -->
+<section class="max-w-7xl mx-auto px-6 py-24 border-t border-slate-200 dark:border-slate-800">
+<div class="grid grid-cols-2 gap-10">
+<a class="group" href="#">
+<p class="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-4">← DỰ ÁN TRƯỚC</p>
+<h4 class="syne-font font-bold text-2xl md:text-4xl group-hover:text-primary transition-colors">L’Artiste Gallery</h4>
+</a>
+<a class="group text-right border-l border-slate-200 dark:border-slate-800" href="#">
+<p class="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-4">DỰ ÁN TIẾP →</p>
+<h4 class="syne-font font-bold text-2xl md:text-4xl group-hover:text-primary transition-colors">Nexus SaaS Platform</h4>
+</a>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-slate-900 text-slate-100 py-20 px-6">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+<div class="md:col-span-1">
+<div class="flex items-center gap-3 mb-8">
+<div class="bg-white p-1.5 rounded">
+<span class="material-symbols-outlined text-slate-900 text-[20px]">deployed_code</span>
+</div>
+<h1 class="syne-font font-bold text-lg tracking-tight">JULES STUDIO</h1>
+</div>
+<p class="text-sm text-slate-400 leading-relaxed">
+                    Đơn vị cung cấp giải pháp thiết kế và phát triển kỹ thuật số tối giản, hiệu quả và bền vững.
+                </p>
+</div>
+<div>
+<h5 class="text-[10px] font-bold tracking-widest uppercase mb-6 text-primary">Liên hệ</h5>
+<ul class="text-sm space-y-4 text-slate-400">
+<li>hello@jules.studio</li>
+<li>+84 900 123 456</li>
+<li>TP. Hồ Chí Minh, Việt Nam</li>
+</ul>
+</div>
+<div>
+<h5 class="text-[10px] font-bold tracking-widest uppercase mb-6 text-primary">Theo dõi</h5>
+<ul class="text-sm space-y-4 text-slate-400">
+<li><a class="hover:text-white transition-colors" href="#">Behance</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Dribbble</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Instagram</a></li>
+</ul>
+</div>
+<div>
+<h5 class="text-[10px] font-bold tracking-widest uppercase mb-6 text-primary">Pháp lý</h5>
+<ul class="text-sm space-y-4 text-slate-400">
+<li><a class="hover:text-white transition-colors" href="#">Điều khoản dịch vụ</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Chính sách bảo mật</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-7xl mx-auto mt-20 pt-8 border-t border-slate-800 flex justify-between items-center">
+<p class="text-[10px] tracking-widest text-slate-500">© 2026 JULES STUDIO. ALL RIGHTS RESERVED.</p>
+<p class="text-[10px] tracking-widest text-slate-500 uppercase">Crafted with passion</p>
+</div>
+</footer>
+</body></html>

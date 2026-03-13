@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════
+   Jules Studio — Exaggerated Minimalism
+   Design System (unified from Stitch HTML analysis)
+   ═══════════════════════════════════════════ */
+
+@theme {
+  /* Colors — unified across all pages */
+  --color-primary: #6366F1;
+  --color-background-light: #ffffff;
+  --color-background-dark: #101122;
+
+  /* Font Families — Space Grotesk (heading, Vietnamese-safe) + Manrope (body) */
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-display: 'Manrope', sans-serif;
+
+  /* Border Radius — 0px (Exaggerated Minimalism = sharp edges) */
+  --radius: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-full: 9999px;
+
+  /* Animation */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ═══════════════════════════════════════════
+   Base Styles — matched to Stitch HTML
+   ═══════════════════════════════════════════ */
+
+body {
+  font-family: 'Manrope', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, .font-heading {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* ═══════════════════════════════════════════
+   Stitch Signature: Grayscale → Color on Hover
+   (from 01-homepage.html, 02-portfolio.html)
+   ═══════════════════════════════════════════ */
+
+.grayscale-hover {
+  filter: grayscale(100%);
+  transition: filter 0.3s ease;
+}
+
+.grayscale-hover:hover {
+  filter: grayscale(0%);
+}
+
+/* ═══════════════════════════════════════════
+   Services Page: Row Hover Effects
+   (from 07-services.html)
+   ═══════════════════════════════════════════ */
+
+.service-row:hover .service-bg {
+  opacity: 0.05;
+}
+
+.service-row:hover .service-title {
+  color: #6366F1;
+}
+
+/* ═══════════════════════════════════════════
+   Selection Color
+   (from 07-services.html body class)
+   ═══════════════════════════════════════════ */
+
+::selection {
+  background: rgba(99, 102, 241, 0.3);
+  color: #6366F1;
+}
+
+/* ═══════════════════════════════════════════
+   Scroll Reveal Animation
+   ═══════════════════════════════════════════ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 600ms var(--ease-out-expo),
+              transform 600ms var(--ease-out-expo);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════
+   Grid Pattern (Register page dark panel)
+   ═══════════════════════════════════════════ */
+
+.grid-pattern {
+  background-image: radial-gradient(circle, #ffffff10 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+/* ═══════════════════════════════════════════
+   Utilities
+   ═══════════════════════════════════════════ */
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

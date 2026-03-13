@@ -1,0 +1,44 @@
+name = "worker-backend-julesstudio"
+main = "src/index.ts"
+compatibility_date = "2025-02-25"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT = "development"
+FIREBASE_PROJECT_ID = "jules-studio"
+FIREBASE_CLIENT_EMAIL = "firebase-adminsdk-fbsvc@jules-studio.iam.gserviceaccount.com"
+CLOUDINARY_CLOUD_NAME = "dcclhoe7i"
+CLOUDINARY_API_KEY = "986763655634378"
+# ADMINISTRATOR_EMAIL = "" # set via wrangler secret put
+
+# Secrets to add via `wrangler secret put <NAME>`:
+# FIREBASE_PRIVATE_KEY
+# EMAIL_API_KEY (Resend)
+# ADMINISTRATOR_EMAIL
+# CLOUDINARY_API_SECRET
+
+[[r2_buckets]]
+binding = "DESIGN_BUCKET"
+bucket_name = "jules-studio-designs"
+
+[observability]
+enabled = true
+head_sampling_rate = 1
+
+[env.staging]
+name = "jules-studio-api-staging"
+[env.staging.vars]
+ENVIRONMENT = "staging"
+FIREBASE_PROJECT_ID = "jules-studio"
+FIREBASE_CLIENT_EMAIL = "firebase-adminsdk-fbsvc@jules-studio.iam.gserviceaccount.com"
+CLOUDINARY_CLOUD_NAME = "dcclhoe7i"
+CLOUDINARY_API_KEY = "986763655634378"
+
+[env.production]
+name = "jules-studio-api-production"
+[env.production.vars]
+ENVIRONMENT = "production"
+FIREBASE_PROJECT_ID = "jules-studio"
+FIREBASE_CLIENT_EMAIL = "firebase-adminsdk-fbsvc@jules-studio.iam.gserviceaccount.com"
+CLOUDINARY_CLOUD_NAME = "dcclhoe7i"
+CLOUDINARY_API_KEY = "986763655634378"
