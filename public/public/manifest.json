@@ -1,0 +1,16 @@
+{
+  "name": "Jules Studio",
+  "short_name": "Jules Studio",
+  "description": "Jules Studio — Kiến Tạo Trải Nghiệm Số",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6f6f8",
+  "theme_color": "#6C63FF",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

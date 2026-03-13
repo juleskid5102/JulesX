@@ -1,0 +1,16 @@
+{
+  "name": "Jules Studio Admin",
+  "short_name": "JS Admin",
+  "description": "Jules Studio — Admin Dashboard",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6C63FF",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -11,6 +11,9 @@ dist/
 .env.*.local
 .dev.vars
 
+# Backend (deploy via wrangler only)
+backend/
+
 # Logs
 *.log
 
