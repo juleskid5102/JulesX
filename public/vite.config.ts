@@ -8,7 +8,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'https://worker-backend-julesstudio.juleskid5102.workers.dev',
+        target: 'https://backend-julesstudio.juleskid5102.workers.dev',
         changeOrigin: true,
       },
     },
