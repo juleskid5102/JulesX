@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './hooks/useAuth'
 
 import AdminLayout from './components/layout/AdminLayout'
+import AdminLogin from './pages/AdminLogin'
 import Dashboard from './pages/Dashboard'
 import Leads from './pages/Leads'
 import Projects from './pages/Projects'
@@ -14,6 +15,7 @@ import { PWAInstallPrompt } from './components/PWAInstallPrompt'
  * Admin App — Standalone admin dashboard
  * All routes at root level (no /admin prefix)
  * Requires authentication + admin role
+ * Shows own login page (Stitch 14-adminlogin.html)
  */
 export default function App() {
   const { user, role, loading } = useAuth()
@@ -29,11 +31,9 @@ export default function App() {
     )
   }
 
+  // Not logged in OR not admin → show admin login page
   if (!user || role !== 'admin') {
-    // Redirect to public site login
-    const publicUrl = import.meta.env.VITE_PUBLIC_URL || 'https://julesstudio.pages.dev'
-    window.location.href = `${publicUrl}/dang-nhap`
-    return null
+    return <AdminLogin />
   }
 
   return (

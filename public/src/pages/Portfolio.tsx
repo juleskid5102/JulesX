@@ -63,6 +63,13 @@ export default function Portfolio() {
     )
   }
 
+  // Static Tailwind class map — MUST use literal strings for Tailwind purge
+  const COL_CLASS: Record<number, string> = {
+    4: 'col-span-12 md:col-span-4',
+    5: 'col-span-12 md:col-span-5',
+    7: 'col-span-12 md:col-span-7',
+  }
+
   // Assign grid patterns
   const gridProjects = projects.map((p, i) => {
     const patterns = [
@@ -94,7 +101,7 @@ export default function Portfolio() {
       <main className="max-w-7xl mx-auto px-6 pb-32">
         <div className="grid grid-cols-12 gap-6">
           {gridProjects.map((project) => (
-            <Reveal key={project.id} className={`col-span-12 md:col-span-${project.colSpan} border border-slate-200 p-0 group`}>
+            <Reveal key={project.id} className={`${COL_CLASS[project.colSpan] || 'col-span-12'} border border-slate-200 p-0 group`}>
               <Link to={`/du-an/${project.id}`} className="block">
                 <div className={`${project.aspect} overflow-hidden border-b border-slate-200`}>
                   <img
