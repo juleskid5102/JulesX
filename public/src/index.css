@@ -134,7 +134,7 @@ h1, h2, h3, .font-heading {
    ═══════════════════════════════════════════ */
 
 .process-card:hover .process-number {
-  color: #6366F1;
+  color: #000000;
   transform: scale(1.08) translateY(-4px);
 }
 

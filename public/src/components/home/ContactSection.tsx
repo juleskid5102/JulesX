@@ -85,7 +85,10 @@ export default function ContactSection() {
         {/* Left — Info */}
         <Reveal>
           <div>
-            <h2 className="text-5xl md:text-6xl font-extrabold tracking-tighter font-heading uppercase leading-none mb-8">
+            <h2
+              className="text-5xl md:text-6xl font-bold tracking-tight uppercase leading-none mb-8"
+              style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+            >
               Hãy bắt đầu<br />dự án của bạn.
             </h2>
             <p className="text-xl text-slate-500 mb-12">

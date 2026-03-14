@@ -58,7 +58,10 @@ export default function ProcessSection() {
         {steps.map((step, index) => (
           <Reveal key={step.number} delay={index * 100}>
             <div className={`process-card py-12 md:px-10 ${index === 0 ? 'first:pl-0' : ''} ${index === steps.length - 1 ? 'last:pr-0' : ''}`}>
-              <span className="process-number text-6xl font-extrabold text-slate-100 block mb-6 font-heading transition-all duration-300">
+              <span
+                className="process-number text-6xl font-bold text-slate-200 block mb-6 transition-all duration-300"
+                style={{ fontFamily: "'Space Grotesk', sans-serif", fontFeatureSettings: "'tnum'" }}
+              >
                 {step.number}
               </span>
               <h3 className="text-2xl font-bold mb-4 font-heading uppercase">

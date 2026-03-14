@@ -64,7 +64,10 @@ export default function PortfolioPreview() {
     <section className="bg-background-light py-32 px-6 md:px-24">
       <Reveal>
         <div className="flex flex-col md:flex-row justify-between md:items-end gap-6 mb-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tighter font-heading uppercase leading-[1.1]">
+          <h2
+            className="text-4xl md:text-5xl font-bold tracking-tight uppercase leading-[1.1]"
+            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+          >
             Dự Án<br />Nổi Bật
           </h2>
           <Link
@@ -82,7 +85,7 @@ export default function PortfolioPreview() {
         <div className="md:col-span-8 group cursor-pointer">
           <Reveal>
             <Link to={`/du-an/${project1.id}`}>
-              <div className="aspect-[16/10] bg-slate-100 border border-slate-200 overflow-hidden grayscale hover:grayscale-0 transition-all duration-500">
+              <div className="aspect-[16/10] bg-slate-100 border border-slate-200 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
                 <img
                   alt={project1.title}
                   className="w-full h-full object-cover"
@@ -91,7 +94,7 @@ export default function PortfolioPreview() {
               </div>
               <div className="mt-6 flex justify-between items-start">
                 <div>
-                  <h3 className="text-xl md:text-2xl font-bold font-heading uppercase">{project1.title}</h3>
+                  <h3 className="text-xl md:text-2xl font-bold uppercase" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{project1.title}</h3>
                   <p className="text-slate-500 mt-1 text-sm font-display">{project1.category} • {project1.year}</p>
                 </div>
                 <span className="material-symbols-outlined text-3xl md:text-4xl group-hover:translate-x-2 transition-transform">arrow_outward</span>
@@ -105,7 +108,7 @@ export default function PortfolioPreview() {
           <div className="md:col-span-4 group cursor-pointer md:mt-24">
             <Reveal delay={150}>
               <Link to={`/du-an/${project2.id}`}>
-                <div className="aspect-[16/10] bg-slate-100 border border-slate-200 overflow-hidden grayscale hover:grayscale-0 transition-all duration-500">
+                <div className="aspect-[16/10] bg-slate-100 border border-slate-200 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
                   <img
                     alt={project2.title}
                     className="w-full h-full object-cover"
@@ -114,7 +117,7 @@ export default function PortfolioPreview() {
                 </div>
                 <div className="mt-6 flex justify-between items-start">
                   <div>
-                    <h3 className="text-xl md:text-2xl font-bold font-heading uppercase">{project2.title}</h3>
+                    <h3 className="text-xl md:text-2xl font-bold uppercase" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{project2.title}</h3>
                     <p className="text-slate-500 mt-1 text-sm font-display">{project2.category} • {project2.year}</p>
                   </div>
                 </div>

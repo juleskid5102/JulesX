@@ -21,7 +21,7 @@ export default function HeroSection() {
       <div className="max-w-6xl w-full">
         <Reveal>
           <h1
-            className="text-white text-6xl md:text-[8rem] font-bold leading-[0.9] tracking-tighter mb-10 uppercase md:w-[80%] whitespace-pre-line"
+            className="text-white text-6xl md:text-[8rem] font-bold leading-[0.9] tracking-tight mb-10 uppercase md:w-[80%] whitespace-pre-line"
             style={{ fontFamily: "'Space Grotesk', sans-serif" }}
           >
             {HERO.title}
@@ -30,7 +30,7 @@ export default function HeroSection() {
 
         <Reveal delay={200}>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-            <p className="text-slate-400 text-lg md:text-xl max-w-md font-display whitespace-pre-line">
+            <p className="text-white/70 text-base md:text-lg max-w-md font-display whitespace-pre-line">
               {HERO.subtitle}
             </p>
             <Link
