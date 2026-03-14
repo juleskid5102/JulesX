@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { SITE } from '../../config/site'
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
+import { API_BASE, SITE } from '../../config/site'
 
 interface FooterData {
   email: string

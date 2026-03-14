@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import Reveal from '../ui/Reveal'
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
+import { API_BASE } from '../../config/site'
 
 /**
  * ProcessSection — From 01-homepage.html lines 75-101

@@ -197,18 +197,29 @@ export default function ConfigBuilder() {
               </Reveal>
             )}
 
-            {/* Step 2: Features (placeholder for future) */}
+            {/* Step 2: Features (informational — discussed during consultation) */}
             {step === 2 && (
               <Reveal delay={100}>
                 <div className="space-y-8">
-                  <h2 className="text-2xl font-heading font-bold">Chọn tính năng</h2>
-                  <p className="text-slate-500">Tính năng sẽ được tùy chỉnh sau khi trao đổi chi tiết.</p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <h2 className="text-2xl font-heading font-bold">Tính năng dự án</h2>
+                  <div className="bg-primary/5 border border-primary/20 p-6">
+                    <div className="flex items-start gap-4">
+                      <span className="material-symbols-outlined text-primary text-2xl mt-0.5">info</span>
+                      <div>
+                        <p className="font-heading font-bold text-lg mb-2">Tính năng sẽ được tùy chỉnh sau</p>
+                        <p className="text-slate-600 leading-relaxed">
+                          Sau khi nhận yêu cầu, đội ngũ Jules Studio sẽ liên hệ để trao đổi chi tiết về tính năng phù hợp với dự án của bạn. 
+                          Dưới đây là một số tính năng chúng tôi hỗ trợ:
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {['Responsive Design', 'CMS Integration', 'SEO Optimization', 'Analytics Dashboard', 'Multi-language', 'Payment Gateway', 'User Authentication', 'Email Notifications'].map((f) => (
-                      <label key={f} className="flex items-center gap-3 p-4 border border-slate-200 hover:border-primary cursor-pointer transition-colors">
-                        <input type="checkbox" className="border-slate-300 text-primary focus:ring-primary rounded" />
-                        <span className="text-sm font-medium">{f}</span>
-                      </label>
+                      <div key={f} className="flex items-center gap-2 p-3 border border-slate-100 bg-slate-50/50">
+                        <span className="material-symbols-outlined text-primary text-lg">check_circle</span>
+                        <span className="text-sm text-slate-600">{f}</span>
+                      </div>
                     ))}
                   </div>
                 </div>

@@ -2,8 +2,7 @@
 // Flow: PNG/JPG → convert WebP (client) → upload via backend → Cloudinary URL
 import { useRef, useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
+import { API_BASE } from '../config/site'
 
 // ─── Helper: Convert image file to WebP Blob ────────────────────
 

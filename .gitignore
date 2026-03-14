@@ -11,8 +11,8 @@ dist/
 .env.*.local
 .dev.vars
 
-# Backend (deploy via wrangler only)
-backend/
+# Backend build artifacts (source IS tracked)
+# backend/node_modules/ and backend/.wrangler/ excluded by global rules above
 
 # Logs
 *.log

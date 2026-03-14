@@ -7,9 +7,11 @@ import Register from './pages/Register'
 import Services from './pages/Services'
 import ConfigBuilder from './pages/ConfigBuilder'
 import OrderTracking from './pages/OrderTracking'
+import NotFound from './pages/NotFound'
 
 import { ContactFAB } from './components/ContactFAB'
 import { PWAInstallPrompt } from './components/PWAInstallPrompt'
+import ScrollToTop from './components/ScrollToTop'
 
 /**
  * Public App — Customer-facing pages only
@@ -18,6 +20,7 @@ import { PWAInstallPrompt } from './components/PWAInstallPrompt'
 export default function App() {
   return (
     <>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/du-an" element={<Portfolio />} />
@@ -27,6 +30,7 @@ export default function App() {
         <Route path="/dich-vu" element={<Services />} />
         <Route path="/bao-gia" element={<ConfigBuilder />} />
         <Route path="/theo-doi/:token" element={<OrderTracking />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       {/* Global Components */}

@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
+import { API_BASE } from '../config/site'
 
 /**
  * ContactFAB — Floating Action Button with social channels

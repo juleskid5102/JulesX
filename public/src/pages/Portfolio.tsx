@@ -3,9 +3,7 @@ import { useEffect, useState } from 'react'
 import Reveal from '../components/ui/Reveal'
 import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
-import { type Project } from '../config/site'
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
+import { API_BASE, type Project } from '../config/site'
 
 /**
  * Portfolio — Grid layout (12-column)

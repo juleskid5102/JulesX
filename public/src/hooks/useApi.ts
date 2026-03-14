@@ -1,8 +1,7 @@
 // useApi — shared fetch wrapper with auth token injection
 import { useAuth } from './useAuth'
 import { useCallback } from 'react'
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
+import { API_BASE } from '../config/site'
 
 interface ApiOptions extends Omit<RequestInit, 'body'> {
     body?: unknown

@@ -40,14 +40,13 @@
 
 ### Font Stack
 
-| Role | Font | Weight(s) | Google Fonts |
+| Role | Font | Weight(s) | Source |
 |---|---|---|---|
-| Heading | **Syne** | 600, 700, 800 | `Syne:wght@600;700;800` |
-| Body | **Manrope** | 300, 400, 500, 600 | `Manrope:wght@300;400;500;600` |
+| Heading | **Syne** | 400, 500, 600, 700, 800 | Local woff2 (Latin-ext + Latin) |
+| Heading (VN fallback) | **Space Grotesk** | 400–800 | Local woff2 — fills ồ, ề, ễ via unicode-range |
+| Body | **Manrope** | 300, 400, 500, 600, 700 | Local woff2 (Vietnamese + Latin) |
 
-```css
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Manrope:wght@300;400;500;600&display=swap');
-```
+> **Unicode-range fallback:** Syne lacks Vietnamese combining diacritics (U+1EA0-1EF9). Space Grotesk fills that gap under the same `font-family: 'Syne'` using `unicode-range`. Browser auto-switches per character.
 
 ### Scale (fluid clamp)
 

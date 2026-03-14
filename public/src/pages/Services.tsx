@@ -3,8 +3,7 @@ import { useEffect, useState } from 'react'
 import Reveal from '../components/ui/Reveal'
 import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
+import { API_BASE } from '../config/site'
 
 /**
  * Services — EXACT layout from 07-services.html

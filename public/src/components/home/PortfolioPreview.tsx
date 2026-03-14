@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Reveal from '../ui/Reveal'
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
+import { API_BASE } from '../../config/site'
 
 /**
  * PortfolioPreview — From 01-homepage.html lines 102-134
@@ -25,8 +24,9 @@ export default function PortfolioPreview() {
     fetch(`${API_BASE}/api/public/portfolio?featured=true`)
       .then(async (res) => {
         if (!res.ok) throw new Error('Failed to load')
-        const data = await res.json()
-        setProjects(Array.isArray(data) ? data.slice(0, 2) : [])
+        const json = await res.json()
+        const list = Array.isArray(json) ? json : json.data || json.projects || []
+        setProjects(list.slice(0, 2))
       })
       .catch((err) => {
         console.error('PortfolioPreview fetch error:', err)

@@ -1,0 +1,10 @@
+name = "backend-julesstudio"
+main = "src/index.ts"
+compatibility_date = "2025-03-10"
+
+[observability]
+enabled = true
+
+[vars]
+FIREBASE_PROJECT_ID = "jules-studio"
+FIREBASE_CLIENT_EMAIL = "firebase-adminsdk-fbsvc@jules-studio.iam.gserviceaccount.com"
