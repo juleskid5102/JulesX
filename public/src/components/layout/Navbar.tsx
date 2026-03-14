@@ -50,7 +50,7 @@ export default function Navbar() {
             <Link
               key={link.href}
               to={link.href}
-              className="text-[10px] font-bold uppercase tracking-widest hover:text-primary transition-colors"
+              className="text-xs font-bold uppercase tracking-widest hover:text-primary transition-colors"
             >
               {link.label}
             </Link>
@@ -61,14 +61,14 @@ export default function Navbar() {
 
           <Link
             to="/dang-nhap"
-            className="text-[10px] font-bold uppercase tracking-widest hover:text-primary transition-colors"
+            className="text-xs font-bold uppercase tracking-widest hover:text-primary transition-colors"
           >
             Đăng Nhập
           </Link>
 
           <Link
             to="/bao-gia"
-            className="bg-slate-900 text-white px-6 py-2.5 text-[10px] font-bold uppercase tracking-widest hover:bg-primary hover:text-white transition-all"
+            className="bg-slate-900 text-white px-6 py-2.5 text-xs font-bold uppercase tracking-widest hover:bg-primary hover:text-white transition-all"
           >
             Bắt Đầu Dự Án
           </Link>
@@ -94,7 +94,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 to={link.href}
-                className="text-[10px] font-bold uppercase tracking-widest py-2 hover:text-primary transition-colors"
+                className="text-xs font-bold uppercase tracking-widest py-2 hover:text-primary transition-colors"
               >
                 {link.label}
               </Link>
