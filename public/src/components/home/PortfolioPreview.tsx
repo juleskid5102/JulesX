@@ -63,13 +63,13 @@ export default function PortfolioPreview() {
   return (
     <section className="bg-background-light py-32 px-6 md:px-24">
       <Reveal>
-        <div className="flex justify-between items-end mb-16">
-          <h2 className="text-5xl font-extrabold tracking-tighter font-heading uppercase">
-            DỰ ÁN<br />NỔI BẬT
+        <div className="flex flex-col md:flex-row justify-between md:items-end gap-6 mb-16">
+          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tighter font-heading uppercase leading-[1.1]">
+            Dự Án<br />Nổi Bật
           </h2>
           <Link
             to="/du-an"
-            className="group flex items-center gap-2 text-slate-900 font-bold tracking-widest uppercase text-sm"
+            className="group flex items-center gap-2 text-slate-900 font-bold tracking-widest uppercase text-sm shrink-0"
           >
             <span>Xem Tất Cả Dự Án</span>
             <span className="material-symbols-outlined text-xl transition-transform group-hover:translate-x-1">arrow_right_alt</span>
@@ -91,10 +91,10 @@ export default function PortfolioPreview() {
               </div>
               <div className="mt-6 flex justify-between items-start">
                 <div>
-                  <h3 className="text-2xl font-bold font-heading uppercase">{project1.title}</h3>
-                  <p className="text-slate-500 mt-1">{project1.category} • {project1.year}</p>
+                  <h3 className="text-xl md:text-2xl font-bold font-heading uppercase">{project1.title}</h3>
+                  <p className="text-slate-500 mt-1 text-sm font-display">{project1.category} • {project1.year}</p>
                 </div>
-                <span className="material-symbols-outlined text-4xl group-hover:translate-x-2 transition-transform">arrow_outward</span>
+                <span className="material-symbols-outlined text-3xl md:text-4xl group-hover:translate-x-2 transition-transform">arrow_outward</span>
               </div>
             </Link>
           </Reveal>
@@ -114,8 +114,8 @@ export default function PortfolioPreview() {
                 </div>
                 <div className="mt-6 flex justify-between items-start">
                   <div>
-                    <h3 className="text-2xl font-bold font-heading uppercase">{project2.title}</h3>
-                    <p className="text-slate-500 mt-1">{project2.category} • {project2.year}</p>
+                    <h3 className="text-xl md:text-2xl font-bold font-heading uppercase">{project2.title}</h3>
+                    <p className="text-slate-500 mt-1 text-sm font-display">{project2.category} • {project2.year}</p>
                   </div>
                 </div>
               </Link>

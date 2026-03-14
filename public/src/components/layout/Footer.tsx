@@ -40,7 +40,7 @@ export default function Footer() {
         {/* Brand */}
         <div>
           <Link to="/">
-            <h2 className="font-heading font-[800] text-3xl tracking-tighter mb-2">
+            <h2 className="font-heading font-extrabold text-3xl tracking-tighter uppercase mb-2">
               JULES STUDIO
             </h2>
           </Link>

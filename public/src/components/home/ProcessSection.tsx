@@ -5,6 +5,9 @@ import { API_BASE } from '../../config/site'
 /**
  * ProcessSection — From 01-homepage.html lines 75-101
  * Data fetched from /api/public/process-steps
+ * 
+ * No "Quy Trình Làm Việc" label.
+ * Hover: number changes to primary color + scales up.
  */
 
 interface ProcessStep {
@@ -33,9 +36,6 @@ export default function ProcessSection() {
   if (loading) {
     return (
       <section className="bg-white py-32 px-6 md:px-24 border-b border-slate-100">
-        <div className="mb-16">
-          <div className="h-4 w-40 bg-slate-200 animate-pulse" />
-        </div>
         <div className="grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-200">
           {[1, 2, 3, 4].map((i) => (
             <div key={i} className="py-12 md:px-10 animate-pulse space-y-4">
@@ -54,17 +54,11 @@ export default function ProcessSection() {
 
   return (
     <section className="bg-white py-32 px-6 md:px-24 border-b border-slate-100">
-      <Reveal>
-        <div className="mb-16">
-          <span className="text-sm font-bold tracking-[0.3em] text-primary uppercase">Quy Trình Làm Việc</span>
-        </div>
-      </Reveal>
-
       <div className="grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-200">
         {steps.map((step, index) => (
           <Reveal key={step.number} delay={index * 100}>
-            <div className={`py-12 md:px-10 ${index === 0 ? 'first:pl-0' : ''} ${index === steps.length - 1 ? 'last:pr-0' : ''}`}>
-              <span className="text-6xl font-extrabold text-slate-100 block mb-6 font-heading">
+            <div className={`process-card py-12 md:px-10 ${index === 0 ? 'first:pl-0' : ''} ${index === steps.length - 1 ? 'last:pr-0' : ''}`}>
+              <span className="process-number text-6xl font-extrabold text-slate-100 block mb-6 font-heading transition-all duration-300">
                 {step.number}
               </span>
               <h3 className="text-2xl font-bold mb-4 font-heading uppercase">

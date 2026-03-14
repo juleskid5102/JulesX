@@ -111,6 +111,15 @@ h1, h2, h3, .font-heading {
 }
 
 /* ═══════════════════════════════════════════
+   Process Card: Number Highlight on Hover
+   ═══════════════════════════════════════════ */
+
+.process-card:hover .process-number {
+  color: #6366F1;
+  transform: scale(1.08) translateY(-4px);
+}
+
+/* ═══════════════════════════════════════════
    Services Page: Row Hover Effects
    (from 07-services.html)
    ═══════════════════════════════════════════ */

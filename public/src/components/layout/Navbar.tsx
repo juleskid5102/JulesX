@@ -38,9 +38,9 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-slate-900 flex items-center justify-center">
-            <span className="material-symbols-outlined text-white text-xl">deployed_code</span>
-          </div>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" className="w-7 h-7" fill="currentColor">
+            <path d="M480-80 120-280v-400l360-200 360 200v400L480-80Zm-40-406v316l40 22 40-22v-316l280-154-40-22-280 154-280-154-40 22 280 154Zm40 74 278-154v-160L480-572 202-726v160l278 154Z"/>
+          </svg>
           <span className="font-heading text-xl font-bold tracking-tighter uppercase">Jules Studio</span>
         </Link>
 
