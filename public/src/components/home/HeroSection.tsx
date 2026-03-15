@@ -8,7 +8,7 @@ import Reveal from '../ui/Reveal'
  */
 
 const HERO = {
-  title: 'THIẾT KẾ\nWEBSITE\nHIỆN ĐẠI',
+  title: 'THIẾT KẾ WEBSITE HIỆN ĐẠI',
   subtitle: 'Thiết kế và phát triển website chuyên nghiệp, tối ưu trải nghiệm người dùng, hiệu năng cao và khả năng mở rộng linh hoạt.',
   cta: 'Khám Phá Jules Studio',
   ctaLink: '/du-an',
@@ -21,7 +21,7 @@ export default function HeroSection() {
       <div className="max-w-6xl w-full">
         <Reveal>
           <h1
-            className="text-white text-6xl md:text-[8rem] font-extrabold leading-[0.9] tracking-tighter mb-16 uppercase md:w-[80%] whitespace-pre-line"
+            className="text-white text-6xl md:text-[8rem] font-extrabold leading-[0.9] tracking-tighter mb-16 uppercase"
             style={{ fontFamily: "'Space Grotesk', sans-serif" }}
           >
             {HERO.title}
