@@ -50,18 +50,20 @@ export default function PortfolioPreview() {
   const project1 = projects[0]!
   const project2 = projects[1]
 
-  // Card subtitle: CATEGORY / DESIGN STYLE / COMPLETED_AT
-  const subtitle = (p: Project) =>
-    [p.category, p.designStyle, p.completedAt].filter(Boolean).join(' / ').toUpperCase()
+  const subtitle = (p: Project) => {
+    const parts = [p.category, p.designStyle]
+    const date = p.completedAt ? p.completedAt.replace(/\//g, ' - ') : ''
+    return [...parts, date].filter(Boolean).join(' / ').toUpperCase()
+  }
 
   return (
-    <section className="py-32 bg-white border-t border-slate-100">
+    <section className="py-16 bg-white border-t border-slate-100">
       <div className="px-6 max-w-7xl mx-auto">
       {/* Section Header */}
       <Reveal>
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-6">
           <h2
-            className="text-5xl md:text-6xl font-bold tracking-tight leading-none uppercase"
+            className="text-5xl md:text-6xl font-bold tracking-tight leading-tight uppercase"
             style={{ fontFamily: "'Space Grotesk', sans-serif" }}
           >
             Dự Án<br />Nổi Bật

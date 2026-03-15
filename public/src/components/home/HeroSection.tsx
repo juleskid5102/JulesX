@@ -8,7 +8,7 @@ import Reveal from '../ui/Reveal'
 
 const HERO = {
   title: 'THIẾT KẾ WEBSITE HIỆN ĐẠI',
-  subtitle: 'Studio thiết kế và phát triển website tối ưu trải nghiệm, hiệu năng và khả năng mở rộng.',
+  subtitle: 'Studio thiết kế và phát triển website cao cấp tối đa trải nghiệm, hiệu năng và khả năng mở rộng.',
   cta: 'Khám Phá Jules Studio',
   ctaLink: '/du-an',
 }
@@ -29,7 +29,7 @@ export default function HeroSection() {
 
         <Reveal delay={200}>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-            <p className="text-slate-400 text-lg md:text-xl max-w-md font-display">
+            <p className="text-white/70 text-lg md:text-xl max-w-md font-display">
               {HERO.subtitle}
             </p>
             <Link

@@ -89,8 +89,11 @@ export default function Portfolio() {
   const row3 = projects.slice(4, 7) // 4-col + 4-col + 4-col
 
   // Card subtitle: CATEGORY / DESIGN STYLE / COMPLETED_AT
-  const subtitle = (p: Project) =>
-    [p.category, p.designStyle, p.completedAt].filter(Boolean).join(' / ').toUpperCase()
+  const subtitle = (p: Project) => {
+    const parts = [p.category, p.designStyle]
+    const date = p.completedAt ? p.completedAt.replace(/\//g, ' - ') : ''
+    return [...parts, date].filter(Boolean).join(' / ').toUpperCase()
+  }
 
   return (
     <div className="bg-[#f6f6f8] text-slate-900">

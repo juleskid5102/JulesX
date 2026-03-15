@@ -53,7 +53,7 @@ export default function ProcessSection() {
   if (steps.length === 0) return null
 
   return (
-    <section className="bg-white py-32 px-6 md:px-24 border-b border-slate-100">
+    <section className="bg-white py-16 px-6 md:px-24 border-b border-slate-100">
       <div className="grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-200">
         {steps.map((step, index) => (
           <Reveal key={step.number} delay={index * 100}>

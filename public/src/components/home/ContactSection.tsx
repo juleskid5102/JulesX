@@ -80,7 +80,7 @@ export default function ContactSection() {
   }
 
   return (
-    <section id="lien-he" className="bg-white py-32 px-6 md:px-24 border-t border-slate-100">
+    <section id="lien-he" className="bg-white py-16 px-6 md:px-24 border-t border-slate-100">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-20">
         {/* Left — Info */}
         <Reveal>
@@ -105,19 +105,19 @@ export default function ContactSection() {
               <div className="space-y-8">
                 {contactInfo.email && (
                   <div>
-                    <span className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Email</span>
+                    <span className="block text-xs font-bold uppercase tracking-widest text-slate-600 mb-2">Email</span>
                     <p className="text-xl font-medium">{contactInfo.email}</p>
                   </div>
                 )}
                 {contactInfo.phone && (
                   <div>
-                    <span className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Điện thoại</span>
+                    <span className="block text-xs font-bold uppercase tracking-widest text-slate-600 mb-2">Điện thoại</span>
                     <p className="text-xl font-medium">{contactInfo.phone}</p>
                   </div>
                 )}
                 {contactInfo.address && (
                   <div>
-                    <span className="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Địa chỉ</span>
+                    <span className="block text-xs font-bold uppercase tracking-widest text-slate-600 mb-2">Địa chỉ</span>
                     <p className="text-xl font-medium">{contactInfo.address}</p>
                   </div>
                 )}
@@ -150,7 +150,7 @@ export default function ContactSection() {
                 )}
 
                 <div className="group border-b border-slate-200 focus-within:border-primary transition-colors">
-                  <label className="block text-xs font-bold uppercase tracking-widest text-slate-400">Họ và tên</label>
+                  <label className="block text-xs font-bold uppercase tracking-widest text-slate-600">Họ và tên</label>
                   <input
                     name="name"
                     type="text"
@@ -164,7 +164,7 @@ export default function ContactSection() {
                 </div>
 
                 <div className="group border-b border-slate-200 focus-within:border-primary transition-colors">
-                  <label className="block text-xs font-bold uppercase tracking-widest text-slate-400">Email</label>
+                  <label className="block text-xs font-bold uppercase tracking-widest text-slate-600">Email</label>
                   <input
                     name="email"
                     type="email"
@@ -178,7 +178,7 @@ export default function ContactSection() {
                 </div>
 
                 <div className="group border-b border-slate-200 focus-within:border-primary transition-colors">
-                  <label className="block text-xs font-bold uppercase tracking-widest text-slate-400">Số điện thoại</label>
+                  <label className="block text-xs font-bold uppercase tracking-widest text-slate-600">Số điện thoại</label>
                   <input
                     name="phone"
                     type="tel"
@@ -191,7 +191,7 @@ export default function ContactSection() {
                 </div>
 
                 <div className="group border-b border-slate-200 focus-within:border-primary transition-colors">
-                  <label className="block text-xs font-bold uppercase tracking-widest text-slate-400">Nội dung tin nhắn</label>
+                  <label className="block text-xs font-bold uppercase tracking-widest text-slate-600">Nội dung tin nhắn</label>
                   <textarea
                     name="message"
                     required
