@@ -80,24 +80,24 @@ export default function PortfolioPreview() {
         </div>
       </Reveal>
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
         {/* Project 1 — 8 columns */}
         <div className="md:col-span-8 group cursor-pointer">
           <Reveal>
-            <Link to={`/du-an/${project1.id}`}>
-              <div className="aspect-[16/10] bg-slate-100 border border-slate-200 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
+            <Link to={`/du-an/${project1.id}`} className="block border border-slate-200">
+              <div className="aspect-[16/10] overflow-hidden border-b border-slate-200">
                 <img
                   alt={project1.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover grayscale-hover"
                   src={project1.image}
                 />
               </div>
-              <div className="mt-6 flex justify-between items-start">
+              <div className="p-8 flex justify-between items-end">
                 <div>
-                  <h3 className="text-xl md:text-2xl font-bold uppercase" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{project1.title}</h3>
-                  <p className="text-slate-500 mt-1 text-sm font-display">{project1.category} • {project1.year}</p>
+                  <h3 className="text-2xl md:text-3xl font-bold font-heading mb-1">{project1.title}</h3>
+                  <p className="text-primary font-bold text-xs tracking-widest uppercase">{project1.category} / {project1.year}</p>
                 </div>
-                <span className="material-symbols-outlined text-3xl md:text-4xl group-hover:translate-x-2 transition-transform">arrow_outward</span>
+                <span className="material-symbols-outlined text-3xl md:text-4xl group-hover:translate-x-2 transition-transform">north_east</span>
               </div>
             </Link>
           </Reveal>
@@ -107,19 +107,17 @@ export default function PortfolioPreview() {
         {project2 && (
           <div className="md:col-span-4 group cursor-pointer md:mt-24">
             <Reveal delay={150}>
-              <Link to={`/du-an/${project2.id}`}>
-                <div className="aspect-[16/10] bg-slate-100 border border-slate-200 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
+              <Link to={`/du-an/${project2.id}`} className="block border border-slate-200">
+                <div className="aspect-[16/10] overflow-hidden border-b border-slate-200">
                   <img
                     alt={project2.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover grayscale-hover"
                     src={project2.image}
                   />
                 </div>
-                <div className="mt-6 flex justify-between items-start">
-                  <div>
-                    <h3 className="text-xl md:text-2xl font-bold uppercase" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{project2.title}</h3>
-                    <p className="text-slate-500 mt-1 text-sm font-display">{project2.category} • {project2.year}</p>
-                  </div>
+                <div className="p-6">
+                  <h3 className="text-xl md:text-2xl font-bold font-heading mb-1">{project2.title}</h3>
+                  <p className="text-primary font-bold text-xs tracking-widest uppercase">{project2.category} / {project2.year}</p>
                 </div>
               </Link>
             </Reveal>

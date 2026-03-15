@@ -59,7 +59,7 @@ export default function ProcessSection() {
           <Reveal key={step.number} delay={index * 100}>
             <div className={`process-card py-12 md:px-10 ${index === 0 ? 'first:pl-0' : ''} ${index === steps.length - 1 ? 'last:pr-0' : ''}`}>
               <span
-                className="process-number text-6xl font-bold text-slate-200 block mb-6 transition-all duration-300"
+                className="process-number text-6xl font-bold text-slate-200 mb-6 transition-all duration-300 inline-flex items-baseline"
                 style={{ fontFamily: "'Space Grotesk', sans-serif", fontFeatureSettings: "'tnum'" }}
               >
                 {step.number}
