@@ -55,17 +55,17 @@ export default function PortfolioPreview() {
     [p.category, p.designStyle, p.completedAt].filter(Boolean).join(' / ').toUpperCase()
 
   return (
-    <section className="py-32 bg-[#f6f6f8]">
+    <section className="py-32 bg-white border-t border-slate-100">
       <div className="px-6 max-w-7xl mx-auto">
       {/* Section Header */}
       <Reveal>
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-          <div>
-            <p className="text-primary font-bold text-xs tracking-widest mb-4 uppercase">DỰ ÁN NỔI BẬT</p>
-            <h2 className="font-heading font-[700] text-6xl md:text-7xl tracking-tight leading-none uppercase">
-              Dự Án<br />Nổi Bật
-            </h2>
-          </div>
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-6">
+          <h2
+            className="text-5xl md:text-6xl font-bold tracking-tight leading-none uppercase"
+            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+          >
+            Dự Án<br />Nổi Bật
+          </h2>
           <Link
             to="/du-an"
             className="text-sm font-bold uppercase tracking-widest hover:text-primary transition-colors flex items-center gap-2 self-start md:self-auto"

@@ -9,7 +9,7 @@ import Reveal from '../ui/Reveal'
 
 const HERO = {
   title: 'THIẾT KẾ\nWEBSITE\nHIỆN ĐẠI',
-  subtitle: 'Studio thiết kế và phát triển website\ntối ưu trải nghiệm, hiệu năng\nvà khả năng mở rộng.',
+  subtitle: 'Thiết kế và phát triển website chuyên nghiệp, tối ưu trải nghiệm người dùng, hiệu năng cao và khả năng mở rộng linh hoạt.',
   cta: 'Khám Phá Jules Studio',
   ctaLink: '/du-an',
 }
@@ -21,7 +21,7 @@ export default function HeroSection() {
       <div className="max-w-6xl w-full">
         <Reveal>
           <h1
-            className="text-white text-6xl md:text-[8rem] font-bold leading-[0.9] tracking-tight mb-12 uppercase md:w-[80%] whitespace-pre-line"
+            className="text-white text-6xl md:text-[8rem] font-extrabold leading-[0.9] tracking-tighter mb-16 uppercase md:w-[80%] whitespace-pre-line"
             style={{ fontFamily: "'Space Grotesk', sans-serif" }}
           >
             {HERO.title}
@@ -30,7 +30,7 @@ export default function HeroSection() {
 
         <Reveal delay={200}>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-10">
-            <p className="text-white/60 text-base md:text-lg max-w-md font-display whitespace-pre-line leading-relaxed">
+            <p className="text-slate-400 text-lg md:text-xl max-w-md font-display leading-relaxed">
               {HERO.subtitle}
             </p>
             <Link
