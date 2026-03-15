@@ -79,15 +79,15 @@ export default function PortfolioPreview() {
       <div className="grid grid-cols-12 gap-6">
         {/* Project 1 — 7 columns */}
         <Reveal className="col-span-12 md:col-span-7 group">
-          <Link to={`/du-an/${project1.id}`} className="block border border-slate-200">
-            <div className="aspect-video overflow-hidden border-b border-slate-200">
+          <Link to={`/du-an/${project1.id}`} className="flex flex-col h-full border border-slate-200">
+            <div className="flex-1 min-h-[280px] overflow-hidden border-b border-slate-200">
               <img
                 alt={project1.title}
                 className="w-full h-full object-cover grayscale-hover"
                 src={project1.image}
               />
             </div>
-            <div className="p-8 flex justify-between items-end">
+            <div className="p-6 md:p-8 flex justify-between items-end">
               <div>
                 <h3 className="text-2xl md:text-3xl font-bold font-heading mb-1">{project1.title}</h3>
                 <p className="text-primary font-bold text-xs tracking-widest uppercase">{subtitle(project1)}</p>
@@ -100,17 +100,20 @@ export default function PortfolioPreview() {
         {/* Project 2 — 5 columns */}
         {project2 && (
           <Reveal className="col-span-12 md:col-span-5 group" delay={150}>
-            <Link to={`/du-an/${project2.id}`} className="block border border-slate-200">
-              <div className="aspect-video md:aspect-square overflow-hidden border-b border-slate-200">
+            <Link to={`/du-an/${project2.id}`} className="flex flex-col h-full border border-slate-200">
+              <div className="flex-1 min-h-[280px] overflow-hidden border-b border-slate-200">
                 <img
                   alt={project2.title}
                   className="w-full h-full object-cover grayscale-hover"
                   src={project2.image}
                 />
               </div>
-              <div className="p-6">
-                <h3 className="text-xl md:text-2xl font-bold font-heading mb-1">{project2.title}</h3>
-                <p className="text-primary font-bold text-xs tracking-widest uppercase">{subtitle(project2)}</p>
+              <div className="p-6 md:p-8 flex justify-between items-end">
+                <div>
+                  <h3 className="text-xl md:text-2xl font-bold font-heading mb-1">{project2.title}</h3>
+                  <p className="text-primary font-bold text-xs tracking-widest uppercase">{subtitle(project2)}</p>
+                </div>
+                <span className="material-symbols-outlined text-3xl md:text-4xl group-hover:translate-x-2 transition-transform">north_east</span>
               </div>
             </Link>
           </Reveal>

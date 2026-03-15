@@ -111,16 +111,16 @@ export default function Portfolio() {
           <div className="grid grid-cols-12 gap-6">
             {row1.map((project, i) => (
               <Reveal key={project.id} className={`${i === 0 ? 'col-span-12 md:col-span-7' : 'col-span-12 md:col-span-5'} group`}>
-                <Link to={`/du-an/${project.id}`} className="block border border-slate-200">
-                  <div className={`${i === 0 ? 'aspect-video' : 'aspect-video md:aspect-square'} overflow-hidden border-b border-slate-200`}>
+                <Link to={`/du-an/${project.id}`} className="flex flex-col h-full border border-slate-200">
+                  <div className="flex-1 min-h-[280px] overflow-hidden border-b border-slate-200">
                     <img alt={project.title} className="w-full h-full object-cover grayscale-hover" src={project.image} />
                   </div>
-                  <div className={`${i === 0 ? 'p-8 flex justify-between items-end' : 'p-6'}`}>
+                  <div className="p-6 md:p-8 flex justify-between items-end">
                     <div>
-                      <h3 className={`font-heading font-[600] ${i === 0 ? 'text-3xl' : 'text-2xl'} mb-1`}>{project.title}</h3>
+                      <h3 className="font-heading font-[600] text-2xl md:text-3xl mb-1">{project.title}</h3>
                       <p className="text-primary font-bold text-xs tracking-widest uppercase">{subtitle(project)}</p>
                     </div>
-                    {i === 0 && <span className="material-symbols-outlined text-4xl font-light">north_east</span>}
+                    <span className="material-symbols-outlined text-3xl md:text-4xl font-light">north_east</span>
                   </div>
                 </Link>
               </Reveal>
@@ -133,16 +133,16 @@ export default function Portfolio() {
           <div className="grid grid-cols-12 gap-6">
             {row2.map((project, i) => (
               <Reveal key={project.id} className={`${i === 0 ? 'col-span-12 md:col-span-5' : 'col-span-12 md:col-span-7'} group`}>
-                <Link to={`/du-an/${project.id}`} className="block border border-slate-200">
-                  <div className={`${i === 0 ? 'aspect-video md:aspect-square' : 'aspect-video'} overflow-hidden border-b border-slate-200`}>
+                <Link to={`/du-an/${project.id}`} className="flex flex-col h-full border border-slate-200">
+                  <div className="flex-1 min-h-[280px] overflow-hidden border-b border-slate-200">
                     <img alt={project.title} className="w-full h-full object-cover grayscale-hover" src={project.image} />
                   </div>
-                  <div className={`${i === 1 ? 'p-8 flex justify-between items-end' : 'p-6'}`}>
+                  <div className="p-6 md:p-8 flex justify-between items-end">
                     <div>
-                      <h3 className={`font-heading font-[600] ${i === 1 ? 'text-3xl' : 'text-2xl'} mb-1`}>{project.title}</h3>
+                      <h3 className="font-heading font-[600] text-2xl md:text-3xl mb-1">{project.title}</h3>
                       <p className="text-primary font-bold text-xs tracking-widest uppercase">{subtitle(project)}</p>
                     </div>
-                    {i === 1 && <span className="material-symbols-outlined text-4xl font-light">north_east</span>}
+                    <span className="material-symbols-outlined text-3xl md:text-4xl font-light">north_east</span>
                   </div>
                 </Link>
               </Reveal>
@@ -155,13 +155,16 @@ export default function Portfolio() {
           <div className="grid grid-cols-12 gap-6">
             {row3.map((project) => (
               <Reveal key={project.id} className="col-span-12 md:col-span-4 group">
-                <Link to={`/du-an/${project.id}`} className="block border border-slate-200">
-                  <div className="aspect-square overflow-hidden border-b border-slate-200">
+                <Link to={`/du-an/${project.id}`} className="flex flex-col h-full border border-slate-200">
+                  <div className="flex-1 min-h-[280px] overflow-hidden border-b border-slate-200">
                     <img alt={project.title} className="w-full h-full object-cover grayscale-hover" src={project.image} />
                   </div>
-                  <div className="p-6">
-                    <h3 className="font-heading font-[600] text-2xl mb-1">{project.title}</h3>
-                    <p className="text-primary font-bold text-xs tracking-widest uppercase">{subtitle(project)}</p>
+                  <div className="p-6 md:p-8 flex justify-between items-end">
+                    <div>
+                      <h3 className="font-heading font-[600] text-2xl mb-1">{project.title}</h3>
+                      <p className="text-primary font-bold text-xs tracking-widest uppercase">{subtitle(project)}</p>
+                    </div>
+                    <span className="material-symbols-outlined text-3xl md:text-4xl font-light">north_east</span>
                   </div>
                 </Link>
               </Reveal>
