@@ -34,7 +34,7 @@ export default function HeroSection() {
             </p>
             <Link
               to={HERO.ctaLink}
-              className="bg-white text-slate-900 px-12 py-5 text-lg font-bold uppercase tracking-widest hover:bg-primary hover:text-white transition-all self-start"
+              className="inline-block bg-white text-slate-900 px-12 py-5 text-lg font-bold uppercase tracking-widest hover:bg-[#6366F1] hover:text-white transition-all self-start"
             >
               {HERO.cta}
             </Link>
