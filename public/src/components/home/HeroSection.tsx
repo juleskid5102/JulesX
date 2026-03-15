@@ -20,8 +20,8 @@ export default function HeroSection() {
       <div className="max-w-6xl w-full">
         <Reveal>
           <h1
-            className="text-white text-5xl md:text-[7.5rem] font-extrabold leading-[0.9] tracking-tighter mb-10 uppercase md:w-[75%]"
-            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+            className="text-white text-5xl md:text-[7.5rem] font-extrabold leading-[0.9] tracking-tighter mb-10 uppercase md:w-[90%]"
+            style={{ fontFamily: "'Syne', sans-serif" }}
           >
             {HERO.title}
           </h1>
