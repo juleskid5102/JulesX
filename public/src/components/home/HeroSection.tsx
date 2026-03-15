@@ -8,7 +8,7 @@ import Reveal from '../ui/Reveal'
 
 const HERO = {
   title: 'THIẾT KẾ WEBSITE HIỆN ĐẠI',
-  subtitle: 'Studio phát triển web chuyên xây dựng sản phẩm số cao cấp cho doanh nghiệp tiên phong.',
+  subtitle: 'Studio thiết kế và phát triển website tối ưu trải nghiệm, hiệu năng và khả năng mở rộng.',
   cta: 'Khám Phá Jules Studio',
   ctaLink: '/du-an',
 }
@@ -16,11 +16,11 @@ const HERO = {
 export default function HeroSection() {
 
   return (
-    <section className="relative min-h-screen flex flex-col justify-center bg-[#0A0A0A] px-6 md:px-24">
+    <section className="relative min-h-screen flex flex-col justify-center bg-black px-6 md:px-24 pt-28">
       <div className="max-w-6xl w-full">
         <Reveal>
           <h1
-            className="text-white text-5xl md:text-[7.5rem] font-extrabold leading-[0.9] tracking-tighter mb-10 uppercase md:w-[90%]"
+            className="text-white text-5xl md:text-[7.5rem] font-extrabold leading-[0.9] tracking-tighter mb-10 uppercase md:w-[75%]"
             style={{ fontFamily: "'Space Grotesk', sans-serif" }}
           >
             {HERO.title}
