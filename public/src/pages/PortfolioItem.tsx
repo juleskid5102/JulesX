@@ -7,7 +7,7 @@ import { API_BASE, type Project } from '../config/site'
 
 /**
  * PortfolioItem — Project detail page
- * NOW WIRED to API with fallback to PROJECTS
+ * Fetches from GET /api/public/portfolio/:id
  */
 export default function PortfolioItem() {
   const { id } = useParams<{ id: string }>()
@@ -20,16 +20,17 @@ export default function PortfolioItem() {
       .then(async (res) => {
         if (!res.ok) throw new Error('API error')
         const data: any = await res.json()
-        const list = Array.isArray(data) ? data : data.projects || data.data || []
-        const mapped = list.map((p: any) => ({
+        const list = Array.isArray(data) ? data : data.data || []
+        const mapped: Project[] = list.map((p: any) => ({
           id: p.id || p.slug || '',
+          slug: p.slug || p.id || '',
           title: p.title || p.name || '',
-          category: p.category || p.type || '',
-          year: p.year || '',
-          image: p.image || p.thumbnail || p.images?.[0] || '',
-          colSpan: 7, aspect: 'aspect-video', showArrow: true,
-          type: p.type || p.category || '',
-          date: p.date || '',
+          category: p.category || '',
+          designStyle: p.designStyle || '',
+          completedAt: p.completedAt || p.date || '',
+          image: p.image || p.thumbnail || '',
+          featured: p.featured,
+          order: p.order,
           field: p.field || '',
           description: p.description || '',
           challenge: p.challenge || '',
@@ -37,15 +38,13 @@ export default function PortfolioItem() {
           duration: p.duration || '',
           stack: p.stack || '',
           lighthouse: p.lighthouse || '',
-          gallery: p.gallery || p.images || [],
-          techTags: p.techTags || p.tags || [],
+          gallery: p.gallery || [],
+          techTags: p.techTags || [],
         }))
         setAllProjects(mapped)
-        setProject(mapped.find((p: Project) => p.id === id) || null)
+        setProject(mapped.find((p) => p.id === id) || null)
       })
-      .catch(() => {
-        // No fallback — show not found
-      })
+      .catch(() => {})
       .finally(() => setLoading(false))
   }, [id])
 
@@ -75,6 +74,7 @@ export default function PortfolioItem() {
   const prevProject = projectIndex > 0 ? allProjects[projectIndex - 1] : null
   const nextProject = projectIndex < allProjects.length - 1 ? allProjects[projectIndex + 1] : null
 
+
   return (
     <div className="bg-white text-slate-900">
       <Navbar />
@@ -97,18 +97,30 @@ export default function PortfolioItem() {
           </Reveal>
           <Reveal>
             <div className="flex flex-wrap gap-x-12 gap-y-4">
-              <div className="flex flex-col">
-                <span className="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-1">Loại hình</span>
-                <span className="text-sm font-medium tracking-widest uppercase">{project.type}</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-1">Thời gian</span>
-                <span className="text-sm font-medium tracking-widest uppercase">{project.date}</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-1">Lĩnh vực</span>
-                <span className="text-sm font-medium tracking-widest uppercase">{project.field}</span>
-              </div>
+              {project.category && (
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-1">Loại hình</span>
+                  <span className="text-sm font-medium tracking-widest uppercase">{project.category}</span>
+                </div>
+              )}
+              {project.designStyle && (
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-1">Phong cách</span>
+                  <span className="text-sm font-medium tracking-widest uppercase">{project.designStyle}</span>
+                </div>
+              )}
+              {project.completedAt && (
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-1">Hoàn thành</span>
+                  <span className="text-sm font-medium tracking-widest uppercase">{project.completedAt}</span>
+                </div>
+              )}
+              {project.field && (
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-1">Lĩnh vực</span>
+                  <span className="text-sm font-medium tracking-widest uppercase">{project.field}</span>
+                </div>
+              )}
             </div>
           </Reveal>
         </section>
@@ -121,33 +133,45 @@ export default function PortfolioItem() {
               <p className="text-xl leading-relaxed text-slate-600">{project.description}</p>
             </Reveal>
             <Reveal className="md:col-span-4 space-y-8">
-              <div className="border-l-2 border-slate-200 pl-6">
-                <p className="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-2">Duration</p>
-                <p className="text-2xl font-bold font-heading">{project.duration}</p>
-              </div>
-              <div className="border-l-2 border-slate-200 pl-6">
-                <p className="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-2">Stack</p>
-                <p className="text-2xl font-bold font-heading">{project.stack}</p>
-              </div>
-              <div className="border-l-2 border-slate-200 pl-6">
-                <p className="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-2">Lighthouse</p>
-                <p className="text-2xl font-bold font-heading">{project.lighthouse} Score</p>
-              </div>
+              {project.duration && (
+                <div className="border-l-2 border-slate-200 pl-6">
+                  <p className="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-2">Duration</p>
+                  <p className="text-2xl font-bold font-heading">{project.duration}</p>
+                </div>
+              )}
+              {project.stack && (
+                <div className="border-l-2 border-slate-200 pl-6">
+                  <p className="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-2">Stack</p>
+                  <p className="text-2xl font-bold font-heading">{project.stack}</p>
+                </div>
+              )}
+              {project.lighthouse && (
+                <div className="border-l-2 border-slate-200 pl-6">
+                  <p className="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-2">Lighthouse</p>
+                  <p className="text-2xl font-bold font-heading">{project.lighthouse} Score</p>
+                </div>
+              )}
             </Reveal>
           </div>
         </section>
 
         {/* Challenge & Solution */}
-        <section className="max-w-7xl mx-auto px-6 py-16 md:py-32 grid grid-cols-1 md:grid-cols-2 gap-20">
-          <Reveal>
-            <h3 className="font-heading font-bold text-4xl mb-8 uppercase">THÁCH THỨC</h3>
-            <p className="text-lg leading-relaxed text-slate-600">{project.challenge}</p>
-          </Reveal>
-          <Reveal>
-            <h3 className="font-heading font-bold text-4xl mb-8 uppercase">GIẢI PHÁP</h3>
-            <p className="text-lg leading-relaxed text-slate-600">{project.solution}</p>
-          </Reveal>
-        </section>
+        {(project.challenge || project.solution) && (
+          <section className="max-w-7xl mx-auto px-6 py-16 md:py-32 grid grid-cols-1 md:grid-cols-2 gap-20">
+            {project.challenge && (
+              <Reveal>
+                <h3 className="font-heading font-bold text-4xl mb-8 uppercase">THÁCH THỨC</h3>
+                <p className="text-lg leading-relaxed text-slate-600">{project.challenge}</p>
+              </Reveal>
+            )}
+            {project.solution && (
+              <Reveal>
+                <h3 className="font-heading font-bold text-4xl mb-8 uppercase">GIẢI PHÁP</h3>
+                <p className="text-lg leading-relaxed text-slate-600">{project.solution}</p>
+              </Reveal>
+            )}
+          </section>
+        )}
 
         {/* Gallery */}
         {project.gallery.length >= 3 && (
@@ -169,18 +193,20 @@ export default function PortfolioItem() {
         )}
 
         {/* Tech Tags */}
-        <Reveal>
-          <section className="max-w-7xl mx-auto px-6 py-16 flex flex-wrap gap-4 justify-center">
-            {project.techTags.map((tag) => (
-              <span
-                key={tag}
-                className="px-6 py-2 border border-slate-200 text-[10px] font-bold tracking-[0.3em] uppercase hover:bg-primary hover:text-white transition-colors"
-              >
-                {tag}
-              </span>
-            ))}
-          </section>
-        </Reveal>
+        {project.techTags.length > 0 && (
+          <Reveal>
+            <section className="max-w-7xl mx-auto px-6 py-16 flex flex-wrap gap-4 justify-center">
+              {project.techTags.map((tag) => (
+                <span
+                  key={tag}
+                  className="px-6 py-2 border border-slate-200 text-[10px] font-bold tracking-[0.3em] uppercase hover:bg-primary hover:text-white transition-colors"
+                >
+                  {tag}
+                </span>
+              ))}
+            </section>
+          </Reveal>
+        )}
 
         {/* Project Navigation */}
         <section className="max-w-7xl mx-auto px-6 py-24 border-t border-slate-200">

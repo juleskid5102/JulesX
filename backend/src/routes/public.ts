@@ -18,21 +18,64 @@ function getDb(c: any): FirestoreClient {
 
 // ─── Portfolio / Projects ────────────────────────────────────────
 
+// Helper: map raw Firestore doc → public-safe project object
+function mapPublicProject(p: any) {
+    return {
+        id: p.id,
+        slug: p.slug || p.id,
+        title: p.title || p.name || '',
+        category: p.category || '',
+        designStyle: p.designBrief?.style || p.designStyle || '',
+        field: p.field || '',
+        completedAt: p.completedAt || p.date || '',
+        description: p.description || '',
+        challenge: p.challenge || '',
+        solution: p.solution || '',
+        duration: p.duration || '',
+        stack: p.stack || '',
+        lighthouse: p.lighthouse || '',
+        image: p.image || p.thumbnail || '',
+        gallery: p.gallery || [],
+        techTags: p.techTags || p.tags || [],
+        featured: p.featured || false,
+        order: p.order ?? 99,
+    };
+}
+
 publicRoutes.get('/portfolio', async (c) => {
     const db = getDb(c);
-    const projects = await db.list('projects');
+    const allProjects = await db.list('projects');
 
-    // Sort by order field if exists, then by id
-    projects.sort((a: any, b: any) => (a.order ?? 99) - (b.order ?? 99));
+    // Only published projects for public
+    const published = allProjects
+        .filter((p: any) => p.status === 'published')
+        .sort((a: any, b: any) => (a.order ?? 99) - (b.order ?? 99))
+        .map(mapPublicProject);
 
-    // Support ?featured=true
+    // If no published projects yet, fall back to all (backward compat)
+    const projects = published.length > 0 ? published : allProjects
+        .sort((a: any, b: any) => (a.order ?? 99) - (b.order ?? 99))
+        .map(mapPublicProject);
+
+    // ?featured=true → random 2 published projects
     const featured = c.req.query('featured');
     if (featured === 'true') {
-        const featuredProjects = projects.filter((p: any) => p.featured === true);
-        return c.json({ data: featuredProjects.length > 0 ? featuredProjects : projects.slice(0, 2) });
+        const pool = projects.filter((p: any) => p.featured === true);
+        const source = pool.length >= 2 ? pool : projects;
+        // Shuffle and take 2
+        const shuffled = [...source].sort(() => Math.random() - 0.5);
+        return c.json({ data: shuffled.slice(0, 2) });
     }
 
-    return c.json({ data: projects });
+    // Pagination: ?page=1&limit=7
+    const page = Math.max(1, parseInt(c.req.query('page') || '1'));
+    const limit = Math.min(21, Math.max(1, parseInt(c.req.query('limit') || '100')));
+    const total = projects.length;
+    const totalPages = Math.ceil(total / limit);
+    const start = (page - 1) * limit;
+    const paginated = projects.slice(start, start + limit);
+
+    return c.json({ data: paginated, total, page, totalPages });
 });
 
 publicRoutes.get('/portfolio/:id', async (c) => {
@@ -52,7 +95,7 @@ publicRoutes.get('/portfolio/:id', async (c) => {
         return c.json({ error: 'Project not found' }, 404);
     }
 
-    return c.json(project);
+    return c.json(mapPublicProject(project));
 });
 
 // ─── Services ────────────────────────────────────────────────────

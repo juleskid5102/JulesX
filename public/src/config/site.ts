@@ -26,17 +26,14 @@ export const NAV_LINKS = [
 
 export interface Project {
   id: string
+  slug?: string
   title: string
   category: string
-  year: string
+  designStyle: string
+  completedAt: string
   image: string
-  colSpan: number
-  aspect: string
-  showArrow: boolean
   featured?: boolean
   order?: number
-  type: string
-  date: string
   field: string
   description: string
   challenge: string
