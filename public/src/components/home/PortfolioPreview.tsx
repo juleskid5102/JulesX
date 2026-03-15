@@ -55,7 +55,8 @@ export default function PortfolioPreview() {
     [p.category, p.designStyle, p.completedAt].filter(Boolean).join(' / ').toUpperCase()
 
   return (
-    <section className="py-32 px-6 max-w-7xl mx-auto bg-[#f6f6f8]">
+    <section className="py-32 bg-[#f6f6f8]">
+      <div className="px-6 max-w-7xl mx-auto">
       {/* Section Header */}
       <Reveal>
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
@@ -92,7 +93,7 @@ export default function PortfolioPreview() {
                 <h3 className="text-2xl md:text-3xl font-bold font-heading mb-1">{project1.title}</h3>
                 <p className="text-primary font-bold text-xs tracking-widest uppercase">{subtitle(project1)}</p>
               </div>
-              <span className="material-symbols-outlined text-3xl md:text-4xl group-hover:translate-x-2 transition-transform">north_east</span>
+              <span className="material-symbols-outlined text-3xl md:text-4xl text-slate-300 group-hover:text-primary transition-colors">north_east</span>
             </div>
           </Link>
         </Reveal>
@@ -113,11 +114,12 @@ export default function PortfolioPreview() {
                   <h3 className="text-xl md:text-2xl font-bold font-heading mb-1">{project2.title}</h3>
                   <p className="text-primary font-bold text-xs tracking-widest uppercase">{subtitle(project2)}</p>
                 </div>
-                <span className="material-symbols-outlined text-3xl md:text-4xl group-hover:translate-x-2 transition-transform">north_east</span>
+                <span className="material-symbols-outlined text-3xl md:text-4xl text-slate-300 group-hover:text-primary transition-colors">north_east</span>
               </div>
             </Link>
           </Reveal>
         )}
+      </div>
       </div>
     </section>
   )

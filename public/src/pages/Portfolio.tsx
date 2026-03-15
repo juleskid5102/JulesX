@@ -120,7 +120,7 @@ export default function Portfolio() {
                       <h3 className="font-heading font-[600] text-2xl md:text-3xl mb-1">{project.title}</h3>
                       <p className="text-primary font-bold text-xs tracking-widest uppercase">{subtitle(project)}</p>
                     </div>
-                    <span className="material-symbols-outlined text-3xl md:text-4xl font-light">north_east</span>
+                    <span className="material-symbols-outlined text-3xl md:text-4xl text-slate-300 group-hover:text-primary transition-colors">north_east</span>
                   </div>
                 </Link>
               </Reveal>
@@ -142,7 +142,7 @@ export default function Portfolio() {
                       <h3 className="font-heading font-[600] text-2xl md:text-3xl mb-1">{project.title}</h3>
                       <p className="text-primary font-bold text-xs tracking-widest uppercase">{subtitle(project)}</p>
                     </div>
-                    <span className="material-symbols-outlined text-3xl md:text-4xl font-light">north_east</span>
+                    <span className="material-symbols-outlined text-3xl md:text-4xl text-slate-300 group-hover:text-primary transition-colors">north_east</span>
                   </div>
                 </Link>
               </Reveal>
@@ -164,7 +164,7 @@ export default function Portfolio() {
                       <h3 className="font-heading font-[600] text-2xl mb-1">{project.title}</h3>
                       <p className="text-primary font-bold text-xs tracking-widest uppercase">{subtitle(project)}</p>
                     </div>
-                    <span className="material-symbols-outlined text-3xl md:text-4xl font-light">north_east</span>
+                    <span className="material-symbols-outlined text-3xl md:text-4xl text-slate-300 group-hover:text-primary transition-colors">north_east</span>
                   </div>
                 </Link>
               </Reveal>
