@@ -27,7 +27,7 @@ function mapPublicProject(p: any) {
         category: p.category || '',
         designStyle: p.designBrief?.style || p.designStyle || '',
         field: p.field || '',
-        completedAt: p.completedAt || p.date || '',
+        completedAt: p.completedAt || '',
         description: p.description || '',
         challenge: p.challenge || '',
         solution: p.solution || '',
@@ -46,14 +46,9 @@ publicRoutes.get('/portfolio', async (c) => {
     const db = getDb(c);
     const allProjects = await db.list('projects');
 
-    // Only published projects for public
-    const published = allProjects
+    // Only published projects for public — no fallback
+    const projects = allProjects
         .filter((p: any) => p.status === 'published')
-        .sort((a: any, b: any) => (a.order ?? 99) - (b.order ?? 99))
-        .map(mapPublicProject);
-
-    // If no published projects yet, fall back to all (backward compat)
-    const projects = published.length > 0 ? published : allProjects
         .sort((a: any, b: any) => (a.order ?? 99) - (b.order ?? 99))
         .map(mapPublicProject);
 
