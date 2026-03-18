@@ -122,6 +122,36 @@ adminRoutes.patch('/settings', async (c) => {
     }
 });
 
+// ─── Pricing Config (single document) ────────────────────────────
+
+adminRoutes.get('/pricing-config', async (c) => {
+    const db = getDb(c);
+    const config = await db.get('pricing_config', 'main');
+    return c.json(config || {
+        coefficient: 1.4,
+        dailyRate: 500000,
+        hoursPerDay: 8,
+        features: [],
+    });
+});
+
+adminRoutes.patch('/pricing-config', async (c) => {
+    const db = getDb(c);
+    const body = await c.req.json();
+    delete body.id;
+    body.updatedAt = new Date().toISOString();
+
+    const existing = await db.get('pricing_config', 'main');
+    if (existing) {
+        const doc = await db.update('pricing_config', 'main', body);
+        return c.json(doc);
+    } else {
+        body.createdAt = new Date().toISOString();
+        const doc = await db.create('pricing_config', body, 'main');
+        return c.json(doc);
+    }
+});
+
 // ─── Custom Claims ───────────────────────────────────────────────
 
 adminRoutes.post('/users/:uid/claims', async (c) => {

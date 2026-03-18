@@ -11,6 +11,7 @@ import Settings from './pages/Settings'
 import AdminServices from './pages/AdminServices'
 import AdminSiteSettings from './pages/AdminSiteSettings'
 import AdminContent from './pages/AdminContent'
+import PricingConfig from './pages/PricingConfig'
 
 import { PWAInstallPrompt } from './components/PWAInstallPrompt'
 
@@ -50,6 +51,7 @@ export default function App() {
           <Route path="services" element={<AdminServices />} />
           <Route path="site-settings" element={<AdminSiteSettings />} />
           <Route path="content" element={<AdminContent />} />
+          <Route path="pricing" element={<PricingConfig />} />
           <Route path="settings" element={<Settings />} />
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

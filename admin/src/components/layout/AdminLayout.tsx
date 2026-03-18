@@ -15,6 +15,7 @@ const NAV_ITEMS = [
   { to: '/services', icon: 'design_services', label: 'Dịch Vụ' },
   { to: '/content', icon: 'article', label: 'Nội Dung' },
   { to: '/site-settings', icon: 'language', label: 'Cài Đặt Web' },
+  { to: '/pricing', icon: 'payments', label: 'Báo Giá' },
   { to: '/settings', icon: 'settings', label: 'Cài Đặt' },
 ]
 

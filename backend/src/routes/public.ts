@@ -149,6 +149,28 @@ publicRoutes.get('/settings', async (c) => {
     return c.json(settings);
 });
 
+// ─── Pricing Config (for Config Builder) ────────────────────────
+
+publicRoutes.get('/pricing-config', async (c) => {
+    const db = getDb(c);
+    const config = await db.get('pricing_config', 'main');
+    if (!config) {
+        return c.json({
+            coefficient: 1.4,
+            dailyRate: 500000,
+            hoursPerDay: 8,
+            features: [],
+        });
+    }
+    // Return public-safe fields only (no internal notes)
+    return c.json({
+        coefficient: config.coefficient,
+        dailyRate: config.dailyRate,
+        hoursPerDay: config.hoursPerDay,
+        features: config.features || [],
+    });
+});
+
 // ─── Contact Form Submission ─────────────────────────────────────
 
 publicRoutes.post('/contact', async (c) => {

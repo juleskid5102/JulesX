@@ -1,19 +1,37 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Reveal from '../components/ui/Reveal'
 import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
 import { useApi } from '../hooks/useApi'
 
 /**
- * ConfigBuilder — Multi-step project estimator
- * NOW WIRED to GET /api/public/settings + POST /api/public/submit-project
+ * ConfigBuilder — Multi-step project estimator with live pricing
+ * Step 1: Choose system type
+ * Step 2: Select features (checkbox grid, filtered by type)
+ * Step 3: Contact info
+ * Step 4: Summary + pricing
  */
+
+interface Feature {
+  id: string
+  name: string
+  category: string
+  timeDev: number
+  priority: '🟢' | '🟡' | '⚪'
+  note?: string
+}
+
+interface PricingConfig {
+  coefficient: number
+  dailyRate: number
+  hoursPerDay: number
+  features: Feature[]
+}
 
 interface SystemType {
   icon: string
   title: string
   description: string
-  base_price?: number
 }
 
 const DEFAULT_TYPES: SystemType[] = [
@@ -30,6 +48,18 @@ const STEPS = [
   { number: 4, label: 'Tổng Kết' },
 ]
 
+// Package definitions
+type PackageType = 'basic' | 'standard' | 'advanced'
+const PACKAGES: { key: PackageType; label: string; desc: string; priorities: string[] }[] = [
+  { key: 'basic', label: 'Cơ Bản', desc: 'Chỉ tính năng thiết yếu', priorities: ['🟢'] },
+  { key: 'standard', label: 'Phổ Thông', desc: 'Tính năng phổ biến cho loại dự án', priorities: ['🟢', '🟡'] },
+  { key: 'advanced', label: 'Nâng Cao', desc: 'Đầy đủ tất cả tính năng', priorities: ['🟢', '🟡', '⚪'] },
+]
+
+function formatVND(amount: number): string {
+  return amount.toLocaleString('vi-VN') + 'đ'
+}
+
 export default function ConfigBuilder() {
   const api = useApi()
   const [step, setStep] = useState(1)
@@ -40,6 +70,18 @@ export default function ConfigBuilder() {
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
 
+  // Pricing data
+  const [pricingConfig, setPricingConfig] = useState<PricingConfig>({
+    coefficient: 1.4,
+    dailyRate: 500000,
+    hoursPerDay: 8,
+    features: [],
+  })
+
+  // Feature selection
+  const [selectedFeatures, setSelectedFeatures] = useState<Set<string>>(new Set())
+  const [activePackage, setActivePackage] = useState<PackageType>('standard')
+
   // Contact info (step 3)
   const [contactName, setContactName] = useState('')
   const [contactEmail, setContactEmail] = useState('')
@@ -47,17 +89,68 @@ export default function ConfigBuilder() {
   const [contactMessage, setContactMessage] = useState('')
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_BASE_URL || ''}/api/public/settings`)
-      .then(async (res) => {
-        if (!res.ok) throw new Error('Settings unavailable')
-        const data: any = await res.json()
-        if (data.systemTypes && Array.isArray(data.systemTypes) && data.systemTypes.length > 0) {
-          setSystemTypes(data.systemTypes)
-        }
-      })
-      .catch(() => {/* Use defaults */})
-      .finally(() => setLoading(false))
+    Promise.all([
+      fetch(`${import.meta.env.VITE_API_BASE_URL || ''}/api/public/settings`)
+        .then(r => r.ok ? r.json() : null)
+        .catch(() => null),
+      fetch(`${import.meta.env.VITE_API_BASE_URL || ''}/api/public/pricing-config`)
+        .then(r => r.ok ? r.json() : null)
+        .catch(() => null),
+    ]).then(([settings, pricing]) => {
+      if (settings?.systemTypes?.length > 0) {
+        setSystemTypes(settings.systemTypes)
+      }
+      if (pricing?.features?.length > 0) {
+        setPricingConfig(pricing)
+      }
+    }).finally(() => setLoading(false))
   }, [])
+
+  // Auto-select features based on active package
+  useEffect(() => {
+    if (pricingConfig.features.length === 0) return
+    const pkgDef = PACKAGES.find(p => p.key === activePackage)
+    if (!pkgDef) return
+    const newSelected = new Set<string>()
+    for (const f of pricingConfig.features) {
+      if (pkgDef.priorities.includes(f.priority)) {
+        newSelected.add(f.id)
+      }
+    }
+    setSelectedFeatures(newSelected)
+  }, [activePackage, pricingConfig.features])
+
+  // Calculate pricing for any set of features
+  const calculatePricing = (featureIds: Set<string>) => {
+    const { coefficient, dailyRate, hoursPerDay, features } = pricingConfig
+    const selected = features.filter(f => featureIds.has(f.id))
+    const timeDevTotal = selected.reduce((sum, f) => sum + f.timeDev, 0)
+    const timeClient = timeDevTotal * coefficient
+    const days = Math.ceil(timeClient / hoursPerDay)
+    const price = days * dailyRate
+    return { timeDevTotal, timeClient, days, price, count: selected.length }
+  }
+
+  // Current selection pricing
+  const currentPricing = useMemo(() => calculatePricing(selectedFeatures), [selectedFeatures, pricingConfig])
+
+  // Package pricings for comparison
+  const packagePricings = useMemo(() => {
+    return PACKAGES.map(pkg => {
+      const ids = new Set<string>()
+      for (const f of pricingConfig.features) {
+        if (pkg.priorities.includes(f.priority)) ids.add(f.id)
+      }
+      return { ...pkg, ...calculatePricing(ids), featureIds: ids }
+    })
+  }, [pricingConfig])
+
+  const toggleFeature = (id: string) => {
+    const next = new Set(selectedFeatures)
+    if (next.has(id)) next.delete(id)
+    else next.add(id)
+    setSelectedFeatures(next)
+  }
 
   const handleSubmit = async () => {
     if (!contactName || !contactEmail) {
@@ -67,12 +160,17 @@ export default function ConfigBuilder() {
     setSubmitting(true)
     setError('')
     try {
+      const selectedList = pricingConfig.features.filter(f => selectedFeatures.has(f.id))
       await api.post('/api/public/submit-project', {
-        system_type: systemTypes[selectedType]?.title || '',
+        systemType: systemTypes[selectedType]?.title || '',
         name: contactName,
         email: contactEmail,
         phone: contactPhone,
-        message: contactMessage,
+        description: contactMessage,
+        features: selectedList.map(f => ({ name: f.name, timeDev: f.timeDev, priority: f.priority })),
+        estimatedDays: currentPricing.days,
+        estimatedPrice: currentPricing.price,
+        package: activePackage,
         source: 'config-builder',
       })
       setSubmitted(true)
@@ -84,6 +182,7 @@ export default function ConfigBuilder() {
   }
 
   const canGoNext = () => {
+    if (step === 2 && selectedFeatures.size === 0) return false
     if (step === 3 && (!contactName || !contactEmail)) return false
     return true
   }
@@ -108,9 +207,14 @@ export default function ConfigBuilder() {
           <Reveal>
             <span className="material-symbols-outlined text-primary text-[80px] mb-6 block">check_circle</span>
             <h1 className="text-5xl md:text-6xl font-heading font-extrabold tracking-tight mb-6">Đã Gửi Thành Công!</h1>
-            <p className="text-xl text-slate-500 max-w-lg mx-auto mb-12">
+            <p className="text-xl text-slate-500 max-w-lg mx-auto mb-4">
               Chúng tôi sẽ liên hệ bạn trong 24 giờ để trao đổi chi tiết về dự án.
             </p>
+            <div className="bg-slate-50 border border-slate-200 p-6 max-w-md mx-auto mb-12">
+              <p className="text-sm text-slate-500 mb-2">Ước tính sơ bộ</p>
+              <p className="text-3xl font-heading font-extrabold text-primary">{formatVND(currentPricing.price)}</p>
+              <p className="text-xs text-slate-400 mt-1">{currentPricing.days} ngày • {currentPricing.count} tính năng</p>
+            </div>
             <a href="/" className="bg-slate-900 text-white px-12 py-5 text-sm font-bold uppercase tracking-widest hover:bg-primary transition-all inline-flex items-center">
               Về Trang Chủ
             </a>
@@ -119,6 +223,13 @@ export default function ConfigBuilder() {
         <Footer />
       </div>
     )
+  }
+
+  // Group features by category
+  const grouped: Record<string, Feature[]> = {}
+  for (const f of pricingConfig.features) {
+    if (!grouped[f.category]) grouped[f.category] = []
+    grouped[f.category]!.push(f)
   }
 
   return (
@@ -180,15 +291,11 @@ export default function ConfigBuilder() {
                             ? 'border border-primary bg-primary text-white'
                             : 'border border-slate-200 group-hover:border-primary group-hover:bg-primary/5'
                         } transition-colors`}>
-                          <span className={`material-symbols-outlined ${
-                            selectedType === index ? '' : 'text-slate-900 group-hover:text-primary'
-                          }`}>{type.icon}</span>
+                          <span className={`material-symbols-outlined ${selectedType === index ? '' : 'text-slate-900 group-hover:text-primary'}`}>{type.icon}</span>
                         </div>
                         <div>
                           <h3 className="font-heading font-bold text-lg mb-2 uppercase tracking-tight">{type.title}</h3>
-                          <p className={`text-sm leading-relaxed ${
-                            selectedType === index ? 'text-slate-700 font-medium' : 'text-slate-500'
-                          }`}>{type.description}</p>
+                          <p className={`text-sm leading-relaxed ${selectedType === index ? 'text-slate-700 font-medium' : 'text-slate-500'}`}>{type.description}</p>
                         </div>
                       </div>
                     ))}
@@ -197,28 +304,72 @@ export default function ConfigBuilder() {
               </Reveal>
             )}
 
-            {/* Step 2: Features (informational — discussed during consultation) */}
+            {/* Step 2: Feature Selection */}
             {step === 2 && (
               <Reveal delay={100}>
                 <div className="space-y-8">
-                  <h2 className="text-2xl font-heading font-bold">Tính năng dự án</h2>
-                  <div className="bg-primary/5 border border-primary/20 p-6">
-                    <div className="flex items-start gap-4">
-                      <span className="material-symbols-outlined text-primary text-2xl mt-0.5">info</span>
-                      <div>
-                        <p className="font-heading font-bold text-lg mb-2">Tính năng sẽ được tùy chỉnh sau</p>
-                        <p className="text-slate-600 leading-relaxed">
-                          Sau khi nhận yêu cầu, đội ngũ Jules Studio sẽ liên hệ để trao đổi chi tiết về tính năng phù hợp với dự án của bạn. 
-                          Dưới đây là một số tính năng chúng tôi hỗ trợ:
-                        </p>
-                      </div>
-                    </div>
+                  <div>
+                    <h2 className="text-2xl font-heading font-bold mb-3">Chọn tính năng cho dự án</h2>
+                    <p className="text-sm text-slate-500">Chọn gói sẵn hoặc tùy chỉnh từng tính năng. Giá cập nhật realtime bên phải.</p>
                   </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {['Responsive Design', 'CMS Integration', 'SEO Optimization', 'Analytics Dashboard', 'Multi-language', 'Payment Gateway', 'User Authentication', 'Email Notifications'].map((f) => (
-                      <div key={f} className="flex items-center gap-2 p-3 border border-slate-100 bg-slate-50/50">
-                        <span className="material-symbols-outlined text-primary text-lg">check_circle</span>
-                        <span className="text-sm text-slate-600">{f}</span>
+
+                  {/* Package Selector */}
+                  <div className="grid grid-cols-3 gap-4">
+                    {packagePricings.map((pkg) => (
+                      <button
+                        key={pkg.key}
+                        onClick={() => setActivePackage(pkg.key)}
+                        className={`p-5 text-left transition-all ${
+                          activePackage === pkg.key
+                            ? 'border-2 border-primary bg-primary/5'
+                            : 'border border-slate-200 hover:border-primary/50'
+                        }`}
+                      >
+                        <p className="font-heading font-bold text-sm uppercase tracking-tight mb-1">{pkg.label}</p>
+                        <p className="text-xs text-slate-400 mb-3">{pkg.desc}</p>
+                        <p className="font-heading font-extrabold text-lg text-primary">{formatVND(pkg.price)}</p>
+                        <p className="text-[10px] text-slate-400 mt-1">{pkg.count} tính năng • {pkg.days} ngày</p>
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Feature Grid by Category */}
+                  <div className="space-y-6">
+                    {Object.entries(grouped).map(([category, catFeatures]) => (
+                      <div key={category}>
+                        <h4 className="text-xs font-bold uppercase tracking-widest text-slate-400 border-b border-slate-100 pb-2 mb-3">{category}</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                          {catFeatures.map((feature) => {
+                            const isSelected = selectedFeatures.has(feature.id)
+                            return (
+                              <label
+                                key={feature.id}
+                                className={`flex items-center gap-3 p-3 cursor-pointer transition-all ${
+                                  isSelected
+                                    ? 'bg-primary/5 border border-primary/20'
+                                    : 'border border-slate-100 hover:border-slate-200'
+                                }`}
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={isSelected}
+                                  onChange={() => toggleFeature(feature.id)}
+                                  className="sr-only"
+                                />
+                                <div className={`w-5 h-5 border flex items-center justify-center shrink-0 transition-colors ${
+                                  isSelected ? 'border-primary bg-primary' : 'border-slate-300'
+                                }`}>
+                                  {isSelected && <span className="material-symbols-outlined text-white text-[14px]">check</span>}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <span className="text-sm font-medium">{feature.name}</span>
+                                  <span className="text-xs text-slate-400 ml-2">{feature.timeDev}h</span>
+                                </div>
+                                <span className="text-sm">{feature.priority}</span>
+                              </label>
+                            )
+                          })}
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -284,7 +435,9 @@ export default function ConfigBuilder() {
                   {error && (
                     <div className="p-4 bg-red-50 border border-red-200 text-red-600 text-sm">{error}</div>
                   )}
-                  <div className="border border-slate-200 p-8 space-y-6">
+
+                  {/* Project Info */}
+                  <div className="border border-slate-200 p-8 space-y-4">
                     <div className="flex justify-between items-center border-b border-slate-100 pb-4">
                       <span className="text-sm text-slate-500">Loại hệ thống</span>
                       <span className="text-sm font-bold">{systemTypes[selectedType]?.title}</span>
@@ -304,6 +457,43 @@ export default function ConfigBuilder() {
                       </div>
                     )}
                   </div>
+
+                  {/* Selected Features */}
+                  <div className="border border-slate-200 p-8 space-y-4">
+                    <h3 className="font-heading font-bold text-sm uppercase tracking-widest text-slate-400">Tính năng đã chọn ({selectedFeatures.size})</h3>
+                    <div className="space-y-2">
+                      {pricingConfig.features
+                        .filter(f => selectedFeatures.has(f.id))
+                        .map(f => (
+                          <div key={f.id} className="flex justify-between items-center py-1 text-sm">
+                            <span>{f.priority} {f.name}</span>
+                            <span className="text-slate-400">{f.timeDev}h</span>
+                          </div>
+                        ))
+                      }
+                    </div>
+                    <div className="border-t border-slate-200 pt-4 mt-4 space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-slate-500">Tổng time dev</span>
+                        <span className="font-bold">{currentPricing.timeDevTotal}h</span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-slate-500">Thời gian (× {pricingConfig.coefficient})</span>
+                        <span className="font-bold">{currentPricing.timeClient.toFixed(1)}h → {currentPricing.days} ngày</span>
+                      </div>
+                      <div className="flex justify-between text-lg pt-2 border-t border-slate-100">
+                        <span className="font-heading font-bold">Ước tính</span>
+                        <span className="font-heading font-extrabold text-primary">{formatVND(currentPricing.price)}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-50 p-4">
+                    <p className="text-[10px] leading-relaxed text-slate-500 uppercase tracking-tighter">
+                      * Đây là báo giá sơ bộ. Giá cuối cùng sẽ được xác nhận sau khi đội ngũ trao đổi chi tiết với bạn.
+                    </p>
+                  </div>
+
                   <button
                     onClick={handleSubmit}
                     disabled={submitting}
@@ -335,7 +525,8 @@ export default function ConfigBuilder() {
               {step < 4 && (
                 <button
                   onClick={() => { if (canGoNext()) setStep(s => s + 1) }}
-                  className="px-12 py-4 text-xs font-bold uppercase tracking-[0.2em] bg-slate-900 text-white hover:bg-primary hover:text-white transition-all"
+                  disabled={!canGoNext()}
+                  className="px-12 py-4 text-xs font-bold uppercase tracking-[0.2em] bg-slate-900 text-white hover:bg-primary hover:text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   Tiếp Theo
                 </button>
@@ -343,31 +534,69 @@ export default function ConfigBuilder() {
             </div>
           </div>
 
-          {/* Sidebar */}
+          {/* Sidebar — Live Pricing */}
           <aside className="lg:w-80">
             <Reveal delay={200}>
-              <div className="sticky top-32 border border-slate-200 p-8 space-y-8">
+              <div className="sticky top-32 border border-slate-200 p-8 space-y-6">
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">Ước Tính Chi Phí</p>
-                  <p className="text-xl font-heading font-extrabold tracking-tight">Liên hệ để báo giá</p>
+                  {pricingConfig.features.length > 0 && selectedFeatures.size > 0 ? (
+                    <>
+                      <p className="text-3xl font-heading font-extrabold tracking-tight text-primary">{formatVND(currentPricing.price)}</p>
+                      <p className="text-xs text-slate-400 mt-1">{currentPricing.days} ngày • {currentPricing.count} tính năng</p>
+                    </>
+                  ) : (
+                    <p className="text-xl font-heading font-extrabold tracking-tight">Chọn tính năng để xem giá</p>
+                  )}
                 </div>
+
                 <div className="h-[1px] bg-slate-200" />
-                <div className="bg-slate-50 p-4">
-                  <p className="text-[10px] leading-relaxed text-slate-500 uppercase tracking-tighter">
-                    * Báo giá sơ bộ, giá cuối cùng sẽ được xác nhận sau khi trao đổi chi tiết.
-                  </p>
-                </div>
-                <div className="space-y-4 pt-4">
+
+                {/* Quick Package Summary */}
+                {pricingConfig.features.length > 0 && (
+                  <div className="space-y-3">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">So Sánh Gói</p>
+                    {packagePricings.map(pkg => (
+                      <div key={pkg.key} className={`flex justify-between items-center py-1 text-xs ${activePackage === pkg.key ? 'text-primary font-bold' : 'text-slate-500'}`}>
+                        <span>{pkg.label}</span>
+                        <span>{formatVND(pkg.price)}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="h-[1px] bg-slate-200" />
+
+                <div className="space-y-4">
                   <p className="text-xs font-bold uppercase tracking-widest flex items-center justify-between">
                     <span>Đã chọn</span>
-                    <span className="text-primary">1</span>
+                    <span className="text-primary">{selectedFeatures.size > 0 ? selectedFeatures.size : 1}</span>
                   </p>
-                  <ul className="text-xs space-y-2 text-slate-500">
+                  <ul className="text-xs space-y-2 text-slate-500 max-h-48 overflow-y-auto">
                     <li className="flex items-start gap-2">
                       <span className="material-symbols-outlined text-[14px] mt-0.5">check</span>
                       {systemTypes[selectedType]?.title}
                     </li>
+                    {pricingConfig.features
+                      .filter(f => selectedFeatures.has(f.id))
+                      .slice(0, 8)
+                      .map(f => (
+                        <li key={f.id} className="flex items-start gap-2">
+                          <span className="material-symbols-outlined text-[14px] mt-0.5">check</span>
+                          {f.name}
+                        </li>
+                      ))
+                    }
+                    {selectedFeatures.size > 8 && (
+                      <li className="text-primary font-bold">+{selectedFeatures.size - 8} tính năng khác</li>
+                    )}
                   </ul>
+                </div>
+
+                <div className="bg-slate-50 p-4">
+                  <p className="text-[10px] leading-relaxed text-slate-500 uppercase tracking-tighter">
+                    * Báo giá sơ bộ, giá cuối cùng sẽ được xác nhận sau khi trao đổi chi tiết.
+                  </p>
                 </div>
               </div>
             </Reveal>
