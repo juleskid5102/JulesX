@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react'
-import Reveal from '../ui/Reveal'
+import ScrollReveal from '../ui/ScrollReveal'
 import { API_BASE } from '../../config/site'
 
 /**
- * ProcessSection — From 01-homepage.html lines 75-101
- * Data fetched from /api/public/process-steps
- * 
- * No "Quy Trình Làm Việc" label.
- * Hover: number changes to primary color + scales up.
+ * ProcessSection — Dark bg, staggered GSAP reveal
+ * 4 steps with oversized numbers, dark theme
  */
 
 interface ProcessStep {
@@ -35,14 +32,14 @@ export default function ProcessSection() {
 
   if (loading) {
     return (
-      <section className="bg-white py-32 px-6 md:px-24 border-b border-slate-100">
-        <div className="grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-200">
+      <section className="bg-[#0a0a0a] py-32 px-6">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="py-12 md:px-10 animate-pulse space-y-4">
-              <div className="h-12 w-16 bg-slate-100" />
-              <div className="h-6 w-24 bg-slate-200" />
-              <div className="h-4 w-full bg-slate-200" />
-              <div className="h-4 w-5/6 bg-slate-200" />
+            <div key={i} className="py-8 animate-pulse space-y-4">
+              <div className="h-14 w-20 bg-white/5 rounded" />
+              <div className="h-5 w-32 bg-white/10 rounded" />
+              <div className="h-4 w-full bg-white/5 rounded" />
+              <div className="h-4 w-4/5 bg-white/5 rounded" />
             </div>
           ))}
         </div>
@@ -53,26 +50,40 @@ export default function ProcessSection() {
   if (steps.length === 0) return null
 
   return (
-    <section className="bg-white py-16 px-6 md:px-24 border-b border-slate-100">
-      <div className="grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-200">
-        {steps.map((step, index) => (
-          <Reveal key={step.number} delay={index * 100}>
-            <div className={`process-card py-12 md:px-10 ${index === 0 ? 'first:pl-0' : ''} ${index === steps.length - 1 ? 'last:pr-0' : ''}`}>
+    <section className="bg-[#0a0a0a] py-32 px-6 overflow-hidden">
+      <div className="max-w-7xl mx-auto">
+        <ScrollReveal className="mb-16">
+          <span className="text-primary uppercase tracking-[0.3em] text-xs font-bold">
+            Quy Trình
+          </span>
+          <h2 className="font-heading text-4xl md:text-5xl text-white mt-4 tracking-tight">
+            Cách Chúng Tôi Làm Việc
+          </h2>
+        </ScrollReveal>
+
+        <ScrollReveal stagger={0.15} className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {steps.map((step, index) => (
+            <div
+              key={step.number}
+              className={`group py-8 ${
+                index > 0 ? 'md:border-l md:border-white/10 md:pl-8' : ''
+              }`}
+            >
               <span
-                className="process-number text-6xl font-bold text-slate-200 mb-6 transition-all duration-300 inline-flex items-baseline"
+                className="text-6xl font-bold text-white/10 mb-6 block transition-all duration-500 group-hover:text-primary/60 group-hover:translate-y-[-4px]"
                 style={{ fontFamily: "'Space Grotesk', sans-serif", fontFeatureSettings: "'tnum'" }}
               >
                 {step.number}
               </span>
-              <h3 className="text-2xl font-bold mb-4 font-heading uppercase">
+              <h3 className="text-xl font-bold text-white mb-4 font-heading uppercase tracking-tight">
                 {step.title}
               </h3>
-              <p className="text-slate-500 leading-relaxed font-display">
+              <p className="text-white/40 leading-relaxed font-display text-sm">
                 {step.description}
               </p>
             </div>
-          </Reveal>
-        ))}
+          ))}
+        </ScrollReveal>
       </div>
     </section>
   )

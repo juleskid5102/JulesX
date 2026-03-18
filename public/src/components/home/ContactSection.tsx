@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
-import Reveal from '../ui/Reveal'
+import ScrollReveal from '../ui/ScrollReveal'
 import { API_BASE } from '../../config/site'
 
 /**
- * ContactSection — From 01-homepage.html
- * Contact info fetched from /api/public/site-settings
- * Form POSTs to /api/public/contact
+ * ContactSection — Dark theme contact form + info
+ * Maintains full form logic, updated styling for Oasis pattern
  */
 export default function ContactSection() {
   const [formData, setFormData] = useState({
@@ -80,63 +79,65 @@ export default function ContactSection() {
   }
 
   return (
-    <section id="lien-he" className="bg-white py-16 px-6 md:px-24 border-t border-slate-100">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-20">
+    <section id="lien-he" className="bg-[#0a0a0a] py-32 px-6 overflow-hidden">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-20">
         {/* Left — Info */}
-        <Reveal>
+        <ScrollReveal direction="left">
           <div>
-            <h2
-              className="text-5xl md:text-6xl font-bold tracking-tight uppercase leading-none mb-8"
-              style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-            >
+            <span className="text-primary uppercase tracking-[0.3em] text-xs font-bold mb-4 block">
+              Liên Hệ
+            </span>
+            <h2 className="font-heading text-4xl md:text-5xl text-white tracking-tight leading-tight mb-8">
               Hãy bắt đầu<br />dự án của bạn.
             </h2>
-            <p className="text-xl text-slate-500 mb-12">
+            <p className="text-white/50 text-lg mb-12 font-display font-light">
               Gửi thông tin liên hệ, chúng tôi sẽ phản hồi trong 24 giờ.
             </p>
 
             {infoLoading ? (
               <div className="space-y-8 animate-pulse">
-                <div className="h-4 w-40 bg-slate-200" />
-                <div className="h-4 w-32 bg-slate-200" />
-                <div className="h-4 w-48 bg-slate-200" />
+                <div className="h-4 w-40 bg-white/10" />
+                <div className="h-4 w-32 bg-white/10" />
+                <div className="h-4 w-48 bg-white/10" />
               </div>
             ) : (
               <div className="space-y-8">
                 {contactInfo.email && (
                   <div>
-                    <span className="block text-xs font-bold uppercase tracking-widest text-slate-600 mb-2">Email</span>
-                    <p className="text-xl font-medium">{contactInfo.email}</p>
+                    <span className="block text-[10px] font-bold uppercase tracking-[0.3em] text-primary mb-2">Email</span>
+                    <a href={`mailto:${contactInfo.email}`} className="text-lg text-white/80 hover:text-primary transition-colors font-display">
+                      {contactInfo.email}
+                    </a>
                   </div>
                 )}
                 {contactInfo.phone && (
                   <div>
-                    <span className="block text-xs font-bold uppercase tracking-widest text-slate-600 mb-2">Điện thoại</span>
-                    <p className="text-xl font-medium">{contactInfo.phone}</p>
+                    <span className="block text-[10px] font-bold uppercase tracking-[0.3em] text-primary mb-2">Điện thoại</span>
+                    <p className="text-lg text-white/80 font-display">{contactInfo.phone}</p>
                   </div>
                 )}
                 {contactInfo.address && (
                   <div>
-                    <span className="block text-xs font-bold uppercase tracking-widest text-slate-600 mb-2">Địa chỉ</span>
-                    <p className="text-xl font-medium">{contactInfo.address}</p>
+                    <span className="block text-[10px] font-bold uppercase tracking-[0.3em] text-primary mb-2">Địa chỉ</span>
+                    <p className="text-lg text-white/60 font-display">{contactInfo.address}</p>
                   </div>
                 )}
               </div>
             )}
           </div>
-        </Reveal>
+        </ScrollReveal>
 
         {/* Right — Form */}
-        <Reveal delay={150}>
-          <div className="bg-white border border-slate-200 p-8 md:p-12">
+        <ScrollReveal direction="right" delay={0.2}>
+          <div className="bg-white/[0.03] border border-white/10 p-8 md:p-12">
             {status === 'success' ? (
               <div className="text-center py-12">
                 <span className="material-symbols-outlined text-primary text-[64px] mb-4 block">check_circle</span>
-                <h3 className="font-heading text-2xl font-bold mb-3">Đã gửi thành công!</h3>
-                <p className="text-slate-500 mb-8">Chúng tôi sẽ phản hồi trong 24 giờ.</p>
+                <h3 className="font-heading text-2xl font-bold text-white mb-3">Đã gửi thành công!</h3>
+                <p className="text-white/50 mb-8">Chúng tôi sẽ phản hồi trong 24 giờ.</p>
                 <button
                   onClick={() => setStatus('idle')}
-                  className="text-primary font-bold text-sm uppercase tracking-widest hover:underline"
+                  className="text-primary font-bold text-sm uppercase tracking-[0.2em] hover:underline"
                 >
                   Gửi tin nhắn khác
                 </button>
@@ -144,13 +145,13 @@ export default function ContactSection() {
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col gap-8">
                 {status === 'error' && errorMsg && (
-                  <div className="p-4 bg-red-50 border border-red-200 text-red-600 text-sm">
+                  <div className="p-4 bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
                     {errorMsg}
                   </div>
                 )}
 
-                <div className="group border-b border-slate-200 focus-within:border-primary transition-colors">
-                  <label className="block text-xs font-bold uppercase tracking-widest text-slate-600">Họ và tên</label>
+                <div className="group border-b border-white/10 focus-within:border-primary transition-colors">
+                  <label className="block text-[10px] font-bold uppercase tracking-[0.3em] text-white/40">Họ và tên</label>
                   <input
                     name="name"
                     type="text"
@@ -158,13 +159,13 @@ export default function ContactSection() {
                     value={formData.name}
                     onChange={handleChange}
                     disabled={loading}
-                    className="w-full border-none px-0 py-4 focus:ring-0 text-lg placeholder:text-slate-300 bg-transparent outline-none disabled:opacity-50"
+                    className="w-full border-none px-0 py-4 focus:ring-0 text-lg text-white placeholder:text-white/20 bg-transparent outline-none disabled:opacity-50 font-display"
                     placeholder="Nguyễn Văn A"
                   />
                 </div>
 
-                <div className="group border-b border-slate-200 focus-within:border-primary transition-colors">
-                  <label className="block text-xs font-bold uppercase tracking-widest text-slate-600">Email</label>
+                <div className="group border-b border-white/10 focus-within:border-primary transition-colors">
+                  <label className="block text-[10px] font-bold uppercase tracking-[0.3em] text-white/40">Email</label>
                   <input
                     name="email"
                     type="email"
@@ -172,33 +173,33 @@ export default function ContactSection() {
                     value={formData.email}
                     onChange={handleChange}
                     disabled={loading}
-                    className="w-full border-none px-0 py-4 focus:ring-0 text-lg placeholder:text-slate-300 bg-transparent outline-none disabled:opacity-50"
+                    className="w-full border-none px-0 py-4 focus:ring-0 text-lg text-white placeholder:text-white/20 bg-transparent outline-none disabled:opacity-50 font-display"
                     placeholder="email@vi-du.com"
                   />
                 </div>
 
-                <div className="group border-b border-slate-200 focus-within:border-primary transition-colors">
-                  <label className="block text-xs font-bold uppercase tracking-widest text-slate-600">Số điện thoại</label>
+                <div className="group border-b border-white/10 focus-within:border-primary transition-colors">
+                  <label className="block text-[10px] font-bold uppercase tracking-[0.3em] text-white/40">Số điện thoại</label>
                   <input
                     name="phone"
                     type="tel"
                     value={formData.phone}
                     onChange={handleChange}
                     disabled={loading}
-                    className="w-full border-none px-0 py-4 focus:ring-0 text-lg placeholder:text-slate-300 bg-transparent outline-none disabled:opacity-50"
+                    className="w-full border-none px-0 py-4 focus:ring-0 text-lg text-white placeholder:text-white/20 bg-transparent outline-none disabled:opacity-50 font-display"
                     placeholder="090 123 4567"
                   />
                 </div>
 
-                <div className="group border-b border-slate-200 focus-within:border-primary transition-colors">
-                  <label className="block text-xs font-bold uppercase tracking-widest text-slate-600">Nội dung tin nhắn</label>
+                <div className="group border-b border-white/10 focus-within:border-primary transition-colors">
+                  <label className="block text-[10px] font-bold uppercase tracking-[0.3em] text-white/40">Nội dung tin nhắn</label>
                   <textarea
                     name="message"
                     required
                     value={formData.message}
                     onChange={handleChange}
                     disabled={loading}
-                    className="w-full border-none px-0 py-4 focus:ring-0 text-lg placeholder:text-slate-300 resize-none bg-transparent outline-none disabled:opacity-50"
+                    className="w-full border-none px-0 py-4 focus:ring-0 text-lg text-white placeholder:text-white/20 resize-none bg-transparent outline-none disabled:opacity-50 font-display"
                     placeholder="Hãy mô tả về dự án của bạn..."
                     rows={4}
                   />
@@ -207,7 +208,7 @@ export default function ContactSection() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="bg-slate-900 text-white py-6 text-sm font-bold uppercase tracking-widest hover:bg-primary transition-all mt-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                  className="bg-primary text-white py-5 text-xs font-bold uppercase tracking-[0.2em] hover:bg-primary/80 transition-all mt-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                 >
                   {loading ? (
                     <>
@@ -221,7 +222,7 @@ export default function ContactSection() {
               </form>
             )}
           </div>
-        </Reveal>
+        </ScrollReveal>
       </div>
     </section>
   )

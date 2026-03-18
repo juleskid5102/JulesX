@@ -9,18 +9,17 @@ import ConfigBuilder from './pages/ConfigBuilder'
 import OrderTracking from './pages/OrderTracking'
 import NotFound from './pages/NotFound'
 
+import SmoothScroll from './components/SmoothScroll'
 import { ContactFAB } from './components/ContactFAB'
-import { PWAInstallPrompt } from './components/PWAInstallPrompt'
-import ScrollToTop from './components/ScrollToTop'
 
 /**
  * Public App — Customer-facing pages only
  * Admin dashboard is at admin-julesstudio.pages.dev
+ * SmoothScroll provides Lenis + resets scroll on route change
  */
 export default function App() {
   return (
-    <>
-      <ScrollToTop />
+    <SmoothScroll>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/du-an" element={<Portfolio />} />
@@ -35,7 +34,6 @@ export default function App() {
 
       {/* Global Components */}
       <ContactFAB />
-      <PWAInstallPrompt />
-    </>
+    </SmoothScroll>
   )
 }

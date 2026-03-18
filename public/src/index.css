@@ -106,7 +106,10 @@
    ═══════════════════════════════════════════ */
 
 body {
+  background-color: #000;
+  color: rgba(255, 255, 255, 0.8);
   font-family: 'Manrope', sans-serif;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -134,17 +137,16 @@ h1, h2, h3, .font-heading {
    ═══════════════════════════════════════════ */
 
 .process-card:hover .process-number {
-  color: #000000;
+  color: #6366F1;
   transform: scale(1.08) translateY(-4px);
 }
 
 /* ═══════════════════════════════════════════
-   Services Page: Row Hover Effects
-   (from 07-services.html)
+   Services Page: Row Hover Effects (Dark Theme)
    ═══════════════════════════════════════════ */
 
 .service-row:hover .service-bg {
-  opacity: 0.05;
+  opacity: 0.08;
 }
 
 .service-row:hover .service-title {
@@ -192,6 +194,99 @@ h1, h2, h3, .font-heading {
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ═══════════════════════════════════════════
+   Lenis Smooth Scroll
+   ═══════════════════════════════════════════ */
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════
+   Glass Navbar
+   ═══════════════════════════════════════════ */
+
+.glass-nav {
+  background: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.glass-nav-solid {
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ═══════════════════════════════════════════
+   Hero Gradient Overlay
+   ═══════════════════════════════════════════ */
+
+.hero-gradient {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+}
+
+/* ═══════════════════════════════════════════
+   Card Overlay (bottom-to-top gradient)
+   ═══════════════════════════════════════════ */
+
+.card-overlay {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0) 60%
+  );
+}
+
+/* ═══════════════════════════════════════════
+   Parallax Background
+   ═══════════════════════════════════════════ */
+
+.parallax-bg {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* ═══════════════════════════════════════════
+   Scrollbar (subtle premium)
+   ═══════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6366F1;
+}
+
+/* ═══════════════════════════════════════════
+   Reduced Motion
+   ═══════════════════════════════════════════ */
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

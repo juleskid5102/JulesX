@@ -1,12 +1,11 @@
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import Reveal from '../ui/Reveal'
+import ScrollReveal from '../ui/ScrollReveal'
 import { API_BASE, type Project } from '../../config/site'
 
 /**
- * PortfolioPreview — Homepage section
- * Fetches random 2 projects via ?featured=true
- * Layout = Row 1 of Portfolio page (7-col + 5-col)
+ * PortfolioPreview — Dark theme, image cards with grayscale→color + overlay
+ * Oasis-style staggered reveal
  */
 export default function PortfolioPreview() {
   const [projects, setProjects] = useState<Project[]>([])
@@ -18,7 +17,7 @@ export default function PortfolioPreview() {
         if (!res.ok) throw new Error('API error')
         const data: any = await res.json()
         const list = Array.isArray(data) ? data : data.data || []
-        setProjects(list.slice(0, 2).map((p: any): Project => ({
+        setProjects(list.slice(0, 4).map((p: any): Project => ({
           id: p.id || p.slug || '',
           slug: p.slug || p.id || '',
           title: p.title || p.name || '',
@@ -43,85 +42,79 @@ export default function PortfolioPreview() {
       .finally(() => setLoading(false))
   }, [])
 
-  if (loading || projects.length === 0) {
-    return null
+  if (loading) {
+    return (
+      <section className="bg-black py-32 px-6">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-[400px] bg-white/5 animate-pulse" />
+          ))}
+        </div>
+      </section>
+    )
   }
 
-  const project1 = projects[0]!
-  const project2 = projects[1]
-
-  const subtitle = (p: Project) => {
-    const parts = [p.category, p.designStyle]
-    const date = p.completedAt ? p.completedAt.replace(/\//g, ' - ') : ''
-    return [...parts, date].filter(Boolean).join(' / ').toUpperCase()
-  }
+  if (projects.length === 0) return null
 
   return (
-    <section className="py-16 bg-white border-t border-slate-100">
-      <div className="px-6 max-w-7xl mx-auto">
-      {/* Section Header */}
-      <Reveal>
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-6">
-          <h2
-            className="text-5xl md:text-6xl font-bold tracking-tight leading-tight uppercase"
-            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-          >
-            Dự Án<br />Nổi Bật
-          </h2>
-          <Link
-            to="/du-an"
-            className="text-sm font-bold uppercase tracking-widest hover:text-primary transition-colors flex items-center gap-2 self-start md:self-auto"
-          >
-            Xem Tất Cả
-            <span className="material-symbols-outlined text-lg">arrow_forward</span>
-          </Link>
-        </div>
-      </Reveal>
+    <section className="bg-black py-32 px-6 overflow-hidden">
+      <div className="max-w-7xl mx-auto">
+        <ScrollReveal>
+          <div className="flex justify-between items-end mb-16">
+            <div>
+              <span className="text-primary uppercase tracking-[0.3em] text-xs font-bold">
+                Portfolio
+              </span>
+              <h2 className="font-heading text-4xl md:text-5xl text-white mt-4 tracking-tight">
+                Dự Án Nổi Bật
+              </h2>
+            </div>
+            <Link
+              to="/du-an"
+              className="hidden md:block text-primary border-b border-primary/30 pb-1 hover:border-primary transition-all uppercase tracking-[0.2em] text-xs font-bold"
+            >
+              Xem Tất Cả
+            </Link>
+          </div>
+        </ScrollReveal>
 
-      {/* Row 1 layout: 7-col + 5-col — matching Portfolio page */}
-      <div className="grid grid-cols-12 gap-6">
-        {/* Project 1 — 7 columns */}
-        <Reveal className="col-span-12 md:col-span-7 group">
-          <Link to={`/du-an/${project1.id}`} className="flex flex-col h-full border border-slate-200">
-            <div className="flex-1 min-h-[280px] overflow-hidden border-b border-slate-200">
+        <ScrollReveal stagger={0.12} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {projects.map((project) => (
+            <Link
+              key={project.id}
+              to={`/du-an/${project.id}`}
+              className="relative group h-[450px] overflow-hidden cursor-pointer"
+            >
               <img
-                alt={project1.title}
-                className="w-full h-full object-cover grayscale-hover"
-                src={project1.image}
+                alt={project.title}
+                loading="lazy"
+                className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
+                src={project.image}
               />
-            </div>
-            <div className="p-6 md:p-8 flex justify-between items-end">
-              <div>
-                <h3 className="text-2xl md:text-3xl font-bold font-heading mb-1">{project1.title}</h3>
-                <p className="text-primary font-bold text-xs tracking-widest uppercase">{subtitle(project1)}</p>
-              </div>
-              <span className="material-symbols-outlined text-3xl md:text-4xl text-slate-300 group-hover:text-primary transition-colors">north_east</span>
-            </div>
-          </Link>
-        </Reveal>
-
-        {/* Project 2 — 5 columns */}
-        {project2 && (
-          <Reveal className="col-span-12 md:col-span-5 group" delay={150}>
-            <Link to={`/du-an/${project2.id}`} className="flex flex-col h-full border border-slate-200">
-              <div className="flex-1 min-h-[280px] overflow-hidden border-b border-slate-200">
-                <img
-                  alt={project2.title}
-                  className="w-full h-full object-cover grayscale-hover"
-                  src={project2.image}
-                />
-              </div>
-              <div className="p-6 md:p-8 flex justify-between items-end">
-                <div>
-                  <h3 className="text-xl md:text-2xl font-bold font-heading mb-1">{project2.title}</h3>
-                  <p className="text-primary font-bold text-xs tracking-widest uppercase">{subtitle(project2)}</p>
-                </div>
-                <span className="material-symbols-outlined text-3xl md:text-4xl text-slate-300 group-hover:text-primary transition-colors">north_east</span>
+              <div className="absolute inset-0 card-overlay flex flex-col justify-end p-8">
+                <span className="bg-primary/90 text-white text-[10px] px-3 py-1 w-fit mb-4 uppercase tracking-[0.2em] font-bold">
+                  {project.category || project.designStyle || 'Web'}
+                </span>
+                <h3 className="font-heading text-2xl text-white mb-2 font-bold">
+                  {project.title}
+                </h3>
+                <p className="text-white/50 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  {project.field || project.description?.slice(0, 80) || ''}
+                </p>
               </div>
             </Link>
-          </Reveal>
-        )}
-      </div>
+          ))}
+        </ScrollReveal>
+
+        {/* Mobile "View All" */}
+        <div className="md:hidden text-center mt-10">
+          <Link
+            to="/du-an"
+            className="text-primary border-b border-primary/30 pb-1 uppercase tracking-[0.2em] text-xs font-bold"
+          >
+            Xem Tất Cả Dự Án
+          </Link>
+        </div>
       </div>
     </section>
   )

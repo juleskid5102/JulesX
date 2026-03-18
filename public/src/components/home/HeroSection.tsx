@@ -1,46 +1,59 @@
 import { Link } from 'react-router-dom'
-import Reveal from '../ui/Reveal'
+import ScrollReveal from '../ui/ScrollReveal'
 
 /**
- * HeroSection — Matched exactly to Stitch 00-hero.html (Vietnamese version)
- * Black bg, oversized heading, Space Grotesk for Vietnamese support
+ * HeroSection — Fullscreen with background image + gradient overlay
+ * Oasis-style storytelling: image fills viewport, text reveals on scroll
  */
-
-const HERO = {
-  title: 'THIẾT KẾ WEBSITE HIỆN ĐẠI',
-  subtitle: 'Studio thiết kế và phát triển website cao cấp tối đa trải nghiệm, hiệu năng và khả năng mở rộng.',
-  cta: 'Khám Phá Jules Studio',
-  ctaLink: '/du-an',
-}
-
 export default function HeroSection() {
-
   return (
-    <section className="relative min-h-screen flex flex-col justify-center bg-black px-6 md:px-24 pt-28">
-      <div className="max-w-6xl w-full">
-        <Reveal>
-          <h1
-            className="text-white text-5xl md:text-[7.5rem] font-extrabold leading-[0.9] tracking-tighter mb-10 uppercase md:w-[90%]"
-            style={{ fontFamily: "'Syne', sans-serif" }}
-          >
-            {HERO.title}
-          </h1>
-        </Reveal>
-
-        <Reveal delay={200}>
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-            <p className="text-white/70 text-lg md:text-xl max-w-md font-display">
-              {HERO.subtitle}
-            </p>
-            <Link
-              to={HERO.ctaLink}
-              className="inline-block bg-white text-slate-900 px-12 py-5 text-lg font-bold uppercase tracking-widest hover:bg-[#6366F1] hover:text-white transition-all self-start"
-            >
-              {HERO.cta}
-            </Link>
-          </div>
-        </Reveal>
+    <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      {/* Background Image + Gradient */}
+      <div className="absolute inset-0 z-0">
+        <img
+          alt="Jules Studio workspace"
+          className="w-full h-full object-cover"
+          src="/images/hero-studio.png"
+        />
+        <div className="absolute inset-0 hero-gradient" />
       </div>
+
+      {/* Content */}
+      <ScrollReveal direction="none" duration={1.2} className="relative z-10 text-center px-6 max-w-5xl mx-auto mt-16">
+        <span className="block text-primary uppercase tracking-[0.4em] mb-6 text-sm font-semibold">
+          Web Design Studio
+        </span>
+        <h1
+          className="text-white text-5xl md:text-7xl lg:text-[6rem] font-extrabold leading-[0.95] tracking-tighter mb-8 uppercase"
+          style={{ fontFamily: "'Syne', sans-serif" }}
+        >
+          THIẾT KẾ WEBSITE<br />
+          <span className="text-primary/80">HIỆN ĐẠI</span>
+        </h1>
+        <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto mb-12 font-display font-light">
+          Studio thiết kế và phát triển website cao cấp — tối đa trải nghiệm, hiệu năng và khả năng mở rộng.
+        </p>
+
+        {/* Animated divider */}
+        <div className="flex justify-center mb-12">
+          <div className="w-px h-16 bg-primary/40" />
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+          <Link
+            to="/bao-gia"
+            className="bg-primary text-white px-12 py-5 text-xs uppercase tracking-[0.3em] font-bold hover:bg-primary/80 transition-all duration-300"
+          >
+            Bắt Đầu Dự Án
+          </Link>
+          <Link
+            to="/du-an"
+            className="text-white/70 hover:text-white transition-colors uppercase tracking-[0.2em] text-xs font-semibold border-b border-white/20 pb-1 hover:border-white/50"
+          >
+            Xem Portfolio
+          </Link>
+        </div>
+      </ScrollReveal>
     </section>
   )
 }

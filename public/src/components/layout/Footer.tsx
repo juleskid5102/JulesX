@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { API_BASE, SITE } from '../../config/site'
+import ScrollReveal from '../ui/ScrollReveal'
 
 interface FooterData {
   email: string
@@ -9,7 +10,8 @@ interface FooterData {
 }
 
 /**
- * Footer — Fetches contact + social from /api/public/site-settings
+ * Footer — Dark premium, ScrollReveal animated
+ * Fetches contact + social from /api/public/site-settings
  */
 export default function Footer() {
   const [data, setData] = useState<FooterData>({ email: '', address: '', social: [] })
@@ -34,75 +36,77 @@ export default function Footer() {
   }, [])
 
   return (
-    <footer className="bg-black text-white py-20 px-6">
-      {/* Top Section */}
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-10">
-        {/* Brand */}
-        <div>
-          <Link to="/">
-            <h2 className="font-heading font-extrabold text-3xl tracking-tighter uppercase mb-2">
-              JULES STUDIO
-            </h2>
-          </Link>
-          <p className="text-slate-400 text-sm max-w-xs">
-            {SITE.tagline}
-          </p>
-        </div>
-
-        {/* Columns */}
-        <div className="flex flex-col md:flex-row gap-10 md:gap-20">
-          {/* Social */}
-          {data.social.length > 0 && (
-            <div className="flex flex-col gap-4">
-              <p className="text-xs font-bold tracking-widest text-primary uppercase">
-                Mạng xã hội
-              </p>
-              {data.social.map((s) => (
-                <a
-                  key={s.href}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm hover:text-primary transition-colors"
-                >
-                  {s.label}
-                </a>
-              ))}
-            </div>
-          )}
-
-          {/* Contact */}
-          <div className="flex flex-col gap-4">
-            <p className="text-xs font-bold tracking-widest text-primary uppercase">
-              Liên hệ
+    <footer className="bg-[#0a0a0a] text-white py-24 px-6 overflow-hidden">
+      <ScrollReveal className="max-w-7xl mx-auto">
+        {/* Top Section */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-10">
+          {/* Brand */}
+          <div>
+            <Link to="/">
+              <h2 className="font-heading font-extrabold text-3xl tracking-tighter uppercase mb-2">
+                JULES STUDIO
+              </h2>
+            </Link>
+            <p className="text-white/40 text-sm max-w-xs font-display">
+              {SITE.tagline}
             </p>
-            {data.email && (
-              <a
-                href={`mailto:${data.email}`}
-                className="text-sm hover:text-primary transition-colors"
-              >
-                {data.email.toUpperCase()}
-              </a>
+          </div>
+
+          {/* Columns */}
+          <div className="flex flex-col md:flex-row gap-10 md:gap-20">
+            {/* Social */}
+            {data.social.length > 0 && (
+              <div className="flex flex-col gap-4">
+                <p className="text-[10px] font-bold tracking-[0.3em] text-primary uppercase">
+                  Mạng xã hội
+                </p>
+                {data.social.map((s) => (
+                  <a
+                    key={s.href}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-white/60 hover:text-primary transition-colors duration-300"
+                  >
+                    {s.label}
+                  </a>
+                ))}
+              </div>
             )}
-            {data.address && (
-              <p className="text-sm text-slate-400">{data.address.toUpperCase()}</p>
-            )}
+
+            {/* Contact */}
+            <div className="flex flex-col gap-4">
+              <p className="text-[10px] font-bold tracking-[0.3em] text-primary uppercase">
+                Liên hệ
+              </p>
+              {data.email && (
+                <a
+                  href={`mailto:${data.email}`}
+                  className="text-sm text-white/60 hover:text-primary transition-colors duration-300"
+                >
+                  {data.email.toUpperCase()}
+                </a>
+              )}
+              {data.address && (
+                <p className="text-sm text-white/40">{data.address.toUpperCase()}</p>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Bottom Bar */}
-      <div className="max-w-7xl mx-auto mt-20 pt-10 border-t border-slate-800 flex flex-col md:flex-row justify-between text-[10px] tracking-widest text-slate-500 font-bold uppercase">
-        <p>{SITE.copyright()}</p>
-        <div className="flex gap-8 mt-4 md:mt-0">
-          <Link to="/chinh-sach" className="hover:text-white transition-colors">
-            Chính sách bảo mật
-          </Link>
-          <Link to="/dieu-khoan" className="hover:text-white transition-colors">
-            Điều khoản dịch vụ
-          </Link>
+        {/* Bottom Bar */}
+        <div className="mt-20 pt-10 border-t border-white/10 flex flex-col md:flex-row justify-between text-[10px] tracking-[0.2em] text-white/30 font-semibold uppercase">
+          <p>{SITE.copyright()}</p>
+          <div className="flex gap-8 mt-4 md:mt-0">
+            <Link to="/chinh-sach" className="hover:text-white transition-colors duration-300">
+              Chính sách bảo mật
+            </Link>
+            <Link to="/dieu-khoan" className="hover:text-white transition-colors duration-300">
+              Điều khoản dịch vụ
+            </Link>
+          </div>
         </div>
-      </div>
+      </ScrollReveal>
     </footer>
   )
 }
