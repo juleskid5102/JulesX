@@ -79,7 +79,7 @@ export default function OrderTracking() {
         ) : error ? (
           <div className="text-center py-32">
             <span className="material-symbols-outlined text-[72px] text-slate-300 mb-4 block">search_off</span>
-            <h2 className="font-heading text-3xl font-bold mb-2">Không tìm thấy đơn hàng</h2>
+            <h2 className="text-3xl font-bold mb-2 font-display text-stone-900">Không tìm thấy đơn hàng</h2>
             <p className="text-slate-500">{error}</p>
           </div>
         ) : order ? (
@@ -87,7 +87,7 @@ export default function OrderTracking() {
             <div className="lg:col-span-2 flex flex-col gap-10">
               {/* Header */}
               <div>
-                <h1 className="font-heading text-4xl lg:text-5xl mb-4 tracking-tight">Theo Dõi Đơn Hàng</h1>
+                <h1 className="text-4xl lg:text-5xl mb-4 tracking-tight font-display font-extrabold text-stone-900">Theo Dõi Đơn Hàng</h1>
                 <div className="flex items-center gap-3 text-sm font-medium">
                   <span className="text-slate-500">Mã đơn hàng: #{order.shortId}</span>
                   {statusInfo && (
@@ -120,7 +120,7 @@ export default function OrderTracking() {
               {/* Project Info Card */}
               <div className="border border-slate-200 rounded-lg p-6 bg-white flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                  <h3 className="font-heading text-xl mb-1">{order.project_name}</h3>
+                  <h3 className="text-xl mb-1 font-display font-bold text-stone-900">{order.project_name}</h3>
                   <p className="text-sm text-slate-500">{order.project_type}</p>
                 </div>
                 {order.estimated_delivery && (
@@ -133,7 +133,7 @@ export default function OrderTracking() {
               {/* Timeline */}
               {order.timeline.length > 0 && (
                 <div>
-                  <h4 className="font-heading text-lg mb-6">Tiến độ chi tiết</h4>
+                  <h4 className="text-lg mb-6 font-display font-bold text-stone-900">Tiến độ chi tiết</h4>
                   <div className="flex flex-col gap-6 relative pl-6">
                     <div className="absolute left-2 top-2 bottom-2 w-0.5 bg-slate-200 -z-10" />
                     {order.timeline.map((item, i) => (
@@ -152,7 +152,7 @@ export default function OrderTracking() {
             <aside className="lg:sticky lg:top-24 h-fit border border-slate-200 rounded-lg p-6 bg-white flex flex-col gap-8">
               {order.attachments.length > 0 && (
                 <div>
-                  <h4 className="font-heading text-lg mb-4 flex items-center gap-2">
+                  <h4 className="text-lg mb-4 flex items-center gap-2 font-display font-bold text-stone-900">
                     <span className="material-symbols-outlined">folder_open</span>
                     Tải tài liệu
                   </h4>

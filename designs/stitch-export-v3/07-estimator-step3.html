@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {},
+                    fontFamily: {
+                        "headline": ["Public Sans"],
+                        "body": ["Public Sans"],
+                        "label": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 h-full flex flex-col">
+<!-- TopNavBar: Fixed Execution of JSON -->
+<nav class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center px-6 h-16 w-full fixed top-0 z-50 font-sans text-sm font-medium">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold text-indigo-600 dark:text-indigo-400">EstimateFlow</span>
+<div class="hidden md:flex gap-6">
+<a class="text-gray-600 dark:text-gray-400 hover:text-indigo-500 transition-colors" href="#">Dashboard</a>
+<a class="text-indigo-600 dark:text-indigo-400 border-b-2 border-indigo-600 dark:border-indigo-400 pb-1" href="#">Projects</a>
+<a class="text-gray-600 dark:text-gray-400 hover:text-indigo-500 transition-colors" href="#">Templates</a>
+<a class="text-gray-600 dark:text-gray-400 hover:text-indigo-500 transition-colors" href="#">Clients</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-gray-600 dark:text-gray-400 hover:text-indigo-500">notifications</button>
+<button class="material-symbols-outlined text-gray-600 dark:text-gray-400 hover:text-indigo-500">help</button>
+<button class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition-all">Save Draft</button>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-gray-200">
+<img alt="User profile" data-alt="Close up portrait of a professional man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjsNHf0Jt3Msld2AXreMOAxBQYsTTsI57mj4d51MWTdMTtcUaOGyky0paT5Dqv7AZ4PKvNPLSjnbQ9l08g2Frn4yndDMdz21YbzW1GRmFTZdkUKsKkqW1fSdCeTGT-XccgXhG_na1nhWT7uRaztI-NqHsbBN-DmdRnPhCioqH0-et_iQU-nB5Rxdc_Eo9tGa4RN94sIp8A8FAbkNM2Nyau-cHfjtG9Zsdv08RhBHbBAuamaqzvDV9TuPznrvL9ArokU9WaUnAewk8"/>
+</div>
+</div>
+</nav>
+<div class="flex h-full pt-16">
+<!-- SideNavBar: Execution of JSON -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-gray-50 dark:bg-gray-950 border-r border-gray-200 dark:border-gray-800 flex flex-col p-4 z-40">
+<div class="mb-8 px-2">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-indigo-600" style="font-variation-settings: 'FILL' 1;">description</span>
+</div>
+<div>
+<h2 class="text-lg font-semibold text-gray-900 dark:text-white">New Estimate</h2>
+<p class="text-xs text-gray-500">Creative Agency Portal</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span>Client Info</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span>Features</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 font-bold rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">palette</span>
+<span>Design</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">schedule</span>
+<span>Timeline</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">visibility</span>
+<span>Review</span>
+</a>
+</nav>
+<div class="pt-4 border-t border-gray-200 dark:border-gray-800 space-y-4">
+<a class="flex items-center gap-3 px-3 py-2 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+<button class="w-full bg-indigo-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+                    Export PDF
+                </button>
+</div>
+</aside>
+<!-- Main Workspace -->
+<main class="ml-64 flex-1 flex flex-col md:flex-row min-h-0 w-full overflow-hidden">
+<!-- Content Area -->
+<div class="flex-1 overflow-y-auto px-8 py-10 bg-white">
+<div class="max-w-3xl mx-auto">
+<!-- Stepper -->
+<div class="mb-12">
+<div class="flex items-center justify-between mb-4">
+<div class="flex flex-col items-center gap-2 group flex-1">
+<div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center text-sm">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+<span class="text-xs font-semibold text-indigo-600">Loại hình</span>
+</div>
+<div class="h-[2px] w-full bg-indigo-600 mb-6"></div>
+<div class="flex flex-col items-center gap-2 group flex-1">
+<div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center text-sm">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+<span class="text-xs font-semibold text-indigo-600">Tính năng</span>
+</div>
+<div class="h-[2px] w-full bg-indigo-600 mb-6"></div>
+<div class="flex flex-col items-center gap-2 group flex-1">
+<div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center text-sm border-2 border-indigo-600">3</div>
+<span class="text-xs font-bold text-indigo-600">Thông Tin</span>
+</div>
+<div class="h-[2px] w-full bg-gray-200 mb-6"></div>
+<div class="flex flex-col items-center gap-2 group flex-1">
+<div class="w-8 h-8 rounded-full bg-white border-2 border-gray-200 text-gray-400 flex items-center justify-center text-sm">4</div>
+<span class="text-xs font-medium text-gray-400">Tổng Kết</span>
+</div>
+</div>
+</div>
+<!-- Header -->
+<div class="mb-10">
+<h1 class="text-3xl font-extrabold text-gray-900 mb-2 tracking-tight">Thông tin liên hệ</h1>
+<p class="text-gray-500 text-base">Vui lòng để lại thông tin để chúng tôi có thể tư vấn chi tiết hơn về dự án của bạn.</p>
+</div>
+<!-- Contact Form (Bento Layout Grid) -->
+<form class="space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-sm font-semibold text-gray-700">Họ và tên</label>
+<input class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" placeholder="Nguyễn Văn A" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-semibold text-gray-700">Email</label>
+<input class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" placeholder="example@gmail.com" type="email"/>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-sm font-semibold text-gray-700">Số điện thoại</label>
+<input class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" placeholder="0901 234 567" type="tel"/>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-semibold text-gray-700">Tên công ty / Tổ chức <span class="text-gray-400 font-normal">(tùy chọn)</span></label>
+<input class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none" placeholder="Công ty của bạn" type="text"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-semibold text-gray-700">Mô tả thêm về dự án</label>
+<textarea class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none resize-none" placeholder="Chia sẻ thêm về yêu cầu đặc biệt hoặc tầm nhìn của bạn..." rows="4"></textarea>
+</div>
+<div class="pt-8 flex items-center justify-between border-t border-gray-100">
+<button class="flex items-center gap-2 text-gray-600 font-semibold hover:text-indigo-600 transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+                                Quay Lại
+                            </button>
+<button class="bg-indigo-600 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-indigo-700 transition-all flex items-center gap-2 shadow-lg shadow-indigo-100" type="button">
+                                Tiếp Tục
+                                <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</form>
+</div>
+</div>
+<!-- Right Sidebar: Project Summary -->
+<aside class="w-full md:w-96 bg-gray-50 border-l border-gray-200 p-8 overflow-y-auto">
+<div class="sticky top-0">
+<h3 class="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-indigo-600" style="font-variation-settings: 'FILL' 1;">analytics</span>
+                        Tóm tắt dự án
+                    </h3>
+<div class="space-y-6">
+<!-- Selection Item 1 -->
+<div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+<p class="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-2">Loại hình</p>
+<div class="flex items-center justify-between">
+<span class="font-semibold text-gray-800">Web App</span>
+<span class="text-xs text-gray-400">Thay đổi</span>
+</div>
+</div>
+<!-- Selection Item 2 -->
+<div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+<p class="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-2">Tính năng đã chọn</p>
+<ul class="space-y-2">
+<li class="flex items-start gap-2 text-sm text-gray-700">
+<span class="material-symbols-outlined text-green-500 text-[18px]">check_circle</span>
+                                    Quản lý nội dung
+                                </li>
+<li class="flex items-start gap-2 text-sm text-gray-700">
+<span class="material-symbols-outlined text-green-500 text-[18px]">check_circle</span>
+                                    Thương mại điện tử
+                                </li>
+</ul>
+</div>
+<!-- Estimate Banner -->
+<div class="bg-indigo-600 rounded-2xl p-6 text-white shadow-xl shadow-indigo-200 relative overflow-hidden">
+<!-- Background Decor -->
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-[120px]">payments</span>
+</div>
+<p class="text-indigo-100 text-sm font-medium mb-1">Tổng chi phí ước tính</p>
+<h4 class="text-3xl font-extrabold mb-4">33.000.000 đ</h4>
+<div class="flex items-center gap-2 text-xs text-indigo-100 bg-white/10 py-2 px-3 rounded-lg backdrop-blur-sm">
+<span class="material-symbols-outlined text-[14px]">info</span>
+                                Giá trị có thể thay đổi dựa trên yêu cầu thực tế
+                            </div>
+</div>
+<!-- Help Card -->
+<div class="p-6 border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center text-center">
+<div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-gray-500">support_agent</span>
+</div>
+<h5 class="font-bold text-gray-900 mb-1">Cần hỗ trợ?</h5>
+<p class="text-sm text-gray-500 mb-4">Chúng tôi luôn sẵn sàng hỗ trợ bạn hoàn thành bảng dự toán này.</p>
+<button class="text-indigo-600 font-bold text-sm hover:underline">Chat với chuyên gia</button>
+</div>
+</div>
+</div>
+</aside>
+</main>
+</div>
+</body></html>

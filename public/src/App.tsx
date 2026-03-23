@@ -28,6 +28,7 @@ export default function App() {
         <Route path="/dang-ky" element={<Register />} />
         <Route path="/dich-vu" element={<Services />} />
         <Route path="/bao-gia" element={<ConfigBuilder />} />
+        <Route path="/bat-dau-du-an" element={<ConfigBuilder />} />
         <Route path="/theo-doi/:token" element={<OrderTracking />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

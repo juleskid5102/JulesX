@@ -1,187 +1,158 @@
-import { Link, useSearchParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import ScrollReveal from '../components/ui/ScrollReveal'
+import { Link } from 'react-router-dom'
+import { API_BASE, type Project } from '../config/site'
 import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
-import { API_BASE, type Project } from '../config/site'
+import ScrollReveal from '../components/ui/ScrollReveal'
+import ProjectCard from '../components/ui/ProjectCard'
 
-const ITEMS_PER_PAGE = 8
+const CATEGORIES = ['Tất Cả', 'Hospitality', 'E-Commerce', 'SaaS', 'Startup']
+const ITEMS_PER_PAGE = 6
 
 /**
- * Portfolio — Dark theme grid with Oasis-style image cards
- * Staggered reveals, grayscale→color hover, overlay gradients
+ * Portfolio — v3 Light theme
+ * Filter tabs + 2-column grid with ProjectCard + pagination
  */
 export default function Portfolio() {
-  const [searchParams, setSearchParams] = useSearchParams()
-  const currentPage = Math.max(1, parseInt(searchParams.get('page') || '1'))
-
   const [projects, setProjects] = useState<Project[]>([])
-  const [totalPages, setTotalPages] = useState(1)
+  const [activeFilter, setActiveFilter] = useState('Tất Cả')
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
-    setLoading(true)
-    fetch(`${API_BASE}/api/public/portfolio?page=${currentPage}&limit=${ITEMS_PER_PAGE}`)
-      .then(async (res) => {
-        if (!res.ok) throw new Error('Không thể tải dự án')
-        const data: any = await res.json()
-        const list = Array.isArray(data) ? data : data.data || []
-        setProjects(list.map((p: any): Project => ({
-          id: p.id || p.slug || '',
-          slug: p.slug || p.id || '',
-          title: p.title || p.name || '',
-          category: p.category || '',
-          designStyle: p.designStyle || '',
-          completedAt: p.completedAt || p.date || '',
-          image: p.image || p.thumbnail || '',
-          featured: p.featured,
-          order: p.order,
-          field: p.field || '',
-          description: p.description || '',
-          challenge: p.challenge || '',
-          solution: p.solution || '',
-          duration: p.duration || '',
-          stack: p.stack || '',
-          lighthouse: p.lighthouse || '',
-          gallery: p.gallery || [],
-          techTags: p.techTags || [],
-        })))
-        setTotalPages(data.totalPages || 1)
+    fetch(`${API_BASE}/api/public/portfolio`)
+      .then((r) => (r.ok ? r.json() : { data: [] }))
+      .then((res: any) => {
+        const list = Array.isArray(res) ? res : res.data || []
+        setProjects(list)
+        setLoading(false)
       })
-      .catch((err) => setError(err.message || 'Lỗi kết nối'))
-      .finally(() => setLoading(false))
-  }, [currentPage])
+      .catch(() => setLoading(false))
+  }, [])
 
-  const goToPage = (page: number) => {
-    setSearchParams({ page: String(page) })
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
+  // Reset page when filter changes
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [activeFilter])
 
-  if (loading) {
-    return (
-      <div className="bg-black text-white min-h-screen">
-        <Navbar />
-        <div className="flex items-center justify-center pt-48 pb-32">
-          <div className="w-8 h-8 border-2 border-primary/20 border-t-primary rounded-full animate-spin" />
-        </div>
-        <Footer />
-      </div>
-    )
-  }
+  const filtered = activeFilter === 'Tất Cả'
+    ? projects
+    : projects.filter((p) => p.field === activeFilter || p.category === activeFilter)
 
-  if (error) {
-    return (
-      <div className="bg-black text-white min-h-screen">
-        <Navbar />
-        <div className="flex flex-col items-center justify-center pt-48 pb-32">
-          <span className="material-symbols-outlined text-red-400 text-[48px] mb-4">error</span>
-          <p className="text-white/50">{error}</p>
-        </div>
-        <Footer />
-      </div>
-    )
-  }
+  // Pagination
+  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE)
+  const paginatedProjects = filtered.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  )
 
   return (
-    <div className="bg-black text-white min-h-screen">
+    <>
       <Navbar />
+      <main className="pt-32 pb-24">
+        {/* Header */}
+        <section className="px-6 max-w-7xl mx-auto text-center mb-16">
+          <ScrollReveal>
+            <h1 className="text-4xl md:text-5xl font-extrabold text-stone-900 mb-6 font-display">
+              Dự Án Nổi Bật
+            </h1>
+            <p className="text-stone-600 text-lg max-w-4xl mx-auto font-display">
+              Mỗi dự án là một câu chuyện riêng — được thiết kế phù hợp với mục tiêu kinh doanh.
+            </p>
+          </ScrollReveal>
+        </section>
 
-      {/* Hero Header */}
-      <header className="pt-48 pb-20 px-6 max-w-7xl mx-auto">
-        <ScrollReveal>
-          <span className="text-primary uppercase tracking-[0.3em] text-xs font-bold block mb-4">
-            Portfolio
-          </span>
-          <h1 className="font-heading text-5xl md:text-7xl tracking-tight font-bold">
-            Dự Án<br />Nổi Bật
-          </h1>
-        </ScrollReveal>
-      </header>
+        {/* Filter Tabs */}
+        <section className="px-6 max-w-7xl mx-auto mb-12">
+          <ScrollReveal className="flex flex-wrap gap-2 justify-center">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveFilter(cat)}
+                className={`px-5 py-2 rounded-full text-sm font-medium transition-all font-display ${
+                  activeFilter === cat
+                    ? 'bg-primary text-white'
+                    : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </ScrollReveal>
+        </section>
 
-      {/* Project Grid — 2-column cards with overlay */}
-      <main className="max-w-7xl mx-auto px-6 pb-32">
-        <ScrollReveal stagger={0.1} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {projects.map((project) => (
-            <Link
-              key={project.id}
-              to={`/du-an/${project.id}`}
-              className="relative group h-[450px] overflow-hidden cursor-pointer"
-            >
-              <img
-                alt={project.title}
-                loading="lazy"
-                className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
-                src={project.image}
-              />
-              <div className="absolute inset-0 card-overlay flex flex-col justify-end p-8">
-                <span className="bg-primary/90 text-white text-[10px] px-3 py-1 w-fit mb-4 uppercase tracking-[0.2em] font-bold">
-                  {project.category || project.designStyle || 'Web'}
-                </span>
-                <h3 className="font-heading text-2xl text-white mb-1 font-bold">
-                  {project.title}
-                </h3>
-                <p className="text-white/40 text-xs uppercase tracking-[0.2em]">
-                  {[project.field, project.completedAt?.replace(/\//g, ' - ')].filter(Boolean).join(' — ')}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </ScrollReveal>
+        {/* Projects Grid — using global ProjectCard */}
+        <section className="px-6 max-w-7xl mx-auto">
+          {loading ? (
+            <div className="grid md:grid-cols-2 gap-8">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="bg-stone-100 rounded-xl aspect-[4/3] animate-pulse" />
+              ))}
+            </div>
+          ) : paginatedProjects.length === 0 ? (
+            <p className="text-center text-stone-500 py-20 font-display">Chưa có dự án nào.</p>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-8">
+              {paginatedProjects.map((project, i) => (
+                <ScrollReveal key={project.id} delay={i * 80}>
+                  <ProjectCard project={project} />
+                </ScrollReveal>
+              ))}
+            </div>
+          )}
+        </section>
 
         {/* Pagination */}
-        {totalPages > 1 && (
-          <ScrollReveal>
-            <div className="flex items-center justify-center gap-3 pt-16">
+        {!loading && totalPages > 1 && (
+          <section className="px-6 max-w-7xl mx-auto mt-16">
+            <div className="flex items-center justify-center gap-2">
               <button
-                onClick={() => goToPage(currentPage - 1)}
-                disabled={currentPage <= 1}
-                className="w-12 h-12 border border-white/20 flex items-center justify-center hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 rounded-lg text-sm font-medium font-display transition-all disabled:opacity-30 disabled:cursor-not-allowed bg-stone-100 text-stone-600 hover:bg-stone-200"
               >
-                <span className="material-symbols-outlined text-xl">chevron_left</span>
+                ← Trước
               </button>
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                 <button
                   key={page}
-                  onClick={() => goToPage(page)}
-                  className={`w-12 h-12 border flex items-center justify-center text-sm font-bold transition-colors ${
-                    page === currentPage
-                      ? 'border-primary bg-primary text-white'
-                      : 'border-white/20 hover:border-primary hover:text-primary'
+                  onClick={() => setCurrentPage(page)}
+                  className={`w-10 h-10 rounded-lg text-sm font-bold font-display transition-all ${
+                    currentPage === page
+                      ? 'bg-primary text-white'
+                      : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
                   }`}
                 >
                   {page}
                 </button>
               ))}
               <button
-                onClick={() => goToPage(currentPage + 1)}
-                disabled={currentPage >= totalPages}
-                className="w-12 h-12 border border-white/20 flex items-center justify-center hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 rounded-lg text-sm font-medium font-display transition-all disabled:opacity-30 disabled:cursor-not-allowed bg-stone-100 text-stone-600 hover:bg-stone-200"
               >
-                <span className="material-symbols-outlined text-xl">chevron_right</span>
+                Tiếp →
               </button>
             </div>
-          </ScrollReveal>
+          </section>
         )}
+
+        {/* CTA */}
+        <section className="mt-24 bg-[#F5F5F0] py-16 px-6">
+          <ScrollReveal className="max-w-7xl mx-auto text-center">
+            <h3 className="text-2xl font-extrabold text-stone-900 mb-6 font-display">
+              Có dự án cần thực hiện?
+            </h3>
+            <Link
+              to="/bat-dau-du-an"
+              className="inline-block bg-primary text-white px-8 py-4 rounded-xl font-bold shadow-lg shadow-primary/20 hover:translate-y-[-2px] transition-all font-display"
+            >
+              Bắt Đầu Dự Án
+            </Link>
+          </ScrollReveal>
+        </section>
       </main>
-
-      {/* CTA */}
-      <section className="py-32 bg-[#0a0a0a] text-center overflow-hidden">
-        <ScrollReveal direction="none" className="max-w-4xl mx-auto px-6">
-          <h2 className="font-heading text-4xl md:text-5xl text-white tracking-tight mb-12">
-            Muốn xem thêm?
-          </h2>
-          <Link
-            to="/bao-gia"
-            className="bg-primary text-white px-12 py-5 text-xs font-bold uppercase tracking-[0.2em] hover:bg-primary/80 transition-all inline-flex items-center gap-4 group"
-          >
-            BẮT ĐẦU DỰ ÁN CỦA BẠN
-            <span className="material-symbols-outlined transition-transform group-hover:translate-x-2">arrow_forward</span>
-          </Link>
-        </ScrollReveal>
-      </section>
-
       <Footer />
-    </div>
+    </>
   )
 }

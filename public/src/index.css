@@ -25,7 +25,6 @@
 }
 
 /* ── Syne Vietnamese fallback → Space Grotesk ── */
-/* Covers: ồ, ề, ễ, ắ, ặ, ử... (U+1EA0-1EF9) */
 @font-face {
   font-family: 'Syne';
   font-style: normal;
@@ -77,24 +76,41 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════
-   Jules Studio — Exaggerated Minimalism
-   Design System (unified from Stitch HTML analysis)
+   Jules Studio v3 — Light & Elegant
+   Design System (unified from Stitch HTML)
    ═══════════════════════════════════════════ */
 
 @theme {
   /* Colors — unified across all pages */
-  --color-primary: #6366F1;
-  --color-background-light: #ffffff;
-  --color-background-dark: #101122;
+  --color-primary: #5048e5;
+  --color-background-light: #FAFAF9;
+  --color-background-dark: #0F172A;
+  --color-surface: #F5F5F0;
 
-  /* Font Families — Syne (heading) + Manrope (body) */
-  --font-heading: 'Syne', sans-serif;
-  --font-display: 'Manrope', sans-serif;
+  /* Stone palette */
+  --color-stone-50: #fafaf9;
+  --color-stone-100: #f5f5f4;
+  --color-stone-200: #e7e5e4;
+  --color-stone-300: #d6d3d1;
+  --color-stone-400: #a8a29e;
+  --color-stone-500: #78716c;
+  --color-stone-600: #57534e;
+  --color-stone-700: #44403c;
+  --color-stone-800: #292524;
+  --color-stone-900: #1c1917;
 
-  /* Border Radius — 0px (Exaggerated Minimalism = sharp edges) */
-  --radius: 0px;
-  --radius-lg: 0px;
-  --radius-xl: 0px;
+  /* Navy dark */
+  --color-navy-900: #0F172A;
+
+  /* Font Families — unified to Be Vietnam Pro */
+  --font-heading: 'Be Vietnam Pro', sans-serif;
+  --font-display: 'Be Vietnam Pro', sans-serif;
+
+  /* Border Radius — rounded (v3 design) */
+  --radius: 0.5rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
   --radius-full: 9999px;
 
   /* Animation */
@@ -102,34 +118,42 @@
 }
 
 /* ═══════════════════════════════════════════
-   Base Styles — matched to Stitch HTML
+   Base Styles — Light theme (v3)
    ═══════════════════════════════════════════ */
 
 body {
-  background-color: #000;
-  color: rgba(255, 255, 255, 0.8);
-  font-family: 'Manrope', sans-serif;
+  background-color: #FAFAF9;
+  color: #1c1917;
+  font-family: 'Be Vietnam Pro', 'Manrope', sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, .font-heading {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+
+/* ═══════════════════════════════════════════
+   Navy Dark Utility (explicit fallback)
+   ═══════════════════════════════════════════ */
+
+.bg-navy-900 {
+  background-color: #0F172A;
 }
 
 /* ═══════════════════════════════════════════
    Stitch Signature: Grayscale → Color on Hover
-   (from 01-homepage.html, 02-portfolio.html)
    ═══════════════════════════════════════════ */
 
 .grayscale-hover {
   filter: grayscale(100%);
-  transition: filter 0.3s ease;
+  transition: filter 0.7s ease, transform 0.7s ease;
 }
 
 .grayscale-hover:hover {
   filter: grayscale(0%);
+  transform: scale(1.05);
 }
 
 /* ═══════════════════════════════════════════
@@ -137,12 +161,12 @@ h1, h2, h3, .font-heading {
    ═══════════════════════════════════════════ */
 
 .process-card:hover .process-number {
-  color: #6366F1;
+  color: #5048e5;
   transform: scale(1.08) translateY(-4px);
 }
 
 /* ═══════════════════════════════════════════
-   Services Page: Row Hover Effects (Dark Theme)
+   Services Page: Row Hover Effects
    ═══════════════════════════════════════════ */
 
 .service-row:hover .service-bg {
@@ -150,17 +174,16 @@ h1, h2, h3, .font-heading {
 }
 
 .service-row:hover .service-title {
-  color: #6366F1;
+  color: #5048e5;
 }
 
 /* ═══════════════════════════════════════════
    Selection Color
-   (from 07-services.html body class)
    ═══════════════════════════════════════════ */
 
 ::selection {
-  background: rgba(99, 102, 241, 0.3);
-  color: #6366F1;
+  background: rgba(80, 72, 229, 0.2);
+  color: #5048e5;
 }
 
 /* ═══════════════════════════════════════════
@@ -213,7 +236,7 @@ html.lenis body {
 }
 
 /* ═══════════════════════════════════════════
-   Glass Navbar
+   Glass Navbar — Dark (existing style, kept for Navbar)
    ═══════════════════════════════════════════ */
 
 .glass-nav {
@@ -264,7 +287,7 @@ html.lenis body {
 }
 
 /* ═══════════════════════════════════════════
-   Scrollbar (subtle premium)
+   Scrollbar (subtle premium — light theme)
    ═══════════════════════════════════════════ */
 
 ::-webkit-scrollbar {
@@ -272,16 +295,16 @@ html.lenis body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #FAFAF9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
+  background: #d6d3d1;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6366F1;
+  background: #5048e5;
 }
 
 /* ═══════════════════════════════════════════

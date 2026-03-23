@@ -26,9 +26,12 @@ function mapPublicProject(p: any) {
         title: p.title || p.name || '',
         category: p.category || '',
         designStyle: p.designBrief?.style || p.designStyle || '',
+        designStyleIds: p.designStyleIds || [],
+        webTypeKey: p.webTypeKey || '',
         field: p.field || '',
         completedAt: p.completedAt || '',
         description: p.description || '',
+        overview: p.overview || '',
         challenge: p.challenge || '',
         solution: p.solution || '',
         duration: p.duration || '',
@@ -37,8 +40,10 @@ function mapPublicProject(p: any) {
         image: p.image || p.thumbnail || '',
         gallery: p.gallery || [],
         techTags: p.techTags || p.tags || [],
+        features: p.features || [],
         featured: p.featured || false,
         order: p.order ?? 99,
+        liveUrl: p.liveUrl || '',
     };
 }
 
@@ -171,11 +176,38 @@ publicRoutes.get('/pricing-config', async (c) => {
     });
 });
 
-// ─── Contact Form Submission ─────────────────────────────────────
+// ─── Estimator Config (for 5-step wizard) ───────────────────────
+
+publicRoutes.get('/estimator-config', async (c) => {
+    const db = getDb(c);
+    const config = await db.get('estimator_config', 'main');
+    if (!config) {
+        return c.json({
+            webTypes: [],
+            designStyles: [],
+            styleGroups: [],
+            features: [],
+            categories: [],
+            pricing: { coefficient: 1.5, dailyRate: 1000000, deposit: 0.4 },
+            priceRef: [],
+        });
+    }
+    return c.json({
+        webTypes: config.webTypes || [],
+        designStyles: config.designStyles || [],
+        styleGroups: config.styleGroups || [],
+        features: config.features || [],
+        categories: config.categories || [],
+        pricing: config.pricing || { coefficient: 1.5, dailyRate: 1000000, deposit: 0.4 },
+        priceRef: config.priceRef || [],
+    });
+});
+
+// ─── Contact Form → leads (source: contact-form) ────────────────
 
 publicRoutes.post('/contact', async (c) => {
     const body = await c.req.json();
-    const { name, email, phone, message } = body;
+    const { name, email, phone, message, company, projectName } = body;
 
     if (!name || !email || !message) {
         return c.json({ error: 'Thiếu thông tin bắt buộc (name, email, message)' }, 400);
@@ -183,13 +215,24 @@ publicRoutes.post('/contact', async (c) => {
 
     const db = getDb(c);
 
-    // Save contact to Firestore
-    const contact = await db.create('contacts', {
+    const lead = await db.create('leads', {
         name,
         email,
         phone: phone || '',
+        company: company || '',
+        projectName: projectName || '',
         message,
+        webTypeKey: null,
+        design: null,
+        features: [],
+        package: null,
+        pricing: null,
+        source: 'contact-form',
         status: 'new',
+        customerId: null,
+        configVersion: null,
+        updatedBy: null,
+        history: [],
         createdAt: new Date().toISOString(),
     });
 
@@ -203,17 +246,17 @@ publicRoutes.post('/contact', async (c) => {
         console.error('FCM notification failed:', e);
     }
 
-    return c.json({ success: true, id: contact.id });
+    return c.json({ success: true, id: lead.id });
 });
 
-// ─── Project Submission (ConfigBuilder) ──────────────────────────
+// ─── ConfigBuilder → leads (source: config-builder) ─────────────
 
-// Whitelist: only these fields are stored from ConfigBuilder
-const SUBMIT_PROJECT_FIELDS = [
-    'name', 'email', 'phone', 'company',
-    'systemType', 'budget', 'timeline', 'description',
-    'designStyle', 'colorPalette', 'animationLevel',
-    'referenceUrls', 'features', 'notes',
+const LEAD_FIELDS = [
+    'name', 'email', 'phone', 'company', 'projectName',
+    'webTypeKey', 'description',
+    'designStyles', 'designNote',
+    'features', 'package', 'notes',
+    'estimatedHours', 'estimatedDays', 'estimatedPrice',
 ] as const;
 
 publicRoutes.post('/submit-project', async (c) => {
@@ -221,7 +264,7 @@ publicRoutes.post('/submit-project', async (c) => {
 
     // Pick only whitelisted fields
     const body: Record<string, unknown> = {};
-    for (const key of SUBMIT_PROJECT_FIELDS) {
+    for (const key of LEAD_FIELDS) {
         if (raw[key] !== undefined) body[key] = raw[key];
     }
 
@@ -230,23 +273,56 @@ publicRoutes.post('/submit-project', async (c) => {
     }
 
     const db = getDb(c);
-    const submission = await db.create('project_submissions', {
-        ...body,
+
+    // Fetch current config version
+    let configVersion: string | null = null;
+    try {
+        const config = await db.get('estimator_config', 'main');
+        configVersion = config?.version || '1.0';
+    } catch (e) { /* ignore */ }
+
+    const lead = await db.create('leads', {
+        name: body.name,
+        email: body.email,
+        phone: body.phone || '',
+        company: body.company || '',
+        projectName: body.projectName || '',
+        message: body.description || body.notes || '',
+        webTypeKey: body.webTypeKey || null,
+        design: {
+            styleIds: Array.isArray(body.designStyles) ? body.designStyles : [],
+            note: (body.designNote as string) || '',
+        },
+        features: body.features || [],
+        package: body.package || null,
+        pricing: body.estimatedDays ? {
+            hours: body.estimatedHours || 0,
+            days: body.estimatedDays || 0,
+            price: body.estimatedPrice || 0,
+            coefficient: 1.5,  // snapshot current
+            dailyRate: 1000000, // snapshot current
+        } : null,
+        source: 'config-builder',
         status: 'new',
+        customerId: null,
+        configVersion,
+        updatedBy: null,
+        history: [],
         createdAt: new Date().toISOString(),
     });
 
     // Notify admins
     try {
+        const typeName = body.webTypeKey || 'Website';
         await db.notifyAdmins(
             '🚀 Yêu cầu dự án mới!',
-            `${body.name || 'Khách'} — ${body.systemType || 'Website'}`
+            `${body.name || 'Khách'} — ${typeName}`
         );
     } catch (e) {
         console.error('FCM notification failed:', e);
     }
 
-    return c.json({ success: true, id: submission.id });
+    return c.json({ success: true, id: lead.id });
 });
 
 // ─── Contact Info (for ContactFAB) ───────────────────────────────
@@ -265,56 +341,6 @@ publicRoutes.get('/contact-info', async (c) => {
         social: settings.social,
         fabChannels: settings.fabChannels,
     });
-});
-
-// ─── Guest Order (no auth needed) ────────────────────────────────
-
-publicRoutes.post('/orders', async (c) => {
-    const body = await c.req.json();
-    const { name, email, phone, ...orderData } = body;
-
-    if (!name || !email) {
-        return c.json({ error: 'Thiếu thông tin bắt buộc (name, email)' }, 400);
-    }
-
-    const db = getDb(c);
-
-    // 1. Look up or create guest profile
-    let guestId: string;
-    const existing = await db.query('guests', 'email', 'EQUAL', email, 1);
-
-    if (existing.length > 0) {
-        guestId = existing[0].id as string;
-    } else {
-        const guestDoc = await db.create('guests', {
-            name, email, phone: phone || '',
-            createdAt: new Date().toISOString(),
-            linkedUserId: null,
-        });
-        guestId = guestDoc.id as string;
-    }
-
-    // 2. Create order linked to guest
-    const order = await db.create('orders', {
-        ...orderData,
-        guestId,
-        email, name, phone: phone || '',
-        userId: null,
-        status: 'pending',
-        createdAt: new Date().toISOString(),
-    });
-
-    // 3. Notify admins
-    try {
-        await db.notifyAdmins(
-            '🛒 Đơn hàng mới!',
-            `${name} — ${orderData.systemType || orderData.service || 'Đơn hàng'}`
-        );
-    } catch (e) {
-        console.error('FCM notification failed:', e);
-    }
-
-    return c.json({ success: true, orderId: order.id, guestId });
 });
 
 export default publicRoutes;

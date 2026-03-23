@@ -1,14 +1,15 @@
 import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
 import HeroSection from '../components/home/HeroSection'
-import ProcessSection from '../components/home/ProcessSection'
+import AboutSection from '../components/home/AboutSection'
 import PortfolioPreview from '../components/home/PortfolioPreview'
-import TestimonialSection from '../components/home/TestimonialSection'
+import DifferentiatorsSection from '../components/home/DifferentiatorsSection'
+import ProcessSection from '../components/home/ProcessSection'
 import ContactSection from '../components/home/ContactSection'
 
 /**
- * Home — Oasis-style storytelling
- * Dark theme, section-based storytelling with smooth scroll
+ * Home — v3 Light & Elegant theme
+ * Storytelling-driven with smooth scroll reveals
  */
 export default function Home() {
   return (
@@ -16,9 +17,10 @@ export default function Home() {
       <Navbar />
       <main>
         <HeroSection />
-        <ProcessSection />
+        <AboutSection />
         <PortfolioPreview />
-        <TestimonialSection />
+        <DifferentiatorsSection />
+        <ProcessSection />
         <ContactSection />
       </main>
       <Footer />

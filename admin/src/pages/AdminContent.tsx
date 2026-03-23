@@ -230,7 +230,7 @@ function ContactsTab() {
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const data: any = await api.get('/api/admin/contacts', true)
+      const data: any = await api.get('/api/admin/leads', true)
       setItems(Array.isArray(data) ? data : data.data || [])
     } catch (e: any) { setError(e.message) }
     setLoading(false)

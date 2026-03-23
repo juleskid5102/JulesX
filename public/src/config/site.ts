@@ -16,13 +16,20 @@ export const SITE = {
 
 // Static nav links (not dynamic — part of layout)
 export const NAV_LINKS = [
+  { label: 'Tổng Quan', href: '/' },
   { label: 'Dự Án', href: '/du-an' },
   { label: 'Dịch Vụ', href: '/dich-vu' },
-  { label: 'Báo Giá', href: '/bao-gia' },
-  { label: 'Liên Hệ', href: '/#lien-he' },
 ] as const
 
 // ─── Types (used by components) ──────────────────────────────────
+
+export interface ProjectFeature {
+  id: string
+  name: string
+  cat: string
+  catLabel?: string
+  coeff?: number
+}
 
 export interface Project {
   id: string
@@ -30,12 +37,15 @@ export interface Project {
   title: string
   category: string
   designStyle: string
+  designStyleIds?: string[]
+  webTypeKey?: string
   completedAt: string
   image: string
   featured?: boolean
   order?: number
   field: string
   description: string
+  overview?: string
   challenge: string
   solution: string
   duration: string
@@ -43,6 +53,8 @@ export interface Project {
   lighthouse: string
   gallery: string[]
   techTags: string[]
+  features?: ProjectFeature[]
+  liveUrl?: string
 }
 
 export interface Service {

@@ -75,7 +75,7 @@ registerCrud(adminRoutes, 'services', 'services');
 registerCrud(adminRoutes, 'portfolio', 'projects');
 registerCrud(adminRoutes, 'process-steps', 'process_steps');
 registerCrud(adminRoutes, 'technologies', 'technologies');
-registerCrud(adminRoutes, 'contacts', 'contacts');
+registerCrud(adminRoutes, 'leads', 'leads');
 
 // ─── Site Settings (single document) ─────────────────────────────
 
@@ -180,7 +180,7 @@ adminRoutes.get('/projects', async (c) => {
 
 adminRoutes.get('/leads', async (c) => {
     const db = getDb(c);
-    const leads = await db.list('contacts');
+    const leads = await db.list('leads');
     leads.sort((a: any, b: any) => {
         const dateA = new Date(a.createdAt || 0).getTime();
         const dateB = new Date(b.createdAt || 0).getTime();

@@ -3,9 +3,9 @@ import { Link, useLocation } from 'react-router-dom'
 import { NAV_LINKS } from '../../config/site'
 
 /**
- * Navbar — Glassmorphism + Scroll-aware
- * Transparent at top, solid on scroll
- * Dark theme matching Oasis-style storytelling
+ * Navbar — v3 Light theme, scroll-aware
+ * Transparent at top, solid white on scroll
+ * Dark text for light backgrounds
  */
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -28,18 +28,16 @@ export default function Navbar() {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? 'glass-nav-solid' : 'glass-nav'
+        scrolled
+          ? 'bg-white/95 backdrop-blur-xl shadow-sm border-b border-stone-200/50'
+          : 'bg-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-8 h-8 bg-primary/90 flex items-center justify-center transition-colors group-hover:bg-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" className="w-5 h-5" fill="white">
-              <path d="M480-80 120-280v-400l360-200 360 200v400L480-80Zm-40-406v316l40 22 40-22v-316l280-154-40-22-280 154-280-154-40 22 280 154Zm40 74 278-154v-160L480-572 202-726v160l278 154Z"/>
-            </svg>
-          </div>
-          <span className="font-heading text-lg font-bold tracking-tighter uppercase text-white">
+          <img src="/favicon.svg" alt="Jules Studio" className="w-8 h-8" />
+          <span className="text-lg font-bold tracking-tighter uppercase text-stone-900 font-display">
             Jules Studio
           </span>
         </Link>
@@ -53,7 +51,7 @@ export default function Navbar() {
               className={`text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors duration-300 ${
                 location.pathname === link.href
                   ? 'text-primary'
-                  : 'text-white/70 hover:text-white'
+                  : 'text-stone-500 hover:text-stone-900'
               }`}
             >
               {link.label}
@@ -61,18 +59,18 @@ export default function Navbar() {
           ))}
 
           {/* Separator */}
-          <div className="h-4 w-[1px] bg-white/20" />
+          <div className="h-4 w-[1px] bg-stone-200" />
 
           <Link
             to="/dang-nhap"
-            className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/70 hover:text-white transition-colors duration-300"
+            className="text-[11px] font-semibold uppercase tracking-[0.2em] text-stone-500 hover:text-stone-900 transition-colors duration-300"
           >
             Đăng Nhập
           </Link>
 
           <Link
-            to="/bao-gia"
-            className="bg-primary text-white px-7 py-2.5 text-[11px] font-bold uppercase tracking-[0.15em] hover:bg-primary/80 transition-all duration-300"
+            to="/bat-dau-du-an"
+            className="bg-primary text-white px-7 py-2.5 text-[11px] font-bold uppercase tracking-[0.15em] rounded-lg hover:bg-primary/80 transition-all duration-300 shadow-sm shadow-primary/20"
           >
             Bắt Đầu Dự Án
           </Link>
@@ -81,7 +79,7 @@ export default function Navbar() {
         {/* Mobile Menu Toggle */}
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="md:hidden p-2 text-white"
+          className="md:hidden p-2 text-stone-900"
           aria-label="Toggle menu"
         >
           <span className="material-symbols-outlined text-2xl">
@@ -92,7 +90,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-black/95 backdrop-blur-xl border-t border-white/10 px-6 py-8">
+        <div className="md:hidden bg-white/95 backdrop-blur-xl border-t border-stone-200/50 px-6 py-8">
           <div className="flex flex-col gap-5">
             {NAV_LINKS.map((link) => (
               <Link
@@ -101,22 +99,22 @@ export default function Navbar() {
                 className={`text-xs font-semibold uppercase tracking-[0.2em] py-1 transition-colors ${
                   location.pathname === link.href
                     ? 'text-primary'
-                    : 'text-white/70 hover:text-white'
+                    : 'text-stone-500 hover:text-stone-900'
                 }`}
               >
                 {link.label}
               </Link>
             ))}
-            <div className="h-[1px] bg-white/10" />
+            <div className="h-[1px] bg-stone-200" />
             <Link
               to="/dang-nhap"
-              className="text-xs font-semibold uppercase tracking-[0.2em] text-white/70 hover:text-white transition-colors"
+              className="text-xs font-semibold uppercase tracking-[0.2em] text-stone-500 hover:text-stone-900 transition-colors"
             >
               Đăng Nhập
             </Link>
             <Link
-              to="/bao-gia"
-              className="mt-2 bg-primary text-white px-6 py-4 text-xs font-bold uppercase tracking-[0.15em] text-center hover:bg-primary/80 transition-all"
+              to="/bat-dau-du-an"
+              className="mt-2 bg-primary text-white px-6 py-4 text-xs font-bold uppercase tracking-[0.15em] text-center rounded-lg hover:bg-primary/80 transition-all"
             >
               Bắt Đầu Dự Án
             </Link>

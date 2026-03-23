@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dịch Vụ | JULES STUDIO - Thiết kế UI/UX &amp; Phát triển Web</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4F46E5", // Indigo accent
+                        "background-light": "#FAFAF9", // Warm white
+                        "background-dark": "#0F172A", // Deep Navy
+                        "navy-deep": "#0F172A",
+                        "stone-custom": {
+                            200: "#E7E5E4",
+                            600: "#57534E",
+                        }
+                    },
+                    fontFamily: {
+                        "display": ["Be Vietnam Pro", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: "Be Vietnam Pro", sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light text-navy-deep antialiased">
+<!-- Navbar -->
+<nav class="sticky top-0 z-50 w-full border-b border-stone-custom-200 bg-background-light/80 backdrop-blur-md">
+<div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-10">
+<div class="flex items-center gap-2">
+<div class="text-primary">
+<svg class="size-6" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M6 6H42L36 24L42 42H6L12 24L6 6Z" fill="currentColor"></path>
+</svg>
+</div>
+<span class="text-xl font-extrabold tracking-tight text-navy-deep">JULES STUDIO</span>
+</div>
+<div class="hidden items-center gap-10 md:flex">
+<a class="text-sm font-semibold text-navy-deep hover:text-primary transition-colors" href="#">Dự Án</a>
+<a class="text-sm font-semibold text-primary" href="#">Dịch Vụ</a>
+<a class="text-sm font-semibold text-navy-deep hover:text-primary transition-colors" href="#">Báo Giá</a>
+</div>
+<button class="rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all">
+                Bắt Đầu Dự Án
+            </button>
+</div>
+</nav>
+<!-- Header Section -->
+<header class="mx-auto max-w-4xl px-6 pt-20 pb-16 text-center">
+<span class="inline-block rounded-full bg-primary/10 px-4 py-1 text-xs font-bold tracking-widest text-primary mb-6">
+            DỊCH VỤ
+        </span>
+<h1 class="text-4xl font-extrabold tracking-tight text-navy-deep md:text-5xl lg:text-6xl mb-6">
+            Giải pháp thiết kế toàn diện
+        </h1>
+<p class="mx-auto max-w-2xl text-lg text-stone-custom-600 leading-relaxed">
+            Từ UI/UX đến development — Jules Studio đồng hành cùng bạn ở mọi giai đoạn để kiến tạo những sản phẩm kỹ thuật số vượt trội.
+        </p>
+</header>
+<!-- Service Blocks -->
+<section class="mx-auto max-w-6xl px-6 pb-24">
+<div class="flex flex-col border-t border-stone-custom-200">
+<!-- Block 01 -->
+<div class="group flex flex-col md:flex-row items-start md:items-center justify-between border-b border-stone-custom-200 py-12 gap-8">
+<div class="flex items-center gap-8 md:w-1/2">
+<span class="text-6xl font-black text-primary/10 select-none">01</span>
+<div class="flex flex-col gap-2">
+<h3 class="text-2xl font-bold text-navy-deep">Thiết Kế UI/UX</h3>
+<p class="text-stone-custom-600 leading-relaxed">
+                            Giao diện bắt mắt, trải nghiệm mượt mà — thiết kế dựa trên nghiên cứu người dùng và mục tiêu kinh doanh.
+                        </p>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 md:justify-end md:w-1/3">
+<span class="rounded-md bg-stone-100 px-3 py-1 text-xs font-medium text-stone-600 border border-stone-200">Figma</span>
+<span class="rounded-md bg-stone-100 px-3 py-1 text-xs font-medium text-stone-600 border border-stone-200">Wireframe</span>
+<span class="rounded-md bg-stone-100 px-3 py-1 text-xs font-medium text-stone-600 border border-stone-200">Prototype</span>
+<span class="rounded-md bg-stone-100 px-3 py-1 text-xs font-medium text-stone-600 border border-stone-200">User Research</span>
+</div>
+</div>
+<!-- Block 02 -->
+<div class="group flex flex-col md:flex-row items-start md:items-center justify-between border-b border-stone-custom-200 py-12 gap-8">
+<div class="flex items-center gap-8 md:w-1/2">
+<span class="text-6xl font-black text-primary/10 select-none">02</span>
+<div class="flex flex-col gap-2">
+<h3 class="text-2xl font-bold text-navy-deep">Phát Triển Web</h3>
+<p class="text-stone-custom-600 leading-relaxed">
+                            Website performance cao với React, hiệu ứng mượt, tốc độ tải nhanh. Responsive hoàn hảo trên mọi thiết bị di động.
+                        </p>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 md:justify-end md:w-1/3">
+<span class="rounded-md bg-stone-100 px-3 py-1 text-xs font-medium text-stone-600 border border-stone-200">React</span>
+<span class="rounded-md bg-stone-100 px-3 py-1 text-xs font-medium text-stone-600 border border-stone-200">Tailwind CSS</span>
+<span class="rounded-md bg-stone-100 px-3 py-1 text-xs font-medium text-stone-600 border border-stone-200">Vite</span>
+<span class="rounded-md bg-stone-100 px-3 py-1 text-xs font-medium text-stone-600 border border-stone-200">Cloudflare</span>
+</div>
+</div>
+<!-- Block 03 -->
+<div class="group flex flex-col md:flex-row items-start md:items-center justify-between border-b border-stone-custom-200 py-12 gap-8">
+<div class="flex items-center gap-8 md:w-1/2">
+<span class="text-6xl font-black text-primary/10 select-none">03</span>
+<div class="flex flex-col gap-2">
+<h3 class="text-2xl font-bold text-navy-deep">Mobile &amp; PWA</h3>
+<p class="text-stone-custom-600 leading-relaxed">
+                            Ứng dụng di động và Progressive Web App — cài đặt như app gốc, chạy mượt mà với push notification thông minh.
+                        </p>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 md:justify-end md:w-1/3">
+<span class="rounded-md bg-stone-100 px-3 py-1 text-xs font-medium text-stone-600 border border-stone-200">PWA</span>
+<span class="rounded-md bg-stone-100 px-3 py-1 text-xs font-medium text-stone-600 border border-stone-200">React Native</span>
+<span class="rounded-md bg-stone-100 px-3 py-1 text-xs font-medium text-stone-600 border border-stone-200">Flutter</span>
+</div>
+</div>
+<!-- Block 04 -->
+<div class="group flex flex-col md:flex-row items-start md:items-center justify-between border-b border-stone-custom-200 py-12 gap-8">
+<div class="flex items-center gap-8 md:w-1/2">
+<span class="text-6xl font-black text-primary/10 select-none">04</span>
+<div class="flex flex-col gap-2">
+<h3 class="text-2xl font-bold text-navy-deep">SEO &amp; Tối Ưu</h3>
+<p class="text-stone-custom-600 leading-relaxed">
+                            Tối ưu hiển thị trên Google, cải thiện tốc độ Core Web Vitals, tăng tỷ lệ chuyển đổi khách hàng tự nhiên.
+                        </p>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 md:justify-end md:w-1/3">
+<span class="rounded-md bg-stone-100 px-3 py-1 text-xs font-medium text-stone-600 border border-stone-200">SEO</span>
+<span class="rounded-md bg-stone-100 px-3 py-1 text-xs font-medium text-stone-600 border border-stone-200">Analytics</span>
+<span class="rounded-md bg-stone-100 px-3 py-1 text-xs font-medium text-stone-600 border border-stone-200">Core Web Vitals</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Tech Stack Section -->
+<section class="bg-navy-deep py-24 text-white">
+<div class="mx-auto max-w-6xl px-6">
+<h2 class="mb-16 text-center text-3xl font-extrabold tracking-tight md:text-4xl">Công Nghệ Sử Dụng</h2>
+<div class="grid grid-cols-2 gap-px bg-white/10 md:grid-cols-4">
+<div class="flex flex-col items-center justify-center p-8 bg-navy-deep border border-white/5 group">
+<span class="material-symbols-outlined text-4xl text-primary mb-3">developer_mode_tv</span>
+<span class="text-sm font-semibold tracking-wider opacity-80 group-hover:opacity-100">REACT</span>
+</div>
+<div class="flex flex-col items-center justify-center p-8 bg-navy-deep border border-white/5 group">
+<span class="material-symbols-outlined text-4xl text-primary mb-3">css</span>
+<span class="text-sm font-semibold tracking-wider opacity-80 group-hover:opacity-100">TAILWIND</span>
+</div>
+<div class="flex flex-col items-center justify-center p-8 bg-navy-deep border border-white/5 group">
+<span class="material-symbols-outlined text-4xl text-primary mb-3">bolt</span>
+<span class="text-sm font-semibold tracking-wider opacity-80 group-hover:opacity-100">VITE</span>
+</div>
+<div class="flex flex-col items-center justify-center p-8 bg-navy-deep border border-white/5 group">
+<span class="material-symbols-outlined text-4xl text-primary mb-3">api</span>
+<span class="text-sm font-semibold tracking-wider opacity-80 group-hover:opacity-100">HONO</span>
+</div>
+<div class="flex flex-col items-center justify-center p-8 bg-navy-deep border border-white/5 group">
+<span class="material-symbols-outlined text-4xl text-primary mb-3">cloud</span>
+<span class="text-sm font-semibold tracking-wider opacity-80 group-hover:opacity-100">CLOUDFLARE</span>
+</div>
+<div class="flex flex-col items-center justify-center p-8 bg-navy-deep border border-white/5 group">
+<span class="material-symbols-outlined text-4xl text-primary mb-3">database</span>
+<span class="text-sm font-semibold tracking-wider opacity-80 group-hover:opacity-100">FIREBASE</span>
+</div>
+<div class="flex flex-col items-center justify-center p-8 bg-navy-deep border border-white/5 group">
+<span class="material-symbols-outlined text-4xl text-primary mb-3">design_services</span>
+<span class="text-sm font-semibold tracking-wider opacity-80 group-hover:opacity-100">FIGMA</span>
+</div>
+<div class="flex flex-col items-center justify-center p-8 bg-navy-deep border border-white/5 group">
+<span class="material-symbols-outlined text-4xl text-primary mb-3">animation</span>
+<span class="text-sm font-semibold tracking-wider opacity-80 group-hover:opacity-100">GSAP</span>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="bg-background-light py-24">
+<div class="mx-auto max-w-4xl px-6 text-center">
+<h2 class="text-3xl font-extrabold text-navy-deep md:text-4xl mb-8">Cần giải pháp cho dự án?</h2>
+<p class="mb-10 text-stone-custom-600 text-lg">
+                Đừng ngần ngại liên hệ để nhận tư vấn miễn phí về ý tưởng của bạn.
+            </p>
+<button class="rounded-full bg-primary px-10 py-4 text-base font-bold text-white shadow-xl shadow-primary/30 hover:scale-105 transition-transform">
+                Liên Hệ Tư Vấn
+            </button>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-navy-deep py-16 text-white border-t border-white/5">
+<div class="mx-auto max-w-7xl px-6 lg:px-10">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+<div class="md:col-span-2">
+<div class="flex items-center gap-2 mb-6">
+<div class="text-primary">
+<svg class="size-6" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M6 6H42L36 24L42 42H6L12 24L6 6Z" fill="currentColor"></path>
+</svg>
+</div>
+<span class="text-xl font-extrabold tracking-tight">JULES STUDIO</span>
+</div>
+<p class="max-w-xs text-stone-400 text-sm leading-relaxed">
+                        Thiết kế và xây dựng những trải nghiệm số ấn tượng, giúp doanh nghiệp bứt phá trong kỷ nguyên công nghệ.
+                    </p>
+</div>
+<div>
+<h4 class="mb-6 text-xs font-black uppercase tracking-widest text-primary">Điều hướng</h4>
+<ul class="space-y-4 text-sm text-stone-300">
+<li><a class="hover:text-white transition-colors" href="#">Dự Án</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Dịch Vụ</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Báo Giá</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Blog</a></li>
+</ul>
+</div>
+<div>
+<h4 class="mb-6 text-xs font-black uppercase tracking-widest text-primary">Liên hệ</h4>
+<ul class="space-y-4 text-sm text-stone-300">
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">mail</span>
+                            hello@jules.studio
+                        </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">location_on</span>
+                            TP. Hồ Chí Minh, VN
+                        </li>
+</ul>
+</div>
+</div>
+<div class="mt-16 border-t border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+<p class="text-xs text-stone-500">© 2024 JULES STUDIO. All rights reserved.</p>
+<div class="flex gap-6 text-stone-500">
+<a class="hover:text-white" href="#"><span class="material-symbols-outlined">public</span></a>
+<a class="hover:text-white" href="#"><span class="material-symbols-outlined">alternate_email</span></a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>
