@@ -32,5 +32,8 @@ Thumbs.db
 .firebase/
 *-firebase-adminsdk-*.json
 
+# Temp/lock files
+~$*
+
 # Gemini
 .gemini/
