@@ -1,16 +1,21 @@
 {
   "name": "Jules Studio",
   "short_name": "Jules Studio",
-  "description": "Jules Studio — Kiến Tạo Trải Nghiệm Số",
+  "description": "Jules Studio — Thiết kế và xây dựng website mang tính trải nghiệm",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f6f6f8",
-  "theme_color": "#6366F1",
+  "background_color": "#FAFAF9",
+  "theme_color": "#5048e5",
   "icons": [
     {
-      "src": "/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml"
+      "src": "/images/logo-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/logo-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
     }
   ]
 }

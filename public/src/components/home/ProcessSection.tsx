@@ -1,69 +1,156 @@
-import ScrollReveal from '../ui/ScrollReveal'
+import { useEffect, useRef } from 'react'
+
+/**
+ * ProcessSection — JulesX Editorial
+ * Reference: screen1.png — vertical timeline with connected circles 01→04
+ * Each step: numbered circle, title, description, deliverables.
+ */
 
 const steps = [
   {
     num: '01',
-    title: 'Khám Phá',
-    desc: 'Phân tích mục tiêu kinh doanh, đối tượng khách hàng và định vị thương hiệu.',
+    title: 'The Blueprint',
+    subtitle: 'Strategy & UX Research',
+    desc: 'Nghiên cứu sâu, phân tích người dùng và lập kế hoạch cấu trúc. Chúng tôi xác định logic cốt lõi và mô hình tương tác trước khi thiết kế bất kỳ pixel nào.',
+    deliverables: ['User Personas', 'Information Architecture', 'Wireframes', 'Functional Specifications'],
   },
   {
     num: '02',
-    title: 'Thiết Kế',
-    desc: 'Xây dựng wireframe và thiết kế UI/UX theo concept độc bản.',
+    title: 'The Aesthetic',
+    subtitle: 'UI & Identity',
+    desc: 'Xây dựng ngôn ngữ hình ảnh riêng biệt. Kết hợp bản sắc thương hiệu với thiết kế giao diện trực quan để tạo tác động tối đa.',
+    deliverables: ['Brand System', 'Visual Design', 'Style Guide', 'UI Components'],
   },
   {
     num: '03',
-    title: 'Phát Triển',
-    desc: 'Hiện thực hóa bản vẽ bằng mã nguồn tối ưu, tốc độ nhanh và chuẩn SEO.',
+    title: 'The Engine',
+    subtitle: 'Development & Scalability',
+    desc: 'Kỹ thuật vững vàng, code sạch và có khả năng mở rộng. Xây dựng nền tảng tối ưu cho tốc độ và bảo mật.',
+    deliverables: ['Front-end', 'Back-end', 'CMS Integration', 'Performance Optimization'],
   },
   {
     num: '04',
-    title: 'Ra Mắt',
-    desc: 'Kiểm thử toàn diện, đào tạo vận hành và đồng hành phát triển lâu dài.',
+    title: 'The Soul',
+    subtitle: 'Motion & Interaction',
+    desc: 'Thổi hồn vào trải nghiệm. Tích hợp animations mượt mà và micro-interactions tạo sự hấp dẫn và thú vị.',
+    deliverables: ['Interactive Prototypes', 'Animation Library', 'Micro-Interactions', 'Sound Design'],
   },
 ]
 
-/**
- * ProcessSection — v4 Premium with timeline animation + connecting line
- * Sequential reveal with number accent
- */
 export default function ProcessSection() {
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (!sectionRef.current) return
+
+    const init = async () => {
+      const { gsap } = await import('gsap')
+      const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+      gsap.registerPlugin(ScrollTrigger)
+
+      const items = sectionRef.current?.querySelectorAll('.timeline-step')
+      if (!items) return
+
+      items.forEach((item) => {
+        gsap.fromTo(
+          item,
+          { y: 50, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: item,
+              start: 'top 82%',
+              toggleActions: 'play none none none',
+            },
+          }
+        )
+      })
+    }
+
+    init()
+  }, [])
+
   return (
-    <section className="bg-[#F5F5F0] py-32 px-6">
-      <ScrollReveal className="max-w-7xl mx-auto text-center mb-20">
-        <p className="text-xs font-bold uppercase tracking-[0.4em] text-primary/70 mb-4 font-display">
-          Quy trình
-        </p>
-        <h3 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-stone-900 font-display">
-          Từ ý tưởng đến <span className="text-primary">sản phẩm</span>
-        </h3>
-      </ScrollReveal>
-
-      <ScrollReveal className="max-w-7xl mx-auto" stagger={0.15}>
-        <div className="grid md:grid-cols-4 gap-8 relative">
-          {/* Connecting line (desktop only) */}
-          <div className="hidden md:block absolute top-[3.5rem] left-[12%] right-[12%] h-[1px] bg-stone-300/50" />
-
-          {steps.map((step) => (
-            <div key={step.num} className="relative group text-center md:text-left">
-              {/* Number circle */}
-              <div className="relative inline-flex items-center justify-center w-16 h-16 mb-6 mx-auto md:mx-0">
-                <div className="absolute inset-0 rounded-full bg-white border-2 border-stone-200 group-hover:border-primary/50 group-hover:shadow-lg group-hover:shadow-primary/10 transition-all duration-500" />
-                <span className="relative z-10 text-2xl font-extrabold text-stone-300 group-hover:text-primary transition-colors duration-500 font-display">
-                  {step.num}
-                </span>
-              </div>
-
-              <h5 className="text-xl font-bold mb-3 font-display group-hover:text-primary transition-colors duration-300">
-                {step.title}
-              </h5>
-              <p className="text-stone-500 text-sm leading-relaxed font-display max-w-xs mx-auto md:mx-0">
-                {step.desc}
-              </p>
-            </div>
-          ))}
+    <section ref={sectionRef} className="py-32 md:py-40 px-6 bg-bg">
+      <div className="max-w-6xl mx-auto">
+        {/* Section header */}
+        <div className="mb-20 md:mb-28">
+          <p className="label-caps text-accent mb-5">Process</p>
+          <h2
+            className="text-editorial text-text"
+            style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}
+          >
+            The Full Build
+            <br />
+            <span className="text-text-muted">Process.</span>
+          </h2>
+          <p className="text-text-muted text-lg mt-6 max-w-lg leading-relaxed">
+            Our end-to-end approach to crafting digital excellence.
+            <br />
+            From concept to award-winning reality.
+          </p>
         </div>
-      </ScrollReveal>
+
+        {/* Timeline */}
+        <div className="relative">
+          {/* Vertical connector line */}
+          <div className="hidden md:block absolute left-[2.75rem] top-0 bottom-0 w-[2px] bg-border" />
+
+          {/* Steps */}
+          <div className="flex flex-col gap-16 md:gap-20">
+            {steps.map((step, i) => (
+              <div
+                key={step.num}
+                className="timeline-step group grid grid-cols-1 md:grid-cols-[5.5rem_1fr] gap-6 md:gap-10"
+              >
+                {/* Circle */}
+                <div className="flex md:flex-col items-center md:items-center gap-4 md:gap-0">
+                  <div className="timeline-circle">
+                    {step.num}
+                  </div>
+                  {/* Mobile connector */}
+                  {i < steps.length - 1 && (
+                    <div className="md:hidden flex-1 h-[2px] bg-border" />
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="flex flex-col md:flex-row gap-6 md:gap-16 pb-0 md:pb-0">
+                  {/* Left — Title + Desc */}
+                  <div className="md:w-1/2">
+                    <h3 className="font-heading text-xl md:text-2xl font-bold text-text group-hover:text-accent transition-colors duration-300 mb-1">
+                      {step.title}:
+                    </h3>
+                    <p className="font-heading text-lg md:text-xl font-bold text-text-muted mb-4">
+                      {step.subtitle}
+                    </p>
+                    <p className="text-text-muted leading-relaxed text-[0.9375rem]">
+                      {step.desc}
+                    </p>
+                  </div>
+
+                  {/* Right — Deliverables */}
+                  <div className="md:w-1/2">
+                    <p className="label-caps text-text-light mb-4">Deliverables</p>
+                    <ul className="space-y-2.5">
+                      {step.deliverables.map((d) => (
+                        <li key={d} className="text-text-muted text-sm flex items-center gap-3">
+                          <span className="w-1.5 h-1.5 bg-accent flex-shrink-0" />
+                          {d}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </section>
   )
 }

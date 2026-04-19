@@ -1,4 +1,4 @@
-# Jules Studio — DESIGN.md
+# JulesX — DESIGN.md
 
 ## Aesthetic Direction
 
@@ -19,7 +19,7 @@
 |---|---|---|
 | `--color-bg` | `#FFFFFF` | Page background |
 | `--color-bg-alt` | `#FAFAFA` | Section alternate bg |
-| `--color-bg-dark` | `#0A0A0A` | Dark sections (hero, footer) |
+| `--color-bg-dark` | `#0A0A0A` | Dark sections (footer, CTA) |
 | `--color-text` | `#0A0A0A` | Primary text |
 | `--color-text-muted` | `#6B7280` | Secondary text |
 | `--color-text-inverse` | `#FFFFFF` | Text on dark bg |
@@ -42,17 +42,17 @@
 
 | Role | Font | Weight(s) | Source |
 |---|---|---|---|
-| Heading | **Syne** | 400, 500, 600, 700, 800 | Local woff2 (Latin-ext + Latin) |
-| Heading (VN fallback) | **Space Grotesk** | 400–800 | Local woff2 — fills ồ, ề, ễ via unicode-range |
-| Body | **Manrope** | 300, 400, 500, 600, 700 | Local woff2 (Vietnamese + Latin) |
+| Heading | **Space Grotesk** | 500, 600, 700 | Local woff2 (Vietnamese + Latin) |
+| Body | **Manrope** | 400, 500, 600 | Local woff2 (Vietnamese + Latin) |
+| Label | **Manrope** | 500 | uppercase, tracking +0.05em |
 
-> **Unicode-range fallback:** Syne lacks Vietnamese combining diacritics (U+1EA0-1EF9). Space Grotesk fills that gap under the same `font-family: 'Syne'` using `unicode-range`. Browser auto-switches per character.
+> **Vietnamese-safe:** Both Space Grotesk and Manrope have full Vietnamese diacritics support (ồ, ề, ễ, ắ). No unicode-range fallback needed.
 
 ### Scale (fluid clamp)
 
 | Element | Size | Weight | Letter Spacing |
 |---|---|---|---|
-| Hero Heading | `clamp(3rem, 8vw, 7rem)` | 800 | `-0.03em` |
+| Hero Heading | `clamp(3rem, 8vw, 7rem)` | 700 | `-0.03em` |
 | Section Heading | `clamp(2rem, 5vw, 4rem)` | 700 | `-0.02em` |
 | Card Title | `clamp(1.25rem, 2vw, 1.75rem)` | 600 | `-0.01em` |
 | Body | `1rem (16px)` | 400 | `0` |
@@ -86,6 +86,19 @@
 
 ---
 
+## Shape System
+
+### Border Radius
+- **All components:** `0px` (strict architectural)
+- **Exception:** Nav pill indicator only (kept from existing header)
+- **Exception:** Avatar/profile images (circle)
+
+### Borders
+- Use `1px solid var(--color-border)` sparingly
+- NO box shadows. Use tonal background shifts instead.
+
+---
+
 ## Motion & Animation
 
 ### Philosophy
@@ -96,10 +109,13 @@
 | Effect | Duration | Easing | When |
 |---|---|---|---|
 | Scroll reveal (fade-up) | `600ms` | `cubic-bezier(0.16, 1, 0.3, 1)` | Elements entering viewport |
+| GSAP split text | `800ms` | `power4.out` | Hero heading on load |
+| GSAP stagger | `200ms` per item | `power3.out` | Grid items entering |
+| Image scale-in | `1000ms` | `power3.out` | Portfolio images on scroll |
 | Page transition | `400ms` | `ease-out` | Route change |
 | Hover: opacity | `200ms` | `ease` | Links, cards |
 | Hover: translate-y | `300ms` | `cubic-bezier(0.16, 1, 0.3, 1)` | Cards lift `-4px` |
-| Cursor follow dot | continuous | `lerp` | Optional: custom cursor on desktop |
+| CountUp | `2000ms` | `ease-out-cubic` | Numbers on scroll enter |
 
 ### Forbidden
 - ❌ Parallax (too common)
@@ -178,12 +194,11 @@
 ```css
 .navbar {
   position: fixed;
-  top: 1.5rem;
-  left: 1.5rem;
-  right: 1.5rem;
+  top: 0;
+  left: 0;
+  right: 0;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(8px);
-  border: 1px solid var(--color-border);
   z-index: 50;
   padding: 1rem 2rem;
   display: flex;
@@ -220,19 +235,21 @@ The admin panel uses a **clean, functional** variant:
 |---|---|
 | Glassmorphism / glass cards | Clean solid backgrounds |
 | Violet/cyan gradients | Black + white + indigo accent |
-| Inter / Roboto fonts | Syne + Manrope |
+| Inter / Roboto / Syne fonts | Space Grotesk + Manrope |
 | Symmetrical grid layouts | Asymmetric composition |
 | Emoji icons | SVG icons (Lucide) |
-| Rounded everything (`rounded-2xl`) | Subtle rounding (`rounded-sm`) or sharp corners |
-| Box shadows everywhere | Borders or subtle `shadow-sm` only |
+| Rounded corners (`rounded-lg/xl/2xl`) | Sharp corners `0px` |
+| Box shadows everywhere | Borders or tonal backgrounds only |
 | Gradient text | Solid text color |
+| `font-display` references to old fonts | `font-heading` = Space Grotesk |
 
 ---
 
 ## Signature Elements
 
 1. **Grayscale → Color on hover** — Project images are B&W, reveal color on interaction
-2. **Oversized typography** — Hero headings use `clamp(3rem, 8vw, 7rem)` Syne 800
+2. **Oversized typography** — Hero headings use `clamp(3rem, 8vw, 7rem)` Space Grotesk 700
 3. **Dramatic white space** — `12rem+` spacing between major sections
 4. **Horizontal rules** — `1px` lines as section dividers (not padding)
 5. **Uppercase labels** — Small caps for categories/labels only
+6. **Sharp edges** — 0px border-radius everywhere (architectural precision)

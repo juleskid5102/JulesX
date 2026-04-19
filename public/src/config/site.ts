@@ -1,5 +1,5 @@
 /**
- * Jules Studio — Site Configuration
+ * JulesX — Site Configuration
  * Types + constants only. All dynamic data fetched from API.
  */
 
@@ -8,10 +8,10 @@ export const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
 
 // Static site config (not dynamic — used for metadata/SEO)
 export const SITE = {
-  name: 'Jules Studio',
-  tagline: 'Xây dựng sự xuất sắc trong kỹ thuật số thông qua phong cách tối giản và thiết kế chức năng.',
+  name: 'JulesX',
+  tagline: 'Thiết kế và xây dựng website mang tính trải nghiệm — phù hợp với từng ngành và mục tiêu kinh doanh.',
   copyright: (year = new Date().getFullYear()) =>
-    `© ${year} Jules Studio. Mọi quyền được bảo lưu.`,
+    `© ${year} JulesX. All rights reserved.`,
 } as const
 
 // Static nav links (not dynamic — part of layout)

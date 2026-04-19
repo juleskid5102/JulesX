@@ -1,123 +1,191 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { API_BASE, type Project } from '../../config/site'
-import ScrollReveal from '../ui/ScrollReveal'
-import RevealImage from '../ui/RevealImage'
 
 /**
- * PortfolioPreview — v4 Premium with image reveal animations
- * Grayscale→color hover + GSAP clip-path reveal
+ * PortfolioPreview — JulesX Editorial
+ * Reference: screen.png editorial gallery style
+ * Full-bleed featured project + 2-col grid remaining.
+ * Uses real project screenshots.
  */
+/* Override API images with real captured screenshots */
+const IMAGE_MAP: Record<string, string> = {
+  'd-home': '/images/projects/dhome-hero.png',
+  'dhome': '/images/projects/dhome-hero.png',
+  'mam-cung-thanh-huan': '/images/projects/mamcung-hero.png',
+  'mamcung': '/images/projects/mamcung-hero.png',
+  'ha-vy-portfolio': '/images/projects/havy-hero.png',
+  'havy': '/images/projects/havy-hero.png',
+  'minh-khang-clinic': '/images/projects/minhkhang-hero.png',
+  'minhkhang': '/images/projects/minhkhang-hero.png',
+  'jules-ecosystem-hub': '/images/projects/jules-hub-hero.png',
+  'jules-atelier': '/images/projects/jules-atelier-hero.png',
+  'jules-oasis': '/images/projects/jules-oasis-hero.png',
+}
+
 export default function PortfolioPreview() {
   const [projects, setProjects] = useState<Project[]>([])
+  const sectionRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
     fetch(`${API_BASE}/api/public/portfolio?featured=true`)
       .then((r) => (r.ok ? r.json() : { data: [] }))
       .then((res: any) => {
-        const list = Array.isArray(res) ? res : res.data || []
+        const list = (Array.isArray(res) ? res : res.data || []).map((p: Project) => ({
+          ...p,
+          image: IMAGE_MAP[p.slug || ''] || IMAGE_MAP[p.id] || p.image,
+        }))
         setProjects(list)
       })
       .catch(() => {})
   }, [])
 
+  // GSAP scroll animations
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (!sectionRef.current) return
+
+    const init = async () => {
+      const { gsap } = await import('gsap')
+      const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+      gsap.registerPlugin(ScrollTrigger)
+
+      const cards = sectionRef.current?.querySelectorAll('.project-item')
+      if (!cards) return
+
+      cards.forEach((card) => {
+        gsap.fromTo(
+          card,
+          { y: 60, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 85%',
+              toggleActions: 'play none none none',
+            },
+          }
+        )
+
+        const img = card.querySelector('.project-image')
+        if (img) {
+          gsap.fromTo(
+            img,
+            { scale: 1.08 },
+            {
+              scale: 1,
+              duration: 1.2,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: card,
+                start: 'top 85%',
+                toggleActions: 'play none none none',
+              },
+            }
+          )
+        }
+      })
+    }
+
+    init()
+  }, [projects])
+
   const displayProjects = projects.length > 0 ? projects : [
-    { id: '1', title: 'Jules Oasis — Resort & Spa', category: 'Hospitality', image: '/images/projects/jules-oasis.jpg', description: 'Website resort & spa cao cấp với thiết kế tropical luxury', slug: 'jules-oasis', field: 'Hospitality', designStyle: 'Tropical Luxury', completedAt: '2024', featured: true, challenge: '', solution: '', duration: '', stack: '', lighthouse: '', gallery: [], techTags: [] },
-    { id: '2', title: 'Lumina Store', category: 'E-Commerce', image: '/images/projects/lumina-store.jpg', description: 'Cửa hàng trực tuyến với giao diện modern minimal', slug: 'lumina-store', field: 'E-Commerce', designStyle: 'Modern Minimal', completedAt: '2024', featured: true, challenge: '', solution: '', duration: '', stack: '', lighthouse: '', gallery: [], techTags: [] },
-    { id: '3', title: 'Zenith App', category: 'SaaS', image: '/images/projects/zenith-app.jpg', description: 'Ứng dụng SaaS với dashboard chuyên nghiệp', slug: 'zenith-app', field: 'SaaS', designStyle: 'Clean Professional', completedAt: '2024', featured: true, challenge: '', solution: '', duration: '', stack: '', lighthouse: '', gallery: [], techTags: [] },
+    { id: '1', title: 'D.HOME Interior', category: 'Interior Design', image: '/images/projects/dhome-hero.png', description: 'Website nội thất cao cấp với trải nghiệm thị giác đẳng cấp', slug: 'd-home', field: 'Interior Design', designStyle: 'Luxury Minimal', completedAt: '2024', featured: true, challenge: '', solution: '', duration: '', stack: '', lighthouse: '', gallery: [], techTags: [] },
+    { id: '2', title: 'Mâm Cúng Thanh Huân', category: 'E-Commerce', image: '/images/projects/mamcung-hero.png', description: 'Nền tảng đặt mâm cúng trực tuyến', slug: 'mam-cung-thanh-huan', field: 'F&B · E-commerce', designStyle: 'Traditional Modern', completedAt: '2024', featured: true, challenge: '', solution: '', duration: '', stack: '', lighthouse: '', gallery: [], techTags: [] },
+    { id: '3', title: 'Hà Vy Portfolio', category: 'Portfolio', image: '/images/projects/havy-hero.png', description: 'Portfolio cá nhân cho Strategic Storyteller', slug: 'ha-vy-portfolio', field: 'Personal Brand', designStyle: 'Editorial Warm', completedAt: '2024', featured: true, challenge: '', solution: '', duration: '', stack: '', lighthouse: '', gallery: [], techTags: [] },
+    { id: '4', title: 'Minh Khang Clinic', category: 'Web App', image: '/images/projects/minhkhang-hero.png', description: 'Hệ thống đặt lịch khám thông minh', slug: 'minh-khang-clinic', field: 'Healthcare', designStyle: 'Clean Medical', completedAt: '2024', featured: true, challenge: '', solution: '', duration: '', stack: '', lighthouse: '', gallery: [], techTags: [] },
   ]
 
   return (
-    <section className="py-32 px-6 max-w-7xl mx-auto">
-      <ScrollReveal className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
-        <div className="space-y-4">
-          <p className="text-xs font-bold uppercase tracking-[0.3em] text-primary font-display">
-            Portfolio
-          </p>
-          <h3 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-stone-900 font-display">
-            Câu chuyện từ những
-            <br />
-            <span className="text-primary">dự án thật</span>
-          </h3>
+    <section ref={sectionRef} className="py-24 md:py-32 px-6 bg-bg-alt">
+      <div className="max-w-7xl mx-auto">
+        {/* Section header — asymmetric */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+          <div>
+            <p className="label-caps text-accent mb-4">Selected Work</p>
+            <h2
+              className="font-heading font-bold text-text tracking-[-0.02em]"
+              style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)' }}
+            >
+              Dự án thực tế
+            </h2>
+          </div>
+          <Link
+            to="/du-an"
+            className="group inline-flex items-center gap-2 text-text text-sm font-semibold uppercase tracking-[0.1em] hover:text-accent transition-colors"
+          >
+            Xem tất cả
+            <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link>
         </div>
-        <Link
-          to="/du-an"
-          className="text-primary font-bold flex items-center gap-2 hover:gap-4 transition-all group font-display text-sm uppercase tracking-[0.1em]"
-        >
-          Xem tất cả dự án
-          <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">
-            arrow_forward
-          </span>
-        </Link>
-      </ScrollReveal>
 
-      {/* Featured project — large */}
-      {displayProjects[0] && (
-        <Link
-          to={`/du-an/${displayProjects[0].slug || displayProjects[0].id}`}
-          className="group block mb-12"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-            <div className="md:col-span-7">
-              <RevealImage
+        {/* Featured project — full width hero image */}
+        {displayProjects[0] && (
+          <Link
+            to={`/du-an/${displayProjects[0].slug || displayProjects[0].id}`}
+            className="project-item group block mb-12"
+          >
+            <div className="overflow-hidden bg-[#1A1A1A] mb-6">
+              <img
                 src={displayProjects[0].image}
                 alt={displayProjects[0].title}
-                delay={0}
-                className="rounded-xl bg-stone-100 aspect-[16/10] border border-stone-200/50"
+                className="project-image w-full aspect-[16/9] object-cover object-top group-hover:scale-[1.02] transition-transform duration-700"
+                loading="eager"
               />
             </div>
-            <div className="md:col-span-5 md:pl-8">
-              <span className="text-[10px] font-bold text-stone-400 tracking-[0.3em] uppercase block mb-3 font-display">
-                01 / {displayProjects[0].field || displayProjects[0].category}
-              </span>
-              <span className="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-xs font-bold tracking-widest uppercase mb-4">
-                {displayProjects[0].category}
-              </span>
-              <h4 className="text-2xl md:text-3xl font-extrabold mb-3 leading-tight group-hover:text-primary transition-colors font-display">
-                {displayProjects[0].title}
-              </h4>
-              <p className="text-stone-500 leading-relaxed mb-6 line-clamp-3 font-display">
-                {displayProjects[0].description}
-              </p>
-              <div className="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-[0.1em]">
-                <span>Xem chi tiết</span>
-                <span className="material-symbols-outlined text-lg transition-transform group-hover:translate-x-2">
-                  arrow_forward
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+              <div>
+                <span className="label-caps text-text-light block mb-2">
+                  01 — {displayProjects[0].field || displayProjects[0].category}
                 </span>
+                <h3 className="font-heading text-2xl md:text-3xl font-bold text-text group-hover:text-accent transition-colors duration-300">
+                  {displayProjects[0].title}
+                </h3>
               </div>
+              <span className="inline-flex items-center gap-2 text-text text-sm font-semibold uppercase tracking-[0.1em] group-hover:text-accent transition-colors shrink-0 md:mt-2">
+                View
+                <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </span>
             </div>
-          </div>
-        </Link>
-      )}
-
-      {/* Remaining projects — side by side */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        {displayProjects.slice(1).map((project, i) => (
-          <Link
-            key={project.id}
-            to={`/du-an/${project.slug || project.id}`}
-            className="group"
-          >
-            <RevealImage
-              src={project.image}
-              alt={project.title}
-              delay={(i + 1) * 0.15}
-              className="rounded-xl bg-stone-100 mb-5 aspect-[4/3] border border-stone-200/50"
-            />
-            <span className="text-[10px] font-bold text-stone-400 tracking-[0.3em] uppercase block mb-2 font-display">
-              0{i + 2} / {project.field || project.category}
-            </span>
-            <span className="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-xs font-bold tracking-widest uppercase mb-3">
-              {project.category}
-            </span>
-            <h4 className="text-xl font-extrabold mb-2 group-hover:text-primary transition-colors font-display">
-              {project.title}
-            </h4>
-            <p className="text-stone-500 text-sm leading-relaxed line-clamp-2 font-display">
-              {project.description}
-            </p>
           </Link>
-        ))}
+        )}
+
+        {/* Separator */}
+        <div className="w-full h-[1px] bg-border mb-12" />
+
+        {/* Remaining projects — 3 columns */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {displayProjects.slice(1).map((project, i) => (
+            <Link
+              key={project.id}
+              to={`/du-an/${project.slug || project.id}`}
+              className="project-item group"
+            >
+              <div className="overflow-hidden mb-5 bg-[#1A1A1A]">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="project-image w-full aspect-[4/3] object-cover object-top group-hover:scale-[1.03] transition-transform duration-700"
+                  loading="lazy"
+                />
+              </div>
+              <span className="label-caps text-text-light block mb-1.5">
+                0{i + 2} — {project.field || project.category}
+              </span>
+              <h3 className="font-heading text-lg font-bold text-text group-hover:text-accent transition-colors duration-300">
+                {project.title}
+              </h3>
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   )

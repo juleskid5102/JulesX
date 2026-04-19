@@ -2,9 +2,9 @@ import { useEffect, useState, useRef } from 'react'
 import { API_BASE } from '../config/site'
 
 /**
- * ContactFAB — Floating Action Button with social channels
- * Adapted from contact-fab.md pattern
- * Channels fetched from /api/public/site-settings { fabChannels }
+ * ContactFAB — Arc-layout Floating Action Button
+ * Channels fan out in a quarter-circle arc (bottom-right origin)
+ * Pattern adapted from minhkhangclinic FAB
  */
 
 interface FabChannel {
@@ -55,67 +55,68 @@ export function ContactFAB() {
         setOpen(false)
       }
     }
-    document.addEventListener('click', handleClick)
-    return () => document.removeEventListener('click', handleClick)
-  }, [])
+    if (open) {
+      document.addEventListener('mousedown', handleClick)
+    }
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [open])
 
   if (loading || channels.length === 0) return null
 
+  // Arc layout: quarter circle from 180° to 270° (bottom-right origin)
+  const radius = 80
+  const angleStep = channels.length > 1 ? 90 / (channels.length - 1) : 0
+
   return (
-    <div ref={fabRef} className="fixed bottom-6 right-6 z-50 flex flex-col-reverse items-center gap-3">
+    <div ref={fabRef} className="fixed bottom-6 right-6 z-50">
+      {/* Sub-buttons — arc layout */}
+      {channels.map((ch, i) => {
+        // 180° = straight left, 270° = straight up
+        const angle = 180 + (i * angleStep)
+        const rad = (angle * Math.PI) / 180
+        const x = Math.cos(rad) * radius
+        const y = Math.sin(rad) * radius
+
+        return (
+          <a
+            key={ch.name}
+            href={ch.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute w-12 h-12 rounded-full text-white shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
+            style={{
+              backgroundColor: ch.color,
+              bottom: `${-y}px`,
+              right: `${-x}px`,
+              opacity: open ? 1 : 0,
+              transform: open ? 'scale(1)' : 'scale(0.3)',
+              transitionDelay: open ? `${i * 60}ms` : '0ms',
+              pointerEvents: open ? 'auto' : 'none',
+            }}
+            title={ch.name}
+          >
+            <span className="material-symbols-outlined text-xl">{ch.icon}</span>
+          </a>
+        )
+      })}
+
       {/* Main FAB button */}
       <button
         onClick={() => setOpen(!open)}
-        className="w-14 h-14 rounded-full bg-primary text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
-        style={{ transform: open ? 'rotate(45deg)' : 'rotate(0deg)', transition: 'transform 0.3s ease' }}
+        className={`relative w-14 h-14 rounded-full text-white shadow-xl flex items-center justify-center transition-all duration-300 ${
+          open
+            ? 'bg-slate-900 rotate-45'
+            : 'bg-gradient-to-br from-primary to-indigo-600 hover:scale-105 shadow-primary/30'
+        }`}
         title="Liên hệ"
       >
+        {!open && (
+          <span className="absolute inset-0 rounded-full bg-primary/30 animate-ping pointer-events-none" />
+        )}
         <span className="material-symbols-outlined text-2xl">
           {open ? 'close' : 'chat'}
         </span>
       </button>
-
-      {/* Channel items — fan out */}
-      {channels.map((ch, i) => (
-        <a
-          key={ch.name}
-          href={ch.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-12 h-12 rounded-full text-white shadow-md flex items-center justify-center transition-all duration-300"
-          style={{
-            backgroundColor: ch.color,
-            opacity: open ? 1 : 0,
-            transform: open ? 'scale(1) translateY(0)' : 'scale(0.5) translateY(16px)',
-            transitionDelay: open ? `${i * 60}ms` : '0ms',
-            pointerEvents: open ? 'auto' : 'none',
-          }}
-          title={ch.name}
-        >
-          <span className="material-symbols-outlined text-xl">{ch.icon}</span>
-        </a>
-      ))}
-
-      {/* Label tooltip */}
-      {open && channels.map((ch, i) => (
-        <span
-          key={`label-${ch.name}`}
-          className="absolute right-16 text-sm font-medium bg-slate-900 text-white px-3 py-1.5 rounded-md whitespace-nowrap shadow-lg transition-all duration-300"
-          style={{
-            bottom: `${(i + 1) * 60 + 8}px`,
-            opacity: open ? 1 : 0,
-            transform: open ? 'translateX(0)' : 'translateX(8px)',
-            transitionDelay: `${i * 60 + 100}ms`,
-          }}
-        >
-          {ch.name}
-        </span>
-      ))}
-
-      {/* Pulse animation when closed */}
-      {!open && (
-        <span className="absolute bottom-0 right-0 w-14 h-14 rounded-full bg-primary/20 animate-ping pointer-events-none" />
-      )}
     </div>
   )
 }
