@@ -1,4 +1,4 @@
-name = "backend-julesstudio"
+name = "julesx"
 main = "src/index.ts"
 compatibility_date = "2025-03-10"
 

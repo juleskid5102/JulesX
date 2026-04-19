@@ -12,8 +12,10 @@ const app = new Hono<Env>();
 // ─── CORS ────────────────────────────────────────────────────────
 
 const ALLOWED_ORIGINS = [
-    'https://julesstudio.pages.dev',
-    'https://admin-julesstudio.pages.dev',
+    'https://julesx.pages.dev',
+    'https://admin-julesx.pages.dev',
+    'https://julesx.com',
+    'https://www.julesx.com',
     'http://localhost:5173',
     'http://localhost:5174',
     'http://localhost:3000',
@@ -24,8 +26,8 @@ app.use('/*', cors({
     origin: (origin) => {
         if (!origin) return ALLOWED_ORIGINS[0];
         if (ALLOWED_ORIGINS.includes(origin)) return origin;
-        // Allow only julesstudio preview deploys
-        if (origin.endsWith('.julesstudio.pages.dev') || origin.endsWith('.admin-julesstudio.pages.dev')) return origin;
+        // Allow julesx preview deploys
+        if (origin.endsWith('.julesx.pages.dev') || origin.endsWith('.admin-julesx.pages.dev')) return origin;
         return ALLOWED_ORIGINS[0];
     },
     allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
@@ -35,7 +37,7 @@ app.use('/*', cors({
 // ─── Health Check ────────────────────────────────────────────────
 
 app.get('/', (c) => c.json({
-    name: 'backend-julesstudio',
+    name: 'julesx-backend',
     status: 'running',
     timestamp: new Date().toISOString(),
 }));
