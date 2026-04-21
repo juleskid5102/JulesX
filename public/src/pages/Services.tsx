@@ -6,7 +6,7 @@ import Footer from '../components/layout/Footer'
 /**
  * Services — JulesX Editorial
  * Reference: screen1.png — zigzag timeline with illustrations,
- * vertical organic connector, "Why Us" section, dark CTA.
+ * Connector line on TEXT side, starts from 01 circle, not above it.
  */
 
 const SERVICES = [
@@ -159,56 +159,23 @@ export default function Services() {
 
           {/* ─── Zigzag Timeline ─── */}
           <section className="px-6 max-w-7xl mx-auto mb-28 md:mb-36">
-            <div className="relative">
-              {/* Vertical connector line — center on desktop */}
-              <div
-                className="hidden lg:block absolute top-0 bottom-0 w-[2px] bg-border-light"
-                style={{ left: '50%', transform: 'translateX(-50%)' }}
-              />
+            <div className="flex flex-col gap-0">
+              {SERVICES.map((service, i) => {
+                const isEven = i % 2 === 0
+                const isFirst = i === 0
+                const isLast = i === SERVICES.length - 1
 
-              <div className="flex flex-col gap-0">
-                {SERVICES.map((service, i) => {
-                  const isEven = i % 2 === 0
-                  return (
-                    <div
-                      key={service.num}
-                      className="srv-reveal relative py-12 lg:py-20"
-                    >
-                      {/* Circle on the vertical line — desktop */}
-                      <div
-                        className="hidden lg:flex absolute top-12 lg:top-20 w-14 h-14 items-center justify-center rounded-full border-2 border-border bg-bg z-10"
-                        style={{
-                          left: '50%',
-                          transform: 'translateX(-50%)',
-                        }}
-                      >
-                        <span className="font-heading text-sm font-bold text-text-muted">
-                          {service.num}
-                        </span>
-                      </div>
-
-                      {/* Content grid — zigzag */}
-                      <div
-                        className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20 items-center ${
-                          isEven ? '' : 'lg:[direction:rtl]'
-                        }`}
-                      >
-                        {/* Text side */}
-                        <div
-                          className={`${isEven ? 'lg:pr-20' : 'lg:pl-20'} ${
-                            !isEven ? 'lg:[direction:ltr]' : ''
-                          }`}
-                        >
-                          {/* Mobile circle */}
-                          <div className="lg:hidden flex items-center gap-4 mb-6">
-                            <div className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-border bg-bg">
-                              <span className="font-heading text-sm font-bold text-text-muted">
-                                {service.num}
-                              </span>
-                            </div>
-                            <div className="flex-1 h-[1px] bg-border" />
-                          </div>
-
+                return (
+                  <div
+                    key={service.num}
+                    className="srv-reveal relative py-12 lg:py-20"
+                  >
+                    {/* ─── Desktop layout ─── */}
+                    <div className="hidden lg:grid grid-cols-[1fr_auto_1fr] gap-0 items-start">
+                      {/* LEFT column */}
+                      {isEven ? (
+                        /* Text on LEFT for even (01, 03) */
+                        <div className="pr-16 pt-2">
                           <h3
                             className="font-heading font-bold text-text leading-[1.15] mb-1"
                             style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}
@@ -224,7 +191,6 @@ export default function Services() {
                           <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-6">
                             {service.description}
                           </p>
-
                           <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-3">
                             Deliverables:
                           </p>
@@ -232,9 +198,9 @@ export default function Services() {
                             {service.deliverables.join(', ')}.
                           </p>
                         </div>
-
-                        {/* Image side */}
-                        <div className={`${!isEven ? 'lg:[direction:ltr]' : ''}`}>
+                      ) : (
+                        /* Image on LEFT for odd (02, 04) */
+                        <div className="pr-16">
                           <div className="relative overflow-hidden rounded-2xl shadow-lg group">
                             <img
                               src={service.image}
@@ -242,15 +208,120 @@ export default function Services() {
                               className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
                               loading="lazy"
                             />
-                            {/* Subtle overlay gradient */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                           </div>
                         </div>
+                      )}
+
+                      {/* CENTER — Circle + connector line */}
+                      <div className="relative flex flex-col items-center" style={{ width: '60px' }}>
+                        {/* Line ABOVE circle — only if not first */}
+                        {!isFirst && (
+                          <div className="w-[2px] bg-border flex-1 min-h-[40px]" />
+                        )}
+                        {/* Spacer before first circle so it aligns with content top */}
+                        {isFirst && <div className="flex-1" />}
+
+                        {/* Circle */}
+                        <div className="w-14 h-14 flex items-center justify-center rounded-full border-2 border-border bg-bg z-10 flex-shrink-0">
+                          <span className="font-heading text-sm font-bold text-text-muted">
+                            {service.num}
+                          </span>
+                        </div>
+
+                        {/* Line BELOW circle — only if not last */}
+                        {!isLast && (
+                          <div className="w-[2px] bg-border flex-1 min-h-[40px]" />
+                        )}
+                        {isLast && <div className="flex-1" />}
                       </div>
+
+                      {/* RIGHT column */}
+                      {isEven ? (
+                        /* Image on RIGHT for even (01, 03) */
+                        <div className="pl-16">
+                          <div className="relative overflow-hidden rounded-2xl shadow-lg group">
+                            <img
+                              src={service.image}
+                              alt={service.title}
+                              className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+                              loading="lazy"
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        /* Text on RIGHT for odd (02, 04) */
+                        <div className="pl-16 pt-2">
+                          <h3
+                            className="font-heading font-bold text-text leading-[1.15] mb-1"
+                            style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}
+                          >
+                            {service.title}:
+                          </h3>
+                          <p
+                            className="font-heading font-bold text-text-muted mb-5"
+                            style={{ fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)' }}
+                          >
+                            {service.subtitle}
+                          </p>
+                          <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-6">
+                            {service.description}
+                          </p>
+                          <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-3">
+                            Deliverables:
+                          </p>
+                          <p className="text-text-muted text-sm leading-relaxed">
+                            {service.deliverables.join(', ')}.
+                          </p>
+                        </div>
+                      )}
                     </div>
-                  )
-                })}
-              </div>
+
+                    {/* ─── Mobile layout ─── */}
+                    <div className="lg:hidden">
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-border bg-bg">
+                          <span className="font-heading text-sm font-bold text-text-muted">
+                            {service.num}
+                          </span>
+                        </div>
+                        <div className="flex-1 h-[1px] bg-border" />
+                      </div>
+
+                      <h3
+                        className="font-heading font-bold text-text leading-[1.15] mb-1"
+                        style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}
+                      >
+                        {service.title}:
+                      </h3>
+                      <p
+                        className="font-heading font-bold text-text-muted mb-5"
+                        style={{ fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)' }}
+                      >
+                        {service.subtitle}
+                      </p>
+                      <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-6">
+                        {service.description}
+                      </p>
+
+                      <div className="relative overflow-hidden rounded-2xl shadow-lg mb-6">
+                        <img
+                          src={service.image}
+                          alt={service.title}
+                          className="w-full h-auto object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+
+                      <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-3">
+                        Deliverables:
+                      </p>
+                      <p className="text-text-muted text-sm leading-relaxed">
+                        {service.deliverables.join(', ')}.
+                      </p>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </section>
 

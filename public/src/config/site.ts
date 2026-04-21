@@ -19,6 +19,7 @@ export const NAV_LINKS = [
   { label: 'Tổng Quan', href: '/' },
   { label: 'Dự Án', href: '/du-an' },
   { label: 'Dịch Vụ', href: '/dich-vu' },
+  { label: 'Đăng Nhập', href: '/dang-nhap' },
 ] as const
 
 // ─── Types (used by components) ──────────────────────────────────

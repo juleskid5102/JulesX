@@ -47,15 +47,13 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-        isVisible
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${isVisible
           ? 'translate-y-0 opacity-100'
           : '-translate-y-full opacity-0'
-      } ${
-        hasScrolled
+        } ${hasScrolled
           ? 'glass-nav shadow-[0_1px_0_rgba(232,226,216,0.5)]'
           : 'bg-transparent'
-      }`}
+        }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
         {/* Logo — with animated underline */}
@@ -75,11 +73,10 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 to={link.href}
-                className={`relative px-5 py-2 rounded-full text-[11px] font-semibold uppercase tracking-[0.15em] transition-all duration-300 ${
-                  isActive
+                className={`relative px-5 py-2 rounded-full text-[11px] font-semibold uppercase tracking-[0.15em] transition-all duration-300 ${isActive
                     ? 'bg-text text-bg shadow-sm'
                     : 'text-text-muted hover:text-text hover:bg-border-light'
-                }`}
+                  }`}
               >
                 {link.label}
               </Link>
@@ -87,15 +84,8 @@ export default function Navbar() {
           })}
         </div>
 
-        {/* Right side — CTA + Login */}
-        <div className="hidden md:flex items-center gap-4">
-          <Link
-            to="/dang-nhap"
-            className="text-[11px] font-semibold uppercase tracking-[0.15em] text-text-light hover:text-text transition-colors duration-300"
-          >
-            Đăng Nhập
-          </Link>
-
+        {/* Right side — CTA */}
+        <div className="hidden md:flex items-center">
           <Link
             to="/bat-dau-du-an"
             className="bg-text text-bg px-7 py-2.5 text-[11px] font-bold uppercase tracking-[0.15em] rounded-full hover:bg-accent hover:text-text active:scale-95 transition-all duration-300 btn-press"
@@ -124,11 +114,10 @@ export default function Navbar() {
 
       {/* Mobile Menu — Fullscreen overlay with stagger animation */}
       <div
-        className={`md:hidden fixed inset-0 bg-bg/[0.98] backdrop-blur-3xl transition-all duration-500 z-[60] ${
-          isOpen
+        className={`md:hidden fixed inset-0 bg-bg/[0.98] backdrop-blur-3xl transition-all duration-500 z-[60] ${isOpen
             ? 'opacity-100 pointer-events-auto'
             : 'opacity-0 pointer-events-none'
-        }`}
+          }`}
       >
         {/* Close button */}
         <button
@@ -147,13 +136,11 @@ export default function Navbar() {
               key={link.href}
               to={link.href}
               onClick={() => setIsOpen(false)}
-              className={`text-3xl font-extrabold uppercase tracking-tight transition-all duration-500 ${
-                isOpen ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-              } ${
-                location.pathname === link.href
+              className={`text-3xl font-extrabold uppercase tracking-tight transition-all duration-500 ${isOpen ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+                } ${location.pathname === link.href
                   ? 'text-accent'
                   : 'text-border hover:text-text'
-              }`}
+                }`}
               style={{ transitionDelay: isOpen ? `${i * 80}ms` : '0ms' }}
             >
               {link.label}
