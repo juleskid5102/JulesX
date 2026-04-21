@@ -4,74 +4,57 @@ import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
 
 /**
- * Services — JulesX Editorial
- * Reference: screen1.png — zigzag timeline with illustrations,
- * Connector line on TEXT side, starts from 01 circle, not above it.
+ * Services — JulesX Editorial (Vietnamese)
+ * Reference: screen1.png
+ * - Zigzag timeline with horizontal connectors from circle to text
+ * - Prominent numbered circles
+ * - Organic wave background pattern
+ * - All text in Vietnamese
  */
 
 const SERVICES = [
   {
     num: '01',
-    title: 'The Blueprint',
-    subtitle: 'Strategy & UX Research',
+    title: 'Bản Thiết Kế',
+    subtitle: 'Chiến Lược & Nghiên Cứu UX',
     description:
       'Nghiên cứu sâu, phân tích người dùng và lập kế hoạch chiến lược. Chúng tôi xác định logic cốt lõi và mô hình tương tác trước khi thiết kế bất kỳ pixel nào.',
-    deliverables: [
-      'User Personas',
-      'Information Architecture',
-      'Wireframes',
-      'Functional Specifications',
-    ],
+    deliverables: 'User Personas, Information Architecture, Wireframes, Functional Specifications',
     image: '/images/srv-strategy.png',
   },
   {
     num: '02',
-    title: 'The Aesthetic',
-    subtitle: 'UI & Identity',
+    title: 'Thẩm Mỹ',
+    subtitle: 'Giao Diện & Nhận Diện Thương Hiệu',
     description:
       'Xây dựng ngôn ngữ hình ảnh riêng biệt. Kết hợp bản sắc thương hiệu với thiết kế giao diện trực quan để tạo tác động tối đa.',
-    deliverables: [
-      'Brand System',
-      'Visual Design',
-      'Style Guide',
-      'UI Components',
-    ],
+    deliverables: 'Brand System, Visual Design, Style Guide, UI Components',
     image: '/images/srv-design.png',
   },
   {
     num: '03',
-    title: 'The Engine',
-    subtitle: 'Development & Scalability',
+    title: 'Bộ Máy',
+    subtitle: 'Phát Triển & Mở Rộng',
     description:
       'Kỹ thuật vững vàng, code sạch và có khả năng mở rộng. Xây dựng nền tảng tối ưu cho tốc độ và bảo mật.',
-    deliverables: [
-      'Front-End Build',
-      'Back-End API',
-      'CMS Integration',
-      'Performance Optimization',
-    ],
+    deliverables: 'Front-End, Back-End, CMS Integration, Performance Optimization, API Development',
     image: '/images/srv-dev.png',
   },
   {
     num: '04',
-    title: 'The Soul',
-    subtitle: 'Motion & Interaction',
+    title: 'Linh Hồn',
+    subtitle: 'Chuyển Động & Tương Tác',
     description:
       'Thổi hồn vào trải nghiệm. Tích hợp animations mượt mà và micro-interactions tạo sự hấp dẫn và thú vị.',
-    deliverables: [
-      'Interactive Prototypes',
-      'Animation Library',
-      'Micro-Interactions',
-      'Sound Design',
-    ],
+    deliverables: 'Interactive Prototypes, Animation Library, Micro-Interactions, Sound Design',
     image: '/images/srv-motion.png',
   },
 ]
 
 const WHY_US = [
   {
-    title: 'Holistic Approach',
-    desc: 'Tiếp cận toàn diện từ chiến lược đến thực thi.',
+    title: 'Tiếp Cận Toàn Diện',
+    desc: 'Từ chiến lược đến thực thi, không chỉ thiết kế — chúng tôi tạo trải nghiệm số trọn vẹn.',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
@@ -80,8 +63,8 @@ const WHY_US = [
     ),
   },
   {
-    title: 'Pixel-Perfect Execution',
-    desc: 'Chính xác từng chi tiết, từng pixel, từng animation.',
+    title: 'Chính Xác Từng Pixel',
+    desc: 'Mỗi pixel, mỗi animation, mỗi dòng code đều được tinh chỉnh đạt chất lượng cao nhất.',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -89,8 +72,8 @@ const WHY_US = [
     ),
   },
   {
-    title: 'Performance-Driven',
-    desc: 'Lighthouse 100/100, Core Web Vitals xanh lá.',
+    title: 'Hiệu Suất Tối Ưu',
+    desc: 'Lighthouse 100/100, Core Web Vitals xanh lá, tốc độ tải nhanh trên mọi thiết bị.',
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
@@ -98,6 +81,82 @@ const WHY_US = [
     ),
   },
 ]
+
+/* ─── Wave SVG background pattern ─── */
+function WaveBackground() {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.06]">
+      {/* Top-left waves */}
+      <svg
+        className="absolute -top-20 -left-20 w-[600px] h-[600px]"
+        viewBox="0 0 600 600"
+        fill="none"
+      >
+        <path
+          d="M0 300C0 300 100 200 200 250S350 350 450 300S600 200 600 200"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          className="text-text"
+        />
+        <path
+          d="M0 350C0 350 120 250 220 300S370 400 470 350S600 250 600 250"
+          stroke="currentColor"
+          strokeWidth="1"
+          className="text-text"
+        />
+        <path
+          d="M0 400C0 400 80 320 200 360S380 440 480 380S600 300 600 300"
+          stroke="currentColor"
+          strokeWidth="0.8"
+          className="text-text"
+        />
+      </svg>
+
+      {/* Bottom-right waves */}
+      <svg
+        className="absolute -bottom-20 -right-20 w-[700px] h-[500px]"
+        viewBox="0 0 700 500"
+        fill="none"
+      >
+        <path
+          d="M0 200C100 150 200 250 300 200S500 100 600 180S700 250 700 250"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          className="text-text"
+        />
+        <path
+          d="M0 250C80 200 180 300 280 250S450 150 560 220S700 300 700 300"
+          stroke="currentColor"
+          strokeWidth="1"
+          className="text-text"
+        />
+        <path
+          d="M0 300C120 260 220 340 320 280S500 200 620 270S700 350 700 350"
+          stroke="currentColor"
+          strokeWidth="0.8"
+          className="text-text"
+        />
+      </svg>
+
+      {/* Center-left swirl */}
+      <svg
+        className="absolute top-1/2 -left-10 w-[400px] h-[400px] -translate-y-1/2"
+        viewBox="0 0 400 400"
+        fill="none"
+      >
+        <circle cx="200" cy="200" r="120" stroke="currentColor" strokeWidth="0.6" className="text-text" opacity="0.5" />
+        <circle cx="200" cy="200" r="160" stroke="currentColor" strokeWidth="0.4" className="text-text" opacity="0.3" />
+        <path
+          d="M80 200C80 134 134 80 200 80"
+          stroke="currentColor"
+          strokeWidth="1"
+          className="text-text"
+          opacity="0.6"
+        />
+      </svg>
+    </div>
+  )
+}
 
 export default function Services() {
   const pageRef = useRef<HTMLDivElement>(null)
@@ -139,43 +198,45 @@ export default function Services() {
     <>
       <Navbar />
       <div ref={pageRef}>
-        <main className="pt-32 pb-0 bg-bg">
+        <main className="pt-32 pb-0 bg-bg relative">
+          {/* Organic wave background */}
+          <WaveBackground />
+
           {/* ─── Hero ─── */}
-          <section className="px-6 max-w-7xl mx-auto mb-20 md:mb-28 srv-reveal">
+          <section className="px-6 max-w-7xl mx-auto mb-20 md:mb-28 srv-reveal relative z-10">
             <h1
               className="font-heading font-bold text-text leading-[1.05] mb-6"
               style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)' }}
             >
-              Services — The Full
+              Dịch Vụ — Quy Trình
               <br />
-              Build Process
+              Xây Dựng Toàn Diện
             </h1>
             <p className="text-text-muted text-lg max-w-xl leading-relaxed">
-              Our end-to-end approach to crafting digital excellence.
+              Quy trình end-to-end từ chiến lược đến thực thi.
               <br />
-              From concept to award-winning reality.
+              Từ ý tưởng đến sản phẩm đoạt giải thưởng.
             </p>
           </section>
 
           {/* ─── Zigzag Timeline ─── */}
-          <section className="px-6 max-w-7xl mx-auto mb-28 md:mb-36">
+          <section className="px-6 max-w-7xl mx-auto mb-28 md:mb-36 relative z-10">
             <div className="flex flex-col gap-0">
               {SERVICES.map((service, i) => {
                 const isEven = i % 2 === 0
-                const isFirst = i === 0
                 const isLast = i === SERVICES.length - 1
 
                 return (
                   <div
                     key={service.num}
-                    className="srv-reveal relative py-12 lg:py-20"
+                    className="srv-reveal relative py-10 lg:py-16"
                   >
-                    {/* ─── Desktop layout ─── */}
+                    {/* ─── Desktop layout: 3-column grid ─── */}
                     <div className="hidden lg:grid grid-cols-[1fr_auto_1fr] gap-0 items-start">
                       {/* LEFT column */}
                       {isEven ? (
                         /* Text on LEFT for even (01, 03) */
-                        <div className="pr-16 pt-2">
+                        <div className="pr-8 pt-1">
                           <h3
                             className="font-heading font-bold text-text leading-[1.15] mb-1"
                             style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}
@@ -183,24 +244,24 @@ export default function Services() {
                             {service.title}:
                           </h3>
                           <p
-                            className="font-heading font-bold text-text-muted mb-5"
-                            style={{ fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)' }}
+                            className="font-heading font-bold text-text-muted mb-4"
+                            style={{ fontSize: 'clamp(1.1rem, 2vw, 1.5rem)' }}
                           >
                             {service.subtitle}
                           </p>
-                          <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-6">
+                          <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-5">
                             {service.description}
                           </p>
-                          <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-3">
-                            Deliverables:
+                          <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-2">
+                            Sản phẩm bàn giao:
                           </p>
                           <p className="text-text-muted text-sm leading-relaxed">
-                            {service.deliverables.join(', ')}.
+                            {service.deliverables}.
                           </p>
                         </div>
                       ) : (
                         /* Image on LEFT for odd (02, 04) */
-                        <div className="pr-16">
+                        <div className="pr-8">
                           <div className="relative overflow-hidden rounded-2xl shadow-lg group">
                             <img
                               src={service.image}
@@ -212,25 +273,39 @@ export default function Services() {
                         </div>
                       )}
 
-                      {/* CENTER — Circle + connector line */}
-                      <div className="relative flex flex-col items-center" style={{ width: '60px' }}>
-                        {/* Line ABOVE circle — only if not first */}
-                        {!isFirst && (
-                          <div className="w-[2px] bg-border flex-1 min-h-[40px]" />
+                      {/* CENTER — Circle + connectors */}
+                      <div className="relative flex flex-col items-center" style={{ width: '80px' }}>
+                        {/* Vertical line ABOVE — only if not first */}
+                        {i > 0 && (
+                          <div className="w-[2px] bg-border flex-1 min-h-[30px]" />
                         )}
-                        {/* Spacer before first circle so it aligns with content top */}
-                        {isFirst && <div className="flex-1" />}
+                        {i === 0 && <div className="flex-1" />}
 
-                        {/* Circle */}
-                        <div className="w-14 h-14 flex items-center justify-center rounded-full border-2 border-border bg-bg z-10 flex-shrink-0">
-                          <span className="font-heading text-sm font-bold text-text-muted">
-                            {service.num}
-                          </span>
+                        {/* Row: horizontal line + circle + horizontal line */}
+                        <div className="flex items-center w-full relative">
+                          {/* Horizontal line LEFT — connects to text side if text is on left (isEven) */}
+                          <div
+                            className={`h-[2px] flex-1 ${isEven ? 'bg-border' : 'bg-transparent'
+                              }`}
+                          />
+
+                          {/* Prominent circle */}
+                          <div className="w-16 h-16 flex items-center justify-center rounded-full border-[2.5px] border-text/30 bg-bg shadow-[0_0_0_4px_rgba(245,240,232,1),0_0_0_6px_rgba(0,0,0,0.06)] z-10 flex-shrink-0">
+                            <span className="font-heading text-base font-bold text-text">
+                              {service.num}
+                            </span>
+                          </div>
+
+                          {/* Horizontal line RIGHT — connects to text side if text is on right (!isEven) */}
+                          <div
+                            className={`h-[2px] flex-1 ${!isEven ? 'bg-border' : 'bg-transparent'
+                              }`}
+                          />
                         </div>
 
-                        {/* Line BELOW circle — only if not last */}
+                        {/* Vertical line BELOW — only if not last */}
                         {!isLast && (
-                          <div className="w-[2px] bg-border flex-1 min-h-[40px]" />
+                          <div className="w-[2px] bg-border flex-1 min-h-[30px]" />
                         )}
                         {isLast && <div className="flex-1" />}
                       </div>
@@ -238,7 +313,7 @@ export default function Services() {
                       {/* RIGHT column */}
                       {isEven ? (
                         /* Image on RIGHT for even (01, 03) */
-                        <div className="pl-16">
+                        <div className="pl-8">
                           <div className="relative overflow-hidden rounded-2xl shadow-lg group">
                             <img
                               src={service.image}
@@ -250,7 +325,7 @@ export default function Services() {
                         </div>
                       ) : (
                         /* Text on RIGHT for odd (02, 04) */
-                        <div className="pl-16 pt-2">
+                        <div className="pl-8 pt-1">
                           <h3
                             className="font-heading font-bold text-text leading-[1.15] mb-1"
                             style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}
@@ -258,19 +333,19 @@ export default function Services() {
                             {service.title}:
                           </h3>
                           <p
-                            className="font-heading font-bold text-text-muted mb-5"
-                            style={{ fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)' }}
+                            className="font-heading font-bold text-text-muted mb-4"
+                            style={{ fontSize: 'clamp(1.1rem, 2vw, 1.5rem)' }}
                           >
                             {service.subtitle}
                           </p>
-                          <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-6">
+                          <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-5">
                             {service.description}
                           </p>
-                          <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-3">
-                            Deliverables:
+                          <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-2">
+                            Sản phẩm bàn giao:
                           </p>
                           <p className="text-text-muted text-sm leading-relaxed">
-                            {service.deliverables.join(', ')}.
+                            {service.deliverables}.
                           </p>
                         </div>
                       )}
@@ -279,12 +354,12 @@ export default function Services() {
                     {/* ─── Mobile layout ─── */}
                     <div className="lg:hidden">
                       <div className="flex items-center gap-4 mb-6">
-                        <div className="w-12 h-12 flex items-center justify-center rounded-full border-2 border-border bg-bg">
-                          <span className="font-heading text-sm font-bold text-text-muted">
+                        <div className="w-14 h-14 flex items-center justify-center rounded-full border-[2.5px] border-text/30 bg-bg shadow-[0_0_0_3px_rgba(245,240,232,1),0_0_0_5px_rgba(0,0,0,0.06)]">
+                          <span className="font-heading text-base font-bold text-text">
                             {service.num}
                           </span>
                         </div>
-                        <div className="flex-1 h-[1px] bg-border" />
+                        <div className="flex-1 h-[2px] bg-border" />
                       </div>
 
                       <h3
@@ -294,16 +369,16 @@ export default function Services() {
                         {service.title}:
                       </h3>
                       <p
-                        className="font-heading font-bold text-text-muted mb-5"
-                        style={{ fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)' }}
+                        className="font-heading font-bold text-text-muted mb-4"
+                        style={{ fontSize: 'clamp(1.1rem, 2vw, 1.5rem)' }}
                       >
                         {service.subtitle}
                       </p>
-                      <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-6">
+                      <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-5">
                         {service.description}
                       </p>
 
-                      <div className="relative overflow-hidden rounded-2xl shadow-lg mb-6">
+                      <div className="relative overflow-hidden rounded-2xl shadow-lg mb-5">
                         <img
                           src={service.image}
                           alt={service.title}
@@ -312,11 +387,11 @@ export default function Services() {
                         />
                       </div>
 
-                      <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-3">
-                        Deliverables:
+                      <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-2">
+                        Sản phẩm bàn giao:
                       </p>
                       <p className="text-text-muted text-sm leading-relaxed">
-                        {service.deliverables.join(', ')}.
+                        {service.deliverables}.
                       </p>
                     </div>
                   </div>
@@ -326,15 +401,15 @@ export default function Services() {
           </section>
 
           {/* ─── Why Us ─── */}
-          <section className="bg-bg py-20 md:py-28 px-6">
+          <section className="bg-bg py-20 md:py-28 px-6 relative z-10">
             <div className="max-w-7xl mx-auto">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-                {/* Image */}
+                {/* Image — unique for Why Us */}
                 <div className="srv-reveal">
                   <div className="relative overflow-hidden rounded-2xl shadow-lg">
                     <img
-                      src="/images/srv-motion.png"
-                      alt="Why Us — The Bridge Between Design & Code"
+                      src="/images/srv-whyus.png"
+                      alt="Cầu nối giữa Thiết Kế và Lập Trình"
                       className="w-full h-auto object-cover"
                       loading="lazy"
                     />
@@ -347,9 +422,10 @@ export default function Services() {
                     className="font-heading font-bold text-text leading-[1.1] mb-5"
                     style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)' }}
                   >
-                    Why Us: The Bridge Between
+                    Tại Sao Chọn Chúng Tôi:
                     <br />
-                    <span className="text-accent">Design & Code</span>
+                    Cầu Nối Giữa{' '}
+                    <span className="text-accent">Thiết Kế & Lập Trình</span>
                   </h2>
                   <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-10">
                     Sự kết hợp độc đáo giữa tầm nhìn sáng tạo và năng lực kỹ thuật
@@ -375,14 +451,14 @@ export default function Services() {
             </div>
           </section>
 
-          {/* ─── CTA — "Let's build something iconic." ─── */}
-          <section className="bg-[#1a1a18] py-20 md:py-28 px-6">
+          {/* ─── CTA ─── */}
+          <section className="bg-[#1a1a18] py-20 md:py-28 px-6 relative z-10">
             <div className="max-w-3xl mx-auto text-center srv-reveal">
               <Link
                 to="/bat-dau-du-an"
                 className="btn-gold btn-press inline-flex text-lg"
               >
-                Let's build something iconic.
+                Hãy cùng xây dựng điều phi thường.
                 <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
