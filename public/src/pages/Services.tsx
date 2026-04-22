@@ -86,86 +86,72 @@ const WHY_US = [
   },
 ]
 
-/* ─── Organic wave / mesh background — visible but not distracting ─── */
+/* ─── Background: flowing contour wave lines ─── */
 function WaveBackground() {
+  /**
+   * Pattern style: thick flowing parallel wave lines like topographic contours
+   * Matching user reference: visible organic waves, beige/brown tone (#b0a48a),
+   * opacity ~12-15%, stroke 1-2px, multiple parallel lines creating depth
+   */
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      {/* ── Layer 1: Full-width flowing waves (top area) ── */}
+      {/* ── Top-right wave cluster (like the reference) ── */}
       <svg
-        className="absolute -top-20 left-0 w-full h-[600px]"
-        viewBox="0 0 1400 600"
+        className="absolute -top-40 -right-60 w-[900px] h-[900px]"
+        viewBox="0 0 900 900"
         fill="none"
-        preserveAspectRatio="none"
-        style={{ animation: 'waveDrift 30s ease-in-out infinite', opacity: 0.08 }}
+        style={{ opacity: 0.12 }}
       >
-        <path d="M0 250C200 180 400 320 600 270S900 150 1100 230S1400 300 1400 300" stroke="#8a7a62" strokeWidth="2" />
-        <path d="M0 290C150 220 350 360 550 300S850 180 1050 260S1400 330 1400 330" stroke="#8a7a62" strokeWidth="1.5" />
-        <path d="M0 330C180 270 380 390 580 320S880 200 1080 280S1400 360 1400 360" stroke="#8a7a62" strokeWidth="1" />
-        <path d="M0 370C120 310 320 420 520 340S820 220 1020 300S1400 380 1400 380" stroke="#8a7a62" strokeWidth="0.8" />
-        <path d="M0 410C200 360 400 440 600 370S900 250 1100 320S1400 400 1400 400" stroke="#8a7a62" strokeWidth="0.6" />
+        {/* Converging flowing lines — top right corner */}
+        <path d="M900 0C700 100 500 50 300 200S100 400 0 500" stroke="#b0a48a" strokeWidth="1.5" fill="none" />
+        <path d="M900 30C720 120 520 70 320 220S120 420 20 520" stroke="#b0a48a" strokeWidth="1.3" fill="none" />
+        <path d="M900 60C740 140 540 90 340 240S140 440 40 540" stroke="#b0a48a" strokeWidth="1.2" fill="none" />
+        <path d="M900 90C760 160 560 110 360 260S160 460 60 560" stroke="#b0a48a" strokeWidth="1" fill="none" />
+        <path d="M900 120C780 180 580 130 380 280S180 480 80 580" stroke="#b0a48a" strokeWidth="0.9" fill="none" />
+        <path d="M900 150C800 200 600 150 400 300S200 500 100 600" stroke="#b0a48a" strokeWidth="0.8" fill="none" />
+        <path d="M900 180C820 220 620 170 420 320S220 520 120 620" stroke="#b0a48a" strokeWidth="0.7" fill="none" />
+        <path d="M900 210C840 240 640 190 440 340S240 540 140 640" stroke="#b0a48a" strokeWidth="0.6" fill="none" />
       </svg>
 
-      {/* ── Layer 2: Bottom flowing waves ── */}
+      {/* ── Bottom-left wave cluster ── */}
       <svg
-        className="absolute -bottom-20 left-0 w-full h-[500px]"
-        viewBox="0 0 1400 500"
+        className="absolute -bottom-60 -left-40 w-[800px] h-[800px]"
+        viewBox="0 0 800 800"
         fill="none"
-        preserveAspectRatio="none"
-        style={{ animation: 'waveDrift 25s ease-in-out infinite reverse', opacity: 0.07 }}
+        style={{ opacity: 0.10 }}
       >
-        <path d="M0 200C250 120 500 300 750 220S1100 100 1400 200" stroke="#8a7a62" strokeWidth="2" />
-        <path d="M0 240C200 160 450 320 700 250S1050 130 1400 230" stroke="#8a7a62" strokeWidth="1.5" />
-        <path d="M0 280C300 210 550 360 800 270S1150 150 1400 260" stroke="#8a7a62" strokeWidth="1" />
+        {/* Converging flowing lines — bottom left */}
+        <path d="M0 800C100 650 50 500 200 350S400 200 550 100" stroke="#b0a48a" strokeWidth="1.5" fill="none" />
+        <path d="M30 800C120 660 70 520 220 370S420 220 570 120" stroke="#b0a48a" strokeWidth="1.3" fill="none" />
+        <path d="M60 800C140 680 90 540 240 390S440 240 590 140" stroke="#b0a48a" strokeWidth="1.1" fill="none" />
+        <path d="M90 800C160 700 110 560 260 410S460 260 610 160" stroke="#b0a48a" strokeWidth="1" fill="none" />
+        <path d="M120 800C180 720 130 580 280 430S480 280 630 180" stroke="#b0a48a" strokeWidth="0.9" fill="none" />
+        <path d="M150 800C200 740 150 600 300 450S500 300 650 200" stroke="#b0a48a" strokeWidth="0.8" fill="none" />
+        <path d="M180 800C220 760 170 620 320 470S520 320 670 220" stroke="#b0a48a" strokeWidth="0.7" fill="none" />
       </svg>
 
-      {/* ── Layer 3: Topographic contour circles (right side) ── */}
+      {/* ── Center-right contour arcs ── */}
       <svg
-        className="absolute top-[20%] -right-40 w-[600px] h-[600px]"
-        viewBox="0 0 600 600"
-        fill="none"
-        style={{ animation: 'waveDrift 40s ease-in-out infinite', opacity: 0.06 }}
-      >
-        <circle cx="300" cy="300" r="80" stroke="#8a7a62" strokeWidth="1.5" />
-        <circle cx="300" cy="300" r="130" stroke="#8a7a62" strokeWidth="1.2" />
-        <circle cx="300" cy="300" r="180" stroke="#8a7a62" strokeWidth="1" />
-        <circle cx="300" cy="300" r="230" stroke="#8a7a62" strokeWidth="0.8" />
-        <circle cx="300" cy="300" r="280" stroke="#8a7a62" strokeWidth="0.5" />
-      </svg>
-
-      {/* ── Layer 4: Topographic contour circles (left-center) ── */}
-      <svg
-        className="absolute top-[55%] -left-32 w-[500px] h-[500px]"
+        className="absolute top-[40%] -right-20 w-[500px] h-[500px]"
         viewBox="0 0 500 500"
         fill="none"
-        style={{ animation: 'waveDrift 35s ease-in-out infinite reverse', opacity: 0.05 }}
+        style={{ opacity: 0.08 }}
       >
-        <circle cx="250" cy="250" r="100" stroke="#8a7a62" strokeWidth="1.2" />
-        <circle cx="250" cy="250" r="160" stroke="#8a7a62" strokeWidth="0.8" />
-        <circle cx="250" cy="250" r="220" stroke="#8a7a62" strokeWidth="0.5" />
-        <path d="M100 250C100 167 167 100 250 100" stroke="#8a7a62" strokeWidth="1.5" />
+        <path d="M500 100C400 150 350 250 300 350S200 450 100 500" stroke="#b0a48a" strokeWidth="1.2" fill="none" />
+        <path d="M500 130C410 175 360 270 310 370S210 465 110 500" stroke="#b0a48a" strokeWidth="1" fill="none" />
+        <path d="M500 160C420 200 370 290 320 390S220 480 120 500" stroke="#b0a48a" strokeWidth="0.8" fill="none" />
+        <path d="M500 190C430 225 380 310 330 410S230 490 130 500" stroke="#b0a48a" strokeWidth="0.6" fill="none" />
       </svg>
 
-      {/* ── Layer 5: Subtle dot grid (very faint) ── */}
-      <svg
-        className="absolute inset-0 w-full h-full"
-        style={{ opacity: 0.03 }}
-      >
+      {/* ── Subtle dot grid ── */}
+      <svg className="absolute inset-0 w-full h-full" style={{ opacity: 0.025 }}>
         <defs>
-          <pattern id="dotGrid" width="40" height="40" patternUnits="userSpaceOnUse">
-            <circle cx="20" cy="20" r="1" fill="#8a7a62" />
+          <pattern id="srvDots" width="48" height="48" patternUnits="userSpaceOnUse">
+            <circle cx="24" cy="24" r="0.8" fill="#b0a48a" />
           </pattern>
         </defs>
-        <rect width="100%" height="100%" fill="url(#dotGrid)" />
+        <rect width="100%" height="100%" fill="url(#srvDots)" />
       </svg>
-
-      {/* CSS for gentle drift */}
-      <style>{`
-        @keyframes waveDrift {
-          0%, 100% { transform: translate(0, 0); }
-          33% { transform: translate(8px, 4px); }
-          66% { transform: translate(-5px, 7px); }
-        }
-      `}</style>
     </div>
   )
 }
@@ -193,6 +179,7 @@ export default function Services() {
   const [lineStyle, setLineStyle] = useState<{ top: number; height: number }>({ top: 0, height: 0 })
 
   // Vertical line from circle 01 center → circle 04 center
+  // Uses ResizeObserver + multiple recalcs to catch MotionDemo async load
   useEffect(() => {
     const calculate = () => {
       const container = timelineRef.current
@@ -206,14 +193,26 @@ export default function Services() {
 
       const top = firstRect.top - containerRect.top + firstRect.height / 2
       const bottom = lastRect.top - containerRect.top + lastRect.height / 2
-      setLineStyle({ top, height: bottom - top })
+      if (bottom - top > 0) setLineStyle({ top, height: bottom - top })
     }
 
-    // Delay to ensure layout
-    const timer = setTimeout(calculate, 100)
+    // Multiple recalcs to catch async layout changes (MotionDemo, images, etc.)
+    const t1 = setTimeout(calculate, 50)
+    const t2 = setTimeout(calculate, 300)
+    const t3 = setTimeout(calculate, 800)
+    const t4 = setTimeout(calculate, 1500)
+
+    // ResizeObserver for dynamic content
+    let ro: ResizeObserver | undefined
+    if (timelineRef.current) {
+      ro = new ResizeObserver(calculate)
+      ro.observe(timelineRef.current)
+    }
+
     window.addEventListener('resize', calculate)
     return () => {
-      clearTimeout(timer)
+      clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4)
+      ro?.disconnect()
       window.removeEventListener('resize', calculate)
     }
   }, [])
