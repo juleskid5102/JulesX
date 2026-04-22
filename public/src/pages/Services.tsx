@@ -5,9 +5,11 @@ import Footer from '../components/layout/Footer'
 
 /**
  * Services — JulesX Editorial (Vietnamese)
- * Timeline: continuous vertical center line, circles on it,
- * horizontal connectors to alternating content blocks,
- * hover highlighting.
+ *
+ * FIXES v5:
+ * 1. Vertical line starts FROM circle 01 → ends AT circle 04 (no line above 01)
+ * 2. Text left-aligned for steps 1,3 — small dot circle at connector tip
+ * 3. Wider 16:9 images to prevent overlap
  */
 
 const SERVICES = [
@@ -101,153 +103,66 @@ function WaveBackground() {
   )
 }
 
-/* ─── Timeline Step (Desktop) ─── */
-function TimelineStep({
-  service,
-  index,
-  hoveredIndex,
-  onHover,
-}: {
-  service: (typeof SERVICES)[number]
-  index: number
-  hoveredIndex: number | null
-  onHover: (i: number | null) => void
-}) {
-  const isOdd = index % 2 === 0 // 01,03 = text LEFT; 02,04 = text RIGHT
-  const isActive = hoveredIndex === index
-
-  const contentBlock = (
-    <div
-      className={`transition-all duration-400 ${isActive ? 'opacity-100 scale-[1.01]' : hoveredIndex !== null ? 'opacity-60' : 'opacity-100'
-        }`}
-    >
-      <h3
-        className={`font-heading font-bold leading-[1.15] mb-1 transition-colors duration-300 ${isActive ? 'text-accent' : 'text-text'
-          }`}
-        style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}
-      >
-        {service.title}:
-      </h3>
-      <p
-        className="font-heading font-bold text-text-muted mb-4"
-        style={{ fontSize: 'clamp(1.1rem, 2vw, 1.4rem)' }}
-      >
-        {service.subtitle}
-      </p>
-      <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-5">
-        {service.description}
-      </p>
-      <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-2">
-        Sản phẩm bàn giao:
-      </p>
-      <p className="text-text-muted text-sm leading-relaxed">
-        {service.deliverables}.
-      </p>
-    </div>
-  )
-
-  const imageBlock = (
-    <div
-      className={`transition-all duration-400 ${isActive ? 'opacity-100 scale-[1.02]' : hoveredIndex !== null ? 'opacity-60' : 'opacity-100'
-        }`}
-    >
-      <div className="relative overflow-hidden rounded-2xl shadow-lg group">
-        <img
-          src={service.image}
-          alt={service.title}
-          className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
-          loading="lazy"
-        />
-      </div>
-    </div>
-  )
-
+/* ─── Small dot at connector tip ─── */
+function ConnectorDot({ side, isActive }: { side: 'left' | 'right'; isActive: boolean }) {
   return (
     <div
-      className="relative grid grid-cols-[1fr_80px_1fr] items-center"
-      style={{ minHeight: '280px' }}
-      onMouseEnter={() => onHover(index)}
-      onMouseLeave={() => onHover(null)}
-    >
-      {/* LEFT column */}
-      <div className={`pr-6 ${isOdd ? '' : 'order-1'}`}>
-        {isOdd ? contentBlock : imageBlock}
-      </div>
-
-      {/* CENTER — circle + horizontal connectors */}
-      <div className="relative flex items-center justify-center order-2" style={{ width: '80px' }}>
-        {/* Horizontal connector LEFT */}
-        <div
-          className={`absolute right-1/2 top-1/2 -translate-y-1/2 h-[2px] transition-colors duration-300 ${isActive ? 'bg-accent' : 'bg-border'
-            }`}
-          style={{ width: 'calc(50% - 28px)', right: 'calc(50% + 28px)', left: '0' }}
-        />
-
-        {/* Circle */}
-        <div
-          className={`relative z-10 w-14 h-14 rounded-full flex items-center justify-center border-[2.5px] transition-all duration-300 ${isActive
-              ? 'border-accent bg-accent text-white shadow-lg shadow-accent/20 scale-110'
-              : 'border-text/25 bg-bg text-text'
-            }`}
-          style={{
-            boxShadow: isActive
-              ? undefined
-              : '0 0 0 4px rgba(245,240,232,1), 0 0 0 6px rgba(0,0,0,0.05)',
-          }}
-        >
-          <span className="font-heading text-sm font-bold">{service.num}</span>
-        </div>
-
-        {/* Horizontal connector RIGHT */}
-        <div
-          className={`absolute left-1/2 top-1/2 -translate-y-1/2 h-[2px] transition-colors duration-300 ${isActive ? 'bg-accent' : 'bg-border'
-            }`}
-          style={{ width: 'calc(50% - 28px)', left: 'calc(50% + 28px)', right: '0' }}
-        />
-      </div>
-
-      {/* RIGHT column */}
-      <div className={`pl-6 ${isOdd ? 'order-3' : ''}`}>
-        {isOdd ? imageBlock : contentBlock}
-      </div>
-    </div>
+      className={`absolute top-1/2 -translate-y-1/2 w-[8px] h-[8px] rounded-full border-[1.5px] transition-colors duration-300 ${isActive ? 'border-accent bg-accent' : 'border-text/30 bg-bg'
+        }`}
+      style={side === 'left' ? { left: '-4px' } : { right: '-4px' }}
+    />
   )
 }
+
+/* ─── Sizes ─── */
+const CIRCLE_SIZE = 64 // w-16 h-16
+const CIRCLE_CENTER_Y = 32 // top offset where circle vertical center lands
+const CONNECTOR_WIDTH = 60
 
 export default function Services() {
   const pageRef = useRef<HTMLDivElement>(null)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const circleRefs = useRef<(HTMLDivElement | null)[]>([])
+  const timelineRef = useRef<HTMLDivElement>(null)
+  const [lineStyle, setLineStyle] = useState<{ top: number; height: number }>({ top: 0, height: 0 })
+
+  // Calculate vertical line position: from center of first circle to center of last circle
+  useEffect(() => {
+    const calculate = () => {
+      const container = timelineRef.current
+      const first = circleRefs.current[0]
+      const last = circleRefs.current[SERVICES.length - 1]
+      if (!container || !first || !last) return
+
+      const containerRect = container.getBoundingClientRect()
+      const firstRect = first.getBoundingClientRect()
+      const lastRect = last.getBoundingClientRect()
+
+      const top = firstRect.top - containerRect.top + firstRect.height / 2
+      const bottom = lastRect.top - containerRect.top + lastRect.height / 2
+      setLineStyle({ top, height: bottom - top })
+    }
+
+    calculate()
+    window.addEventListener('resize', calculate)
+    return () => window.removeEventListener('resize', calculate)
+  }, [])
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-
     const init = async () => {
       const { gsap } = await import('gsap')
       const { ScrollTrigger } = await import('gsap/ScrollTrigger')
       gsap.registerPlugin(ScrollTrigger)
-
       const els = pageRef.current?.querySelectorAll('.srv-reveal')
       if (!els) return
-
       els.forEach((el) => {
-        gsap.fromTo(
-          el,
-          { y: 50, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: el,
-              start: 'top 85%',
-              toggleActions: 'play none none none',
-            },
-          }
-        )
+        gsap.fromTo(el, { y: 50, opacity: 0 }, {
+          y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none none' },
+        })
       })
     }
-
     init()
   }, [])
 
@@ -275,66 +190,210 @@ export default function Services() {
             </p>
           </section>
 
-          {/* ─── Timeline Section ─── */}
+          {/* ━━━ TIMELINE SECTION ━━━ */}
           <section className="px-6 max-w-7xl mx-auto mb-28 md:mb-36 relative z-10">
-            {/* ─── Desktop Timeline ─── */}
-            <div className="hidden lg:block relative">
-              {/* ▌ Continuous vertical center line — runs the entire height */}
-              <div
-                className="absolute top-0 bottom-0 w-[2px] bg-border"
-                style={{ left: 'calc(50% - 1px)' }}
-              />
 
-              {/* Steps */}
-              <div className="relative flex flex-col" style={{ gap: '60px', paddingTop: '40px', paddingBottom: '40px' }}>
-                {SERVICES.map((service, i) => (
-                  <TimelineStep
+            {/* ─── DESKTOP TIMELINE ─── */}
+            <div ref={timelineRef} className="hidden lg:block relative">
+
+              {/* ▌ VERTICAL LINE — dynamically positioned from circle 01 center to circle 04 center */}
+              {lineStyle.height > 0 && (
+                <div
+                  className="absolute w-[2px] bg-border"
+                  style={{
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    top: `${lineStyle.top}px`,
+                    height: `${lineStyle.height}px`,
+                  }}
+                />
+              )}
+
+              {/* ▌ STEPS */}
+              {SERVICES.map((service, i) => {
+                const isOddStep = i % 2 === 0 // 01,03 = content LEFT
+                const isActive = hoveredIndex === i
+                const isDimmed = hoveredIndex !== null && hoveredIndex !== i
+
+                return (
+                  <div
                     key={service.num}
-                    service={service}
-                    index={i}
-                    hoveredIndex={hoveredIndex}
-                    onHover={setHoveredIndex}
-                  />
-                ))}
-              </div>
+                    className="srv-reveal"
+                    style={{ marginBottom: i < SERVICES.length - 1 ? '100px' : '0' }}
+                    onMouseEnter={() => setHoveredIndex(i)}
+                    onMouseLeave={() => setHoveredIndex(null)}
+                  >
+                    {/* Two-column grid: LEFT | RIGHT, circle positioned absolutely at center */}
+                    <div className="grid grid-cols-2 gap-0 relative" style={{ minHeight: '200px' }}>
+
+                      {/* ── CIRCLE (absolute, centered on X axis) ── */}
+                      <div
+                        ref={el => { circleRefs.current[i] = el }}
+                        className="absolute z-20"
+                        style={{
+                          left: '50%',
+                          top: `${CIRCLE_CENTER_Y}px`,
+                          transform: 'translate(-50%, -50%)',
+                        }}
+                      >
+                        <div
+                          className={`w-16 h-16 rounded-full flex items-center justify-center border-[2.5px] transition-all duration-300 ${isActive
+                              ? 'border-accent bg-accent text-white shadow-lg shadow-accent/25 scale-110'
+                              : 'border-text/30 bg-bg text-text'
+                            }`}
+                          style={{
+                            boxShadow: isActive
+                              ? undefined
+                              : '0 0 0 5px rgba(245,240,232,1), 0 0 0 7px rgba(0,0,0,0.06)',
+                          }}
+                        >
+                          <span className="font-heading text-base font-bold">
+                            {service.num}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* ── HORIZONTAL CONNECTOR with dot ── */}
+                      <div
+                        className={`absolute z-10 transition-colors duration-300`}
+                        style={{
+                          top: `${CIRCLE_CENTER_Y}px`,
+                          transform: 'translateY(-50%)',
+                          height: '2px',
+                          width: `${CONNECTOR_WIDTH}px`,
+                          ...(isOddStep
+                            ? { right: `calc(50% + ${CIRCLE_SIZE / 2 + 2}px)` }  // LEFT of circle
+                            : { left: `calc(50% + ${CIRCLE_SIZE / 2 + 2}px)` }), // RIGHT of circle
+                        }}
+                      >
+                        {/* Line body */}
+                        <div
+                          className={`absolute inset-0 transition-colors duration-300 ${isActive ? 'bg-accent' : 'bg-text/20'
+                            }`}
+                        />
+                        {/* Dot at the end (away from circle) */}
+                        <ConnectorDot
+                          side={isOddStep ? 'left' : 'right'}
+                          isActive={isActive}
+                        />
+                      </div>
+
+                      {/* ── LEFT COLUMN ── */}
+                      <div
+                        className={`pr-24 transition-all duration-400 ${isDimmed ? 'opacity-50' : 'opacity-100'
+                          }`}
+                      >
+                        {isOddStep ? (
+                          /* Text content LEFT for 01, 03 — LEFT ALIGNED */
+                          <div className="text-left">
+                            <h3
+                              className={`font-heading font-bold leading-[1.15] mb-1 transition-colors duration-300 ${isActive ? 'text-accent' : 'text-text'
+                                }`}
+                              style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}
+                            >
+                              {service.title}:
+                            </h3>
+                            <p className="font-heading font-bold text-text-muted mb-4" style={{ fontSize: 'clamp(1.1rem, 2vw, 1.4rem)' }}>
+                              {service.subtitle}
+                            </p>
+                            <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-5">
+                              {service.description}
+                            </p>
+                            <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-2">
+                              Sản phẩm bàn giao:
+                            </p>
+                            <p className="text-text-muted text-sm leading-relaxed">
+                              {service.deliverables}.
+                            </p>
+                          </div>
+                        ) : (
+                          /* Image LEFT for 02, 04 */
+                          <div className="overflow-hidden rounded-2xl shadow-lg">
+                            <img
+                              src={service.image}
+                              alt={service.title}
+                              className="w-full h-auto object-cover transition-transform duration-700 hover:scale-105"
+                              style={{ maxHeight: '280px', objectFit: 'cover' }}
+                              loading="lazy"
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* ── RIGHT COLUMN ── */}
+                      <div
+                        className={`pl-24 transition-all duration-400 ${isDimmed ? 'opacity-50' : 'opacity-100'
+                          }`}
+                      >
+                        {isOddStep ? (
+                          /* Image RIGHT for 01, 03 */
+                          <div className="overflow-hidden rounded-2xl shadow-lg">
+                            <img
+                              src={service.image}
+                              alt={service.title}
+                              className="w-full h-auto object-cover transition-transform duration-700 hover:scale-105"
+                              style={{ maxHeight: '280px', objectFit: 'cover' }}
+                              loading="lazy"
+                            />
+                          </div>
+                        ) : (
+                          /* Text content RIGHT for 02, 04 — LEFT ALIGNED */
+                          <div className="text-left">
+                            <h3
+                              className={`font-heading font-bold leading-[1.15] mb-1 transition-colors duration-300 ${isActive ? 'text-accent' : 'text-text'
+                                }`}
+                              style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}
+                            >
+                              {service.title}:
+                            </h3>
+                            <p className="font-heading font-bold text-text-muted mb-4" style={{ fontSize: 'clamp(1.1rem, 2vw, 1.4rem)' }}>
+                              {service.subtitle}
+                            </p>
+                            <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-5">
+                              {service.description}
+                            </p>
+                            <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-2">
+                              Sản phẩm bàn giao:
+                            </p>
+                            <p className="text-text-muted text-sm leading-relaxed">
+                              {service.deliverables}.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
 
-            {/* ─── Mobile Timeline ─── */}
+            {/* ─── MOBILE TIMELINE ─── */}
             <div className="lg:hidden flex flex-col gap-12">
               {SERVICES.map((service) => (
                 <div key={service.num} className="srv-reveal">
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="w-14 h-14 flex items-center justify-center rounded-full border-[2.5px] border-text/25 bg-bg shadow-[0_0_0_3px_rgba(245,240,232,1),0_0_0_5px_rgba(0,0,0,0.06)]">
-                      <span className="font-heading text-base font-bold text-text">
-                        {service.num}
-                      </span>
+                    <div className="w-14 h-14 flex items-center justify-center rounded-full border-[2.5px] border-text/30 bg-bg shadow-[0_0_0_3px_rgba(245,240,232,1),0_0_0_5px_rgba(0,0,0,0.06)]">
+                      <span className="font-heading text-base font-bold text-text">{service.num}</span>
                     </div>
-                    <div className="flex-1 h-[2px] bg-border" />
+                    <div className="flex-1 h-[2px] bg-border relative">
+                      <div className="absolute right-[-4px] top-1/2 -translate-y-1/2 w-[8px] h-[8px] rounded-full border-[1.5px] border-text/30 bg-bg" />
+                    </div>
                   </div>
 
-                  <h3
-                    className="font-heading font-bold text-text leading-[1.15] mb-1"
-                    style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}
-                  >
+                  <h3 className="font-heading font-bold text-text leading-[1.15] mb-1" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>
                     {service.title}:
                   </h3>
                   <p className="font-heading font-bold text-text-muted mb-4" style={{ fontSize: 'clamp(1.1rem, 2vw, 1.5rem)' }}>
                     {service.subtitle}
                   </p>
-                  <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-5">
-                    {service.description}
-                  </p>
+                  <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-5">{service.description}</p>
 
-                  <div className="relative overflow-hidden rounded-2xl shadow-lg mb-5">
-                    <img src={service.image} alt={service.title} className="w-full h-auto object-cover" loading="lazy" />
+                  <div className="overflow-hidden rounded-2xl shadow-lg mb-5">
+                    <img src={service.image} alt={service.title} className="w-full h-auto object-cover" style={{ maxHeight: '240px' }} loading="lazy" />
                   </div>
 
-                  <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-2">
-                    Sản phẩm bàn giao:
-                  </p>
-                  <p className="text-text-muted text-sm leading-relaxed">
-                    {service.deliverables}.
-                  </p>
+                  <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-2">Sản phẩm bàn giao:</p>
+                  <p className="text-text-muted text-sm leading-relaxed">{service.deliverables}.</p>
                 </div>
               ))}
             </div>
@@ -345,37 +404,26 @@ export default function Services() {
             <div className="max-w-7xl mx-auto">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
                 <div className="srv-reveal">
-                  <div className="relative overflow-hidden rounded-2xl shadow-lg">
+                  <div className="overflow-hidden rounded-2xl shadow-lg">
                     <img src="/images/srv-whyus.png" alt="Cầu nối giữa Thiết Kế và Lập Trình" className="w-full h-auto object-cover" loading="lazy" />
                   </div>
                 </div>
-
                 <div className="srv-reveal">
-                  <h2
-                    className="font-heading font-bold text-text leading-[1.1] mb-5"
-                    style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)' }}
-                  >
+                  <h2 className="font-heading font-bold text-text leading-[1.1] mb-5" style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)' }}>
                     Tại Sao Chọn Chúng Tôi:
                     <br />
-                    Cầu Nối Giữa{' '}
-                    <span className="text-accent">Thiết Kế & Lập Trình</span>
+                    Cầu Nối Giữa <span className="text-accent">Thiết Kế & Lập Trình</span>
                   </h2>
                   <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-10">
-                    Sự kết hợp độc đáo giữa tầm nhìn sáng tạo và năng lực kỹ thuật
-                    đảm bảo sản phẩm không chỉ đạt chuẩn mà vượt trội. Chúng tôi
-                    không chỉ xây website — chúng tôi tạo trải nghiệm số đẳng cấp.
+                    Sự kết hợp độc đáo giữa tầm nhìn sáng tạo và năng lực kỹ thuật đảm bảo sản phẩm không chỉ đạt chuẩn mà vượt trội.
+                    Chúng tôi không chỉ xây website — chúng tôi tạo trải nghiệm số đẳng cấp.
                   </p>
-
                   <div className="grid grid-cols-3 gap-6">
                     {WHY_US.map((item) => (
                       <div key={item.title} className="group">
                         <span className="text-accent mb-3 block">{item.icon}</span>
-                        <h4 className="font-heading font-bold text-text text-sm mb-1 group-hover:text-accent transition-colors duration-300">
-                          {item.title}
-                        </h4>
-                        <p className="text-text-light text-xs leading-relaxed">
-                          {item.desc}
-                        </p>
+                        <h4 className="font-heading font-bold text-text text-sm mb-1 group-hover:text-accent transition-colors duration-300">{item.title}</h4>
+                        <p className="text-text-light text-xs leading-relaxed">{item.desc}</p>
                       </div>
                     ))}
                   </div>
@@ -387,10 +435,7 @@ export default function Services() {
           {/* ─── CTA ─── */}
           <section className="bg-[#1a1a18] py-20 md:py-28 px-6 relative z-10">
             <div className="max-w-3xl mx-auto text-center srv-reveal">
-              <Link
-                to="/bat-dau-du-an"
-                className="btn-gold btn-press inline-flex text-lg"
-              >
+              <Link to="/bat-dau-du-an" className="btn-gold btn-press inline-flex text-lg">
                 Hãy cùng xây dựng điều phi thường.
                 <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
