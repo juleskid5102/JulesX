@@ -1,15 +1,13 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
 
 /**
  * Services — JulesX Editorial (Vietnamese)
- * Reference: screen1.png
- * - Zigzag timeline with horizontal connectors from circle to text
- * - Prominent numbered circles
- * - Organic wave background pattern
- * - All text in Vietnamese
+ * Timeline: continuous vertical center line, circles on it,
+ * horizontal connectors to alternating content blocks,
+ * hover highlighting.
  */
 
 const SERVICES = [
@@ -86,80 +84,139 @@ const WHY_US = [
 function WaveBackground() {
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.06]">
-      {/* Top-left waves */}
-      <svg
-        className="absolute -top-20 -left-20 w-[600px] h-[600px]"
-        viewBox="0 0 600 600"
-        fill="none"
-      >
-        <path
-          d="M0 300C0 300 100 200 200 250S350 350 450 300S600 200 600 200"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          className="text-text"
-        />
-        <path
-          d="M0 350C0 350 120 250 220 300S370 400 470 350S600 250 600 250"
-          stroke="currentColor"
-          strokeWidth="1"
-          className="text-text"
-        />
-        <path
-          d="M0 400C0 400 80 320 200 360S380 440 480 380S600 300 600 300"
-          stroke="currentColor"
-          strokeWidth="0.8"
-          className="text-text"
-        />
+      <svg className="absolute -top-20 -left-20 w-[600px] h-[600px]" viewBox="0 0 600 600" fill="none">
+        <path d="M0 300C0 300 100 200 200 250S350 350 450 300S600 200 600 200" stroke="currentColor" strokeWidth="1.5" className="text-text" />
+        <path d="M0 350C0 350 120 250 220 300S370 400 470 350S600 250 600 250" stroke="currentColor" strokeWidth="1" className="text-text" />
+        <path d="M0 400C0 400 80 320 200 360S380 440 480 380S600 300 600 300" stroke="currentColor" strokeWidth="0.8" className="text-text" />
       </svg>
-
-      {/* Bottom-right waves */}
-      <svg
-        className="absolute -bottom-20 -right-20 w-[700px] h-[500px]"
-        viewBox="0 0 700 500"
-        fill="none"
-      >
-        <path
-          d="M0 200C100 150 200 250 300 200S500 100 600 180S700 250 700 250"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          className="text-text"
-        />
-        <path
-          d="M0 250C80 200 180 300 280 250S450 150 560 220S700 300 700 300"
-          stroke="currentColor"
-          strokeWidth="1"
-          className="text-text"
-        />
-        <path
-          d="M0 300C120 260 220 340 320 280S500 200 620 270S700 350 700 350"
-          stroke="currentColor"
-          strokeWidth="0.8"
-          className="text-text"
-        />
+      <svg className="absolute -bottom-20 -right-20 w-[700px] h-[500px]" viewBox="0 0 700 500" fill="none">
+        <path d="M0 200C100 150 200 250 300 200S500 100 600 180S700 250 700 250" stroke="currentColor" strokeWidth="1.5" className="text-text" />
+        <path d="M0 250C80 200 180 300 280 250S450 150 560 220S700 300 700 300" stroke="currentColor" strokeWidth="1" className="text-text" />
       </svg>
-
-      {/* Center-left swirl */}
-      <svg
-        className="absolute top-1/2 -left-10 w-[400px] h-[400px] -translate-y-1/2"
-        viewBox="0 0 400 400"
-        fill="none"
-      >
+      <svg className="absolute top-1/2 -left-10 w-[400px] h-[400px] -translate-y-1/2" viewBox="0 0 400 400" fill="none">
         <circle cx="200" cy="200" r="120" stroke="currentColor" strokeWidth="0.6" className="text-text" opacity="0.5" />
         <circle cx="200" cy="200" r="160" stroke="currentColor" strokeWidth="0.4" className="text-text" opacity="0.3" />
-        <path
-          d="M80 200C80 134 134 80 200 80"
-          stroke="currentColor"
-          strokeWidth="1"
-          className="text-text"
-          opacity="0.6"
-        />
       </svg>
+    </div>
+  )
+}
+
+/* ─── Timeline Step (Desktop) ─── */
+function TimelineStep({
+  service,
+  index,
+  hoveredIndex,
+  onHover,
+}: {
+  service: (typeof SERVICES)[number]
+  index: number
+  hoveredIndex: number | null
+  onHover: (i: number | null) => void
+}) {
+  const isOdd = index % 2 === 0 // 01,03 = text LEFT; 02,04 = text RIGHT
+  const isActive = hoveredIndex === index
+
+  const contentBlock = (
+    <div
+      className={`transition-all duration-400 ${isActive ? 'opacity-100 scale-[1.01]' : hoveredIndex !== null ? 'opacity-60' : 'opacity-100'
+        }`}
+    >
+      <h3
+        className={`font-heading font-bold leading-[1.15] mb-1 transition-colors duration-300 ${isActive ? 'text-accent' : 'text-text'
+          }`}
+        style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}
+      >
+        {service.title}:
+      </h3>
+      <p
+        className="font-heading font-bold text-text-muted mb-4"
+        style={{ fontSize: 'clamp(1.1rem, 2vw, 1.4rem)' }}
+      >
+        {service.subtitle}
+      </p>
+      <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-5">
+        {service.description}
+      </p>
+      <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-2">
+        Sản phẩm bàn giao:
+      </p>
+      <p className="text-text-muted text-sm leading-relaxed">
+        {service.deliverables}.
+      </p>
+    </div>
+  )
+
+  const imageBlock = (
+    <div
+      className={`transition-all duration-400 ${isActive ? 'opacity-100 scale-[1.02]' : hoveredIndex !== null ? 'opacity-60' : 'opacity-100'
+        }`}
+    >
+      <div className="relative overflow-hidden rounded-2xl shadow-lg group">
+        <img
+          src={service.image}
+          alt={service.title}
+          className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  )
+
+  return (
+    <div
+      className="relative grid grid-cols-[1fr_80px_1fr] items-center"
+      style={{ minHeight: '280px' }}
+      onMouseEnter={() => onHover(index)}
+      onMouseLeave={() => onHover(null)}
+    >
+      {/* LEFT column */}
+      <div className={`pr-6 ${isOdd ? '' : 'order-1'}`}>
+        {isOdd ? contentBlock : imageBlock}
+      </div>
+
+      {/* CENTER — circle + horizontal connectors */}
+      <div className="relative flex items-center justify-center order-2" style={{ width: '80px' }}>
+        {/* Horizontal connector LEFT */}
+        <div
+          className={`absolute right-1/2 top-1/2 -translate-y-1/2 h-[2px] transition-colors duration-300 ${isActive ? 'bg-accent' : 'bg-border'
+            }`}
+          style={{ width: 'calc(50% - 28px)', right: 'calc(50% + 28px)', left: '0' }}
+        />
+
+        {/* Circle */}
+        <div
+          className={`relative z-10 w-14 h-14 rounded-full flex items-center justify-center border-[2.5px] transition-all duration-300 ${isActive
+              ? 'border-accent bg-accent text-white shadow-lg shadow-accent/20 scale-110'
+              : 'border-text/25 bg-bg text-text'
+            }`}
+          style={{
+            boxShadow: isActive
+              ? undefined
+              : '0 0 0 4px rgba(245,240,232,1), 0 0 0 6px rgba(0,0,0,0.05)',
+          }}
+        >
+          <span className="font-heading text-sm font-bold">{service.num}</span>
+        </div>
+
+        {/* Horizontal connector RIGHT */}
+        <div
+          className={`absolute left-1/2 top-1/2 -translate-y-1/2 h-[2px] transition-colors duration-300 ${isActive ? 'bg-accent' : 'bg-border'
+            }`}
+          style={{ width: 'calc(50% - 28px)', left: 'calc(50% + 28px)', right: '0' }}
+        />
+      </div>
+
+      {/* RIGHT column */}
+      <div className={`pl-6 ${isOdd ? 'order-3' : ''}`}>
+        {isOdd ? imageBlock : contentBlock}
+      </div>
     </div>
   )
 }
 
 export default function Services() {
   const pageRef = useRef<HTMLDivElement>(null)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
@@ -199,7 +256,6 @@ export default function Services() {
       <Navbar />
       <div ref={pageRef}>
         <main className="pt-32 pb-0 bg-bg relative">
-          {/* Organic wave background */}
           <WaveBackground />
 
           {/* ─── Hero ─── */}
@@ -219,184 +275,68 @@ export default function Services() {
             </p>
           </section>
 
-          {/* ─── Zigzag Timeline ─── */}
+          {/* ─── Timeline Section ─── */}
           <section className="px-6 max-w-7xl mx-auto mb-28 md:mb-36 relative z-10">
-            <div className="flex flex-col gap-0">
-              {SERVICES.map((service, i) => {
-                const isEven = i % 2 === 0
-                const isLast = i === SERVICES.length - 1
+            {/* ─── Desktop Timeline ─── */}
+            <div className="hidden lg:block relative">
+              {/* ▌ Continuous vertical center line — runs the entire height */}
+              <div
+                className="absolute top-0 bottom-0 w-[2px] bg-border"
+                style={{ left: 'calc(50% - 1px)' }}
+              />
 
-                return (
-                  <div
+              {/* Steps */}
+              <div className="relative flex flex-col" style={{ gap: '60px', paddingTop: '40px', paddingBottom: '40px' }}>
+                {SERVICES.map((service, i) => (
+                  <TimelineStep
                     key={service.num}
-                    className="srv-reveal relative py-10 lg:py-16"
-                  >
-                    {/* ─── Desktop layout: 3-column grid ─── */}
-                    <div className="hidden lg:grid grid-cols-[1fr_auto_1fr] gap-0 items-start">
-                      {/* LEFT column */}
-                      {isEven ? (
-                        /* Text on LEFT for even (01, 03) */
-                        <div className="pr-8 pt-1">
-                          <h3
-                            className="font-heading font-bold text-text leading-[1.15] mb-1"
-                            style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}
-                          >
-                            {service.title}:
-                          </h3>
-                          <p
-                            className="font-heading font-bold text-text-muted mb-4"
-                            style={{ fontSize: 'clamp(1.1rem, 2vw, 1.5rem)' }}
-                          >
-                            {service.subtitle}
-                          </p>
-                          <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-5">
-                            {service.description}
-                          </p>
-                          <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-2">
-                            Sản phẩm bàn giao:
-                          </p>
-                          <p className="text-text-muted text-sm leading-relaxed">
-                            {service.deliverables}.
-                          </p>
-                        </div>
-                      ) : (
-                        /* Image on LEFT for odd (02, 04) */
-                        <div className="pr-8">
-                          <div className="relative overflow-hidden rounded-2xl shadow-lg group">
-                            <img
-                              src={service.image}
-                              alt={service.title}
-                              className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
-                              loading="lazy"
-                            />
-                          </div>
-                        </div>
-                      )}
+                    service={service}
+                    index={i}
+                    hoveredIndex={hoveredIndex}
+                    onHover={setHoveredIndex}
+                  />
+                ))}
+              </div>
+            </div>
 
-                      {/* CENTER — Circle + connectors */}
-                      <div className="relative flex flex-col items-center" style={{ width: '80px' }}>
-                        {/* Vertical line ABOVE — only if not first */}
-                        {i > 0 && (
-                          <div className="w-[2px] bg-border flex-1 min-h-[30px]" />
-                        )}
-                        {i === 0 && <div className="flex-1" />}
-
-                        {/* Row: horizontal line + circle + horizontal line */}
-                        <div className="flex items-center w-full relative">
-                          {/* Horizontal line LEFT — connects to text side if text is on left (isEven) */}
-                          <div
-                            className={`h-[2px] flex-1 ${isEven ? 'bg-border' : 'bg-transparent'
-                              }`}
-                          />
-
-                          {/* Prominent circle */}
-                          <div className="w-16 h-16 flex items-center justify-center rounded-full border-[2.5px] border-text/30 bg-bg shadow-[0_0_0_4px_rgba(245,240,232,1),0_0_0_6px_rgba(0,0,0,0.06)] z-10 flex-shrink-0">
-                            <span className="font-heading text-base font-bold text-text">
-                              {service.num}
-                            </span>
-                          </div>
-
-                          {/* Horizontal line RIGHT — connects to text side if text is on right (!isEven) */}
-                          <div
-                            className={`h-[2px] flex-1 ${!isEven ? 'bg-border' : 'bg-transparent'
-                              }`}
-                          />
-                        </div>
-
-                        {/* Vertical line BELOW — only if not last */}
-                        {!isLast && (
-                          <div className="w-[2px] bg-border flex-1 min-h-[30px]" />
-                        )}
-                        {isLast && <div className="flex-1" />}
-                      </div>
-
-                      {/* RIGHT column */}
-                      {isEven ? (
-                        /* Image on RIGHT for even (01, 03) */
-                        <div className="pl-8">
-                          <div className="relative overflow-hidden rounded-2xl shadow-lg group">
-                            <img
-                              src={service.image}
-                              alt={service.title}
-                              className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
-                              loading="lazy"
-                            />
-                          </div>
-                        </div>
-                      ) : (
-                        /* Text on RIGHT for odd (02, 04) */
-                        <div className="pl-8 pt-1">
-                          <h3
-                            className="font-heading font-bold text-text leading-[1.15] mb-1"
-                            style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}
-                          >
-                            {service.title}:
-                          </h3>
-                          <p
-                            className="font-heading font-bold text-text-muted mb-4"
-                            style={{ fontSize: 'clamp(1.1rem, 2vw, 1.5rem)' }}
-                          >
-                            {service.subtitle}
-                          </p>
-                          <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-5">
-                            {service.description}
-                          </p>
-                          <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-2">
-                            Sản phẩm bàn giao:
-                          </p>
-                          <p className="text-text-muted text-sm leading-relaxed">
-                            {service.deliverables}.
-                          </p>
-                        </div>
-                      )}
+            {/* ─── Mobile Timeline ─── */}
+            <div className="lg:hidden flex flex-col gap-12">
+              {SERVICES.map((service) => (
+                <div key={service.num} className="srv-reveal">
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-14 h-14 flex items-center justify-center rounded-full border-[2.5px] border-text/25 bg-bg shadow-[0_0_0_3px_rgba(245,240,232,1),0_0_0_5px_rgba(0,0,0,0.06)]">
+                      <span className="font-heading text-base font-bold text-text">
+                        {service.num}
+                      </span>
                     </div>
-
-                    {/* ─── Mobile layout ─── */}
-                    <div className="lg:hidden">
-                      <div className="flex items-center gap-4 mb-6">
-                        <div className="w-14 h-14 flex items-center justify-center rounded-full border-[2.5px] border-text/30 bg-bg shadow-[0_0_0_3px_rgba(245,240,232,1),0_0_0_5px_rgba(0,0,0,0.06)]">
-                          <span className="font-heading text-base font-bold text-text">
-                            {service.num}
-                          </span>
-                        </div>
-                        <div className="flex-1 h-[2px] bg-border" />
-                      </div>
-
-                      <h3
-                        className="font-heading font-bold text-text leading-[1.15] mb-1"
-                        style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}
-                      >
-                        {service.title}:
-                      </h3>
-                      <p
-                        className="font-heading font-bold text-text-muted mb-4"
-                        style={{ fontSize: 'clamp(1.1rem, 2vw, 1.5rem)' }}
-                      >
-                        {service.subtitle}
-                      </p>
-                      <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-5">
-                        {service.description}
-                      </p>
-
-                      <div className="relative overflow-hidden rounded-2xl shadow-lg mb-5">
-                        <img
-                          src={service.image}
-                          alt={service.title}
-                          className="w-full h-auto object-cover"
-                          loading="lazy"
-                        />
-                      </div>
-
-                      <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-2">
-                        Sản phẩm bàn giao:
-                      </p>
-                      <p className="text-text-muted text-sm leading-relaxed">
-                        {service.deliverables}.
-                      </p>
-                    </div>
+                    <div className="flex-1 h-[2px] bg-border" />
                   </div>
-                )
-              })}
+
+                  <h3
+                    className="font-heading font-bold text-text leading-[1.15] mb-1"
+                    style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}
+                  >
+                    {service.title}:
+                  </h3>
+                  <p className="font-heading font-bold text-text-muted mb-4" style={{ fontSize: 'clamp(1.1rem, 2vw, 1.5rem)' }}>
+                    {service.subtitle}
+                  </p>
+                  <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-5">
+                    {service.description}
+                  </p>
+
+                  <div className="relative overflow-hidden rounded-2xl shadow-lg mb-5">
+                    <img src={service.image} alt={service.title} className="w-full h-auto object-cover" loading="lazy" />
+                  </div>
+
+                  <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-2">
+                    Sản phẩm bàn giao:
+                  </p>
+                  <p className="text-text-muted text-sm leading-relaxed">
+                    {service.deliverables}.
+                  </p>
+                </div>
+              ))}
             </div>
           </section>
 
@@ -404,19 +344,12 @@ export default function Services() {
           <section className="bg-bg py-20 md:py-28 px-6 relative z-10">
             <div className="max-w-7xl mx-auto">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-                {/* Image — unique for Why Us */}
                 <div className="srv-reveal">
                   <div className="relative overflow-hidden rounded-2xl shadow-lg">
-                    <img
-                      src="/images/srv-whyus.png"
-                      alt="Cầu nối giữa Thiết Kế và Lập Trình"
-                      className="w-full h-auto object-cover"
-                      loading="lazy"
-                    />
+                    <img src="/images/srv-whyus.png" alt="Cầu nối giữa Thiết Kế và Lập Trình" className="w-full h-auto object-cover" loading="lazy" />
                   </div>
                 </div>
 
-                {/* Content */}
                 <div className="srv-reveal">
                   <h2
                     className="font-heading font-bold text-text leading-[1.1] mb-5"
