@@ -2,14 +2,17 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
+import MotionDemo from '../components/MotionDemo'
 
 /**
  * Services — JulesX Editorial (Vietnamese)
  *
- * FIXES v5:
- * 1. Vertical line starts FROM circle 01 → ends AT circle 04 (no line above 01)
- * 2. Text left-aligned for steps 1,3 — small dot circle at connector tip
- * 3. Wider 16:9 images to prevent overlap
+ * v6:
+ * 1. Vertical line from circle 01 → 04 only (dynamic via refs)
+ * 2. Dot connector tips + left-aligned text
+ * 3. Step 04 uses live MotionDemo instead of static image
+ * 4. More padding for steps 02/04 text (pl-28)
+ * 5. Enhanced organic wave background with subtle motion
  */
 
 const SERVICES = [
@@ -47,7 +50,8 @@ const SERVICES = [
     description:
       'Thổi hồn vào trải nghiệm. Tích hợp animations mượt mà và micro-interactions tạo sự hấp dẫn và thú vị.',
     deliverables: 'Interactive Prototypes, Animation Library, Micro-Interactions, Sound Design',
-    image: '/images/srv-motion.png',
+    image: '/images/srv-motion.png', // Fallback for mobile
+    isMotion: true, // Flag for live animation on desktop
   },
 ]
 
@@ -82,23 +86,60 @@ const WHY_US = [
   },
 ]
 
-/* ─── Wave SVG background pattern ─── */
+/* ─── Enhanced organic wave background with subtle motion ─── */
 function WaveBackground() {
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.06]">
-      <svg className="absolute -top-20 -left-20 w-[600px] h-[600px]" viewBox="0 0 600 600" fill="none">
-        <path d="M0 300C0 300 100 200 200 250S350 350 450 300S600 200 600 200" stroke="currentColor" strokeWidth="1.5" className="text-text" />
-        <path d="M0 350C0 350 120 250 220 300S370 400 470 350S600 250 600 250" stroke="currentColor" strokeWidth="1" className="text-text" />
-        <path d="M0 400C0 400 80 320 200 360S380 440 480 380S600 300 600 300" stroke="currentColor" strokeWidth="0.8" className="text-text" />
+    <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.05]">
+      {/* Top-left flowing waves with subtle drift */}
+      <svg
+        className="absolute -top-32 -left-32 w-[800px] h-[800px]"
+        viewBox="0 0 800 800"
+        fill="none"
+        style={{ animation: 'waveDrift 30s ease-in-out infinite' }}
+      >
+        <path d="M0 400C100 300 200 350 350 300S550 200 700 280S800 350 800 350" stroke="currentColor" strokeWidth="1.2" className="text-text" />
+        <path d="M0 440C120 360 240 400 380 340S560 240 720 310S800 380 800 380" stroke="currentColor" strokeWidth="0.8" className="text-text" />
+        <path d="M0 480C80 420 200 460 340 380S520 280 680 350S800 420 800 420" stroke="currentColor" strokeWidth="0.5" className="text-text" />
+        {/* Mesh grid hint */}
+        <path d="M200 0L200 800" stroke="currentColor" strokeWidth="0.3" className="text-text" opacity="0.3" />
+        <path d="M400 0L400 800" stroke="currentColor" strokeWidth="0.3" className="text-text" opacity="0.2" />
+        <path d="M600 0L600 800" stroke="currentColor" strokeWidth="0.3" className="text-text" opacity="0.15" />
       </svg>
-      <svg className="absolute -bottom-20 -right-20 w-[700px] h-[500px]" viewBox="0 0 700 500" fill="none">
-        <path d="M0 200C100 150 200 250 300 200S500 100 600 180S700 250 700 250" stroke="currentColor" strokeWidth="1.5" className="text-text" />
-        <path d="M0 250C80 200 180 300 280 250S450 150 560 220S700 300 700 300" stroke="currentColor" strokeWidth="1" className="text-text" />
+
+      {/* Bottom-right organic swirls */}
+      <svg
+        className="absolute -bottom-32 -right-32 w-[900px] h-[600px]"
+        viewBox="0 0 900 600"
+        fill="none"
+        style={{ animation: 'waveDrift 25s ease-in-out infinite reverse' }}
+      >
+        <path d="M0 300C150 200 300 350 450 280S700 150 800 250S900 350 900 350" stroke="currentColor" strokeWidth="1.2" className="text-text" />
+        <path d="M0 340C100 260 250 380 400 300S650 180 780 270S900 380 900 380" stroke="currentColor" strokeWidth="0.8" className="text-text" />
+        <path d="M0 380C130 320 280 420 430 330S680 210 820 290S900 400 900 400" stroke="currentColor" strokeWidth="0.5" className="text-text" />
+        {/* Circular mesh hints */}
+        <circle cx="450" cy="300" r="200" stroke="currentColor" strokeWidth="0.3" className="text-text" opacity="0.15" />
+        <circle cx="450" cy="300" r="280" stroke="currentColor" strokeWidth="0.2" className="text-text" opacity="0.1" />
       </svg>
-      <svg className="absolute top-1/2 -left-10 w-[400px] h-[400px] -translate-y-1/2" viewBox="0 0 400 400" fill="none">
-        <circle cx="200" cy="200" r="120" stroke="currentColor" strokeWidth="0.6" className="text-text" opacity="0.5" />
-        <circle cx="200" cy="200" r="160" stroke="currentColor" strokeWidth="0.4" className="text-text" opacity="0.3" />
+
+      {/* Center-left organic circles */}
+      <svg
+        className="absolute top-1/2 -left-10 w-[400px] h-[400px] -translate-y-1/2"
+        viewBox="0 0 400 400"
+        fill="none"
+        style={{ animation: 'waveDrift 35s ease-in-out infinite' }}
+      >
+        <circle cx="200" cy="200" r="120" stroke="currentColor" strokeWidth="0.6" className="text-text" opacity="0.4" />
+        <circle cx="200" cy="200" r="160" stroke="currentColor" strokeWidth="0.4" className="text-text" opacity="0.25" />
+        <path d="M80 200C80 134 134 80 200 80" stroke="currentColor" strokeWidth="0.8" className="text-text" opacity="0.4" />
       </svg>
+
+      {/* CSS for subtle drift */}
+      <style>{`
+        @keyframes waveDrift {
+          0%, 100% { transform: translate(0, 0); }
+          50% { transform: translate(10px, 5px); }
+        }
+      `}</style>
     </div>
   )
 }
@@ -114,9 +155,8 @@ function ConnectorDot({ side, isActive }: { side: 'left' | 'right'; isActive: bo
   )
 }
 
-/* ─── Sizes ─── */
-const CIRCLE_SIZE = 64 // w-16 h-16
-const CIRCLE_CENTER_Y = 32 // top offset where circle vertical center lands
+const CIRCLE_SIZE = 64
+const CIRCLE_CENTER_Y = 32
 const CONNECTOR_WIDTH = 60
 
 export default function Services() {
@@ -126,7 +166,7 @@ export default function Services() {
   const timelineRef = useRef<HTMLDivElement>(null)
   const [lineStyle, setLineStyle] = useState<{ top: number; height: number }>({ top: 0, height: 0 })
 
-  // Calculate vertical line position: from center of first circle to center of last circle
+  // Vertical line from circle 01 center → circle 04 center
   useEffect(() => {
     const calculate = () => {
       const container = timelineRef.current
@@ -143,9 +183,13 @@ export default function Services() {
       setLineStyle({ top, height: bottom - top })
     }
 
-    calculate()
+    // Delay to ensure layout
+    const timer = setTimeout(calculate, 100)
     window.addEventListener('resize', calculate)
-    return () => window.removeEventListener('resize', calculate)
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener('resize', calculate)
+    }
   }, [])
 
   useEffect(() => {
@@ -165,6 +209,49 @@ export default function Services() {
     }
     init()
   }, [])
+
+  /* ─── Render a content block (text) ─── */
+  const renderContent = (service: typeof SERVICES[number], isActive: boolean) => (
+    <div className="text-left">
+      <h3
+        className={`font-heading font-bold leading-[1.15] mb-1 transition-colors duration-300 ${isActive ? 'text-accent' : 'text-text'
+          }`}
+        style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}
+      >
+        {service.title}:
+      </h3>
+      <p className="font-heading font-bold text-text-muted mb-4" style={{ fontSize: 'clamp(1.1rem, 2vw, 1.4rem)' }}>
+        {service.subtitle}
+      </p>
+      <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-5">
+        {service.description}
+      </p>
+      <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-2">
+        Sản phẩm bàn giao:
+      </p>
+      <p className="text-text-muted text-sm leading-relaxed">
+        {service.deliverables}.
+      </p>
+    </div>
+  )
+
+  /* ─── Render a media block (image or MotionDemo for step 04) ─── */
+  const renderMedia = (service: typeof SERVICES[number]) => {
+    if (service.isMotion) {
+      return <MotionDemo />
+    }
+    return (
+      <div className="overflow-hidden rounded-2xl shadow-lg">
+        <img
+          src={service.image}
+          alt={service.title}
+          className="w-full h-auto object-cover transition-transform duration-700 hover:scale-105"
+          style={{ maxHeight: '280px', objectFit: 'cover' }}
+          loading="lazy"
+        />
+      </div>
+    )
+  }
 
   return (
     <>
@@ -196,7 +283,7 @@ export default function Services() {
             {/* ─── DESKTOP TIMELINE ─── */}
             <div ref={timelineRef} className="hidden lg:block relative">
 
-              {/* ▌ VERTICAL LINE — dynamically positioned from circle 01 center to circle 04 center */}
+              {/* Vertical line: 01 center → 04 center */}
               {lineStyle.height > 0 && (
                 <div
                   className="absolute w-[2px] bg-border"
@@ -209,9 +296,9 @@ export default function Services() {
                 />
               )}
 
-              {/* ▌ STEPS */}
+              {/* Steps */}
               {SERVICES.map((service, i) => {
-                const isOddStep = i % 2 === 0 // 01,03 = content LEFT
+                const isOddStep = i % 2 === 0 // 01,03 text LEFT
                 const isActive = hoveredIndex === i
                 const isDimmed = hoveredIndex !== null && hoveredIndex !== i
 
@@ -223,10 +310,9 @@ export default function Services() {
                     onMouseEnter={() => setHoveredIndex(i)}
                     onMouseLeave={() => setHoveredIndex(null)}
                   >
-                    {/* Two-column grid: LEFT | RIGHT, circle positioned absolutely at center */}
                     <div className="grid grid-cols-2 gap-0 relative" style={{ minHeight: '200px' }}>
 
-                      {/* ── CIRCLE (absolute, centered on X axis) ── */}
+                      {/* Circle */}
                       <div
                         ref={el => { circleRefs.current[i] = el }}
                         className="absolute z-20"
@@ -247,119 +333,44 @@ export default function Services() {
                               : '0 0 0 5px rgba(245,240,232,1), 0 0 0 7px rgba(0,0,0,0.06)',
                           }}
                         >
-                          <span className="font-heading text-base font-bold">
-                            {service.num}
-                          </span>
+                          <span className="font-heading text-base font-bold">{service.num}</span>
                         </div>
                       </div>
 
-                      {/* ── HORIZONTAL CONNECTOR with dot ── */}
+                      {/* Horizontal connector with dot */}
                       <div
-                        className={`absolute z-10 transition-colors duration-300`}
+                        className="absolute z-10"
                         style={{
                           top: `${CIRCLE_CENTER_Y}px`,
                           transform: 'translateY(-50%)',
                           height: '2px',
                           width: `${CONNECTOR_WIDTH}px`,
                           ...(isOddStep
-                            ? { right: `calc(50% + ${CIRCLE_SIZE / 2 + 2}px)` }  // LEFT of circle
-                            : { left: `calc(50% + ${CIRCLE_SIZE / 2 + 2}px)` }), // RIGHT of circle
+                            ? { right: `calc(50% + ${CIRCLE_SIZE / 2 + 2}px)` }
+                            : { left: `calc(50% + ${CIRCLE_SIZE / 2 + 2}px)` }),
                         }}
                       >
-                        {/* Line body */}
                         <div
                           className={`absolute inset-0 transition-colors duration-300 ${isActive ? 'bg-accent' : 'bg-text/20'
                             }`}
                         />
-                        {/* Dot at the end (away from circle) */}
-                        <ConnectorDot
-                          side={isOddStep ? 'left' : 'right'}
-                          isActive={isActive}
-                        />
+                        <ConnectorDot side={isOddStep ? 'left' : 'right'} isActive={isActive} />
                       </div>
 
-                      {/* ── LEFT COLUMN ── */}
+                      {/* LEFT column */}
                       <div
-                        className={`pr-24 transition-all duration-400 ${isDimmed ? 'opacity-50' : 'opacity-100'
-                          }`}
+                        className={`transition-all duration-400 ${isDimmed ? 'opacity-50' : 'opacity-100'
+                          } ${isOddStep ? 'pr-24' : 'pr-16'}`}
                       >
-                        {isOddStep ? (
-                          /* Text content LEFT for 01, 03 — LEFT ALIGNED */
-                          <div className="text-left">
-                            <h3
-                              className={`font-heading font-bold leading-[1.15] mb-1 transition-colors duration-300 ${isActive ? 'text-accent' : 'text-text'
-                                }`}
-                              style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}
-                            >
-                              {service.title}:
-                            </h3>
-                            <p className="font-heading font-bold text-text-muted mb-4" style={{ fontSize: 'clamp(1.1rem, 2vw, 1.4rem)' }}>
-                              {service.subtitle}
-                            </p>
-                            <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-5">
-                              {service.description}
-                            </p>
-                            <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-2">
-                              Sản phẩm bàn giao:
-                            </p>
-                            <p className="text-text-muted text-sm leading-relaxed">
-                              {service.deliverables}.
-                            </p>
-                          </div>
-                        ) : (
-                          /* Image LEFT for 02, 04 */
-                          <div className="overflow-hidden rounded-2xl shadow-lg">
-                            <img
-                              src={service.image}
-                              alt={service.title}
-                              className="w-full h-auto object-cover transition-transform duration-700 hover:scale-105"
-                              style={{ maxHeight: '280px', objectFit: 'cover' }}
-                              loading="lazy"
-                            />
-                          </div>
-                        )}
+                        {isOddStep ? renderContent(service, isActive) : renderMedia(service)}
                       </div>
 
-                      {/* ── RIGHT COLUMN ── */}
+                      {/* RIGHT column — more padding (pl-28) for text on even steps */}
                       <div
-                        className={`pl-24 transition-all duration-400 ${isDimmed ? 'opacity-50' : 'opacity-100'
-                          }`}
+                        className={`transition-all duration-400 ${isDimmed ? 'opacity-50' : 'opacity-100'
+                          } ${isOddStep ? 'pl-24' : 'pl-28'}`}
                       >
-                        {isOddStep ? (
-                          /* Image RIGHT for 01, 03 */
-                          <div className="overflow-hidden rounded-2xl shadow-lg">
-                            <img
-                              src={service.image}
-                              alt={service.title}
-                              className="w-full h-auto object-cover transition-transform duration-700 hover:scale-105"
-                              style={{ maxHeight: '280px', objectFit: 'cover' }}
-                              loading="lazy"
-                            />
-                          </div>
-                        ) : (
-                          /* Text content RIGHT for 02, 04 — LEFT ALIGNED */
-                          <div className="text-left">
-                            <h3
-                              className={`font-heading font-bold leading-[1.15] mb-1 transition-colors duration-300 ${isActive ? 'text-accent' : 'text-text'
-                                }`}
-                              style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}
-                            >
-                              {service.title}:
-                            </h3>
-                            <p className="font-heading font-bold text-text-muted mb-4" style={{ fontSize: 'clamp(1.1rem, 2vw, 1.4rem)' }}>
-                              {service.subtitle}
-                            </p>
-                            <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-5">
-                              {service.description}
-                            </p>
-                            <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-2">
-                              Sản phẩm bàn giao:
-                            </p>
-                            <p className="text-text-muted text-sm leading-relaxed">
-                              {service.deliverables}.
-                            </p>
-                          </div>
-                        )}
+                        {isOddStep ? renderMedia(service) : renderContent(service, isActive)}
                       </div>
                     </div>
                   </div>
@@ -388,8 +399,14 @@ export default function Services() {
                   </p>
                   <p className="text-text-muted leading-relaxed text-[0.9375rem] mb-5">{service.description}</p>
 
-                  <div className="overflow-hidden rounded-2xl shadow-lg mb-5">
-                    <img src={service.image} alt={service.title} className="w-full h-auto object-cover" style={{ maxHeight: '240px' }} loading="lazy" />
+                  <div className="mb-5">
+                    {service.isMotion ? (
+                      <MotionDemo />
+                    ) : (
+                      <div className="overflow-hidden rounded-2xl shadow-lg">
+                        <img src={service.image} alt={service.title} className="w-full h-auto object-cover" style={{ maxHeight: '240px' }} loading="lazy" />
+                      </div>
+                    )}
                   </div>
 
                   <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-text-light mb-2">Sản phẩm bàn giao:</p>
