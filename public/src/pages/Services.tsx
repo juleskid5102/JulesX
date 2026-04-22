@@ -86,58 +86,84 @@ const WHY_US = [
   },
 ]
 
-/* ─── Enhanced organic wave background with subtle motion ─── */
+/* ─── Organic wave / mesh background — visible but not distracting ─── */
 function WaveBackground() {
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.05]">
-      {/* Top-left flowing waves with subtle drift */}
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {/* ── Layer 1: Full-width flowing waves (top area) ── */}
       <svg
-        className="absolute -top-32 -left-32 w-[800px] h-[800px]"
-        viewBox="0 0 800 800"
+        className="absolute -top-20 left-0 w-full h-[600px]"
+        viewBox="0 0 1400 600"
         fill="none"
-        style={{ animation: 'waveDrift 30s ease-in-out infinite' }}
+        preserveAspectRatio="none"
+        style={{ animation: 'waveDrift 30s ease-in-out infinite', opacity: 0.08 }}
       >
-        <path d="M0 400C100 300 200 350 350 300S550 200 700 280S800 350 800 350" stroke="currentColor" strokeWidth="1.2" className="text-text" />
-        <path d="M0 440C120 360 240 400 380 340S560 240 720 310S800 380 800 380" stroke="currentColor" strokeWidth="0.8" className="text-text" />
-        <path d="M0 480C80 420 200 460 340 380S520 280 680 350S800 420 800 420" stroke="currentColor" strokeWidth="0.5" className="text-text" />
-        {/* Mesh grid hint */}
-        <path d="M200 0L200 800" stroke="currentColor" strokeWidth="0.3" className="text-text" opacity="0.3" />
-        <path d="M400 0L400 800" stroke="currentColor" strokeWidth="0.3" className="text-text" opacity="0.2" />
-        <path d="M600 0L600 800" stroke="currentColor" strokeWidth="0.3" className="text-text" opacity="0.15" />
+        <path d="M0 250C200 180 400 320 600 270S900 150 1100 230S1400 300 1400 300" stroke="#8a7a62" strokeWidth="2" />
+        <path d="M0 290C150 220 350 360 550 300S850 180 1050 260S1400 330 1400 330" stroke="#8a7a62" strokeWidth="1.5" />
+        <path d="M0 330C180 270 380 390 580 320S880 200 1080 280S1400 360 1400 360" stroke="#8a7a62" strokeWidth="1" />
+        <path d="M0 370C120 310 320 420 520 340S820 220 1020 300S1400 380 1400 380" stroke="#8a7a62" strokeWidth="0.8" />
+        <path d="M0 410C200 360 400 440 600 370S900 250 1100 320S1400 400 1400 400" stroke="#8a7a62" strokeWidth="0.6" />
       </svg>
 
-      {/* Bottom-right organic swirls */}
+      {/* ── Layer 2: Bottom flowing waves ── */}
       <svg
-        className="absolute -bottom-32 -right-32 w-[900px] h-[600px]"
-        viewBox="0 0 900 600"
+        className="absolute -bottom-20 left-0 w-full h-[500px]"
+        viewBox="0 0 1400 500"
         fill="none"
-        style={{ animation: 'waveDrift 25s ease-in-out infinite reverse' }}
+        preserveAspectRatio="none"
+        style={{ animation: 'waveDrift 25s ease-in-out infinite reverse', opacity: 0.07 }}
       >
-        <path d="M0 300C150 200 300 350 450 280S700 150 800 250S900 350 900 350" stroke="currentColor" strokeWidth="1.2" className="text-text" />
-        <path d="M0 340C100 260 250 380 400 300S650 180 780 270S900 380 900 380" stroke="currentColor" strokeWidth="0.8" className="text-text" />
-        <path d="M0 380C130 320 280 420 430 330S680 210 820 290S900 400 900 400" stroke="currentColor" strokeWidth="0.5" className="text-text" />
-        {/* Circular mesh hints */}
-        <circle cx="450" cy="300" r="200" stroke="currentColor" strokeWidth="0.3" className="text-text" opacity="0.15" />
-        <circle cx="450" cy="300" r="280" stroke="currentColor" strokeWidth="0.2" className="text-text" opacity="0.1" />
+        <path d="M0 200C250 120 500 300 750 220S1100 100 1400 200" stroke="#8a7a62" strokeWidth="2" />
+        <path d="M0 240C200 160 450 320 700 250S1050 130 1400 230" stroke="#8a7a62" strokeWidth="1.5" />
+        <path d="M0 280C300 210 550 360 800 270S1150 150 1400 260" stroke="#8a7a62" strokeWidth="1" />
       </svg>
 
-      {/* Center-left organic circles */}
+      {/* ── Layer 3: Topographic contour circles (right side) ── */}
       <svg
-        className="absolute top-1/2 -left-10 w-[400px] h-[400px] -translate-y-1/2"
-        viewBox="0 0 400 400"
+        className="absolute top-[20%] -right-40 w-[600px] h-[600px]"
+        viewBox="0 0 600 600"
         fill="none"
-        style={{ animation: 'waveDrift 35s ease-in-out infinite' }}
+        style={{ animation: 'waveDrift 40s ease-in-out infinite', opacity: 0.06 }}
       >
-        <circle cx="200" cy="200" r="120" stroke="currentColor" strokeWidth="0.6" className="text-text" opacity="0.4" />
-        <circle cx="200" cy="200" r="160" stroke="currentColor" strokeWidth="0.4" className="text-text" opacity="0.25" />
-        <path d="M80 200C80 134 134 80 200 80" stroke="currentColor" strokeWidth="0.8" className="text-text" opacity="0.4" />
+        <circle cx="300" cy="300" r="80" stroke="#8a7a62" strokeWidth="1.5" />
+        <circle cx="300" cy="300" r="130" stroke="#8a7a62" strokeWidth="1.2" />
+        <circle cx="300" cy="300" r="180" stroke="#8a7a62" strokeWidth="1" />
+        <circle cx="300" cy="300" r="230" stroke="#8a7a62" strokeWidth="0.8" />
+        <circle cx="300" cy="300" r="280" stroke="#8a7a62" strokeWidth="0.5" />
       </svg>
 
-      {/* CSS for subtle drift */}
+      {/* ── Layer 4: Topographic contour circles (left-center) ── */}
+      <svg
+        className="absolute top-[55%] -left-32 w-[500px] h-[500px]"
+        viewBox="0 0 500 500"
+        fill="none"
+        style={{ animation: 'waveDrift 35s ease-in-out infinite reverse', opacity: 0.05 }}
+      >
+        <circle cx="250" cy="250" r="100" stroke="#8a7a62" strokeWidth="1.2" />
+        <circle cx="250" cy="250" r="160" stroke="#8a7a62" strokeWidth="0.8" />
+        <circle cx="250" cy="250" r="220" stroke="#8a7a62" strokeWidth="0.5" />
+        <path d="M100 250C100 167 167 100 250 100" stroke="#8a7a62" strokeWidth="1.5" />
+      </svg>
+
+      {/* ── Layer 5: Subtle dot grid (very faint) ── */}
+      <svg
+        className="absolute inset-0 w-full h-full"
+        style={{ opacity: 0.03 }}
+      >
+        <defs>
+          <pattern id="dotGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <circle cx="20" cy="20" r="1" fill="#8a7a62" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#dotGrid)" />
+      </svg>
+
+      {/* CSS for gentle drift */}
       <style>{`
         @keyframes waveDrift {
           0%, 100% { transform: translate(0, 0); }
-          50% { transform: translate(10px, 5px); }
+          33% { transform: translate(8px, 4px); }
+          66% { transform: translate(-5px, 7px); }
         }
       `}</style>
     </div>
@@ -324,8 +350,8 @@ export default function Services() {
                       >
                         <div
                           className={`w-16 h-16 rounded-full flex items-center justify-center border-[2.5px] transition-all duration-300 ${isActive
-                              ? 'border-accent bg-accent text-white shadow-lg shadow-accent/25 scale-110'
-                              : 'border-text/30 bg-bg text-text'
+                            ? 'border-accent bg-accent text-white shadow-lg shadow-accent/25 scale-110'
+                            : 'border-text/30 bg-bg text-text'
                             }`}
                           style={{
                             boxShadow: isActive

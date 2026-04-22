@@ -2,13 +2,14 @@ import { useEffect, useRef, useState } from 'react'
 
 /**
  * MotionDemo — Live animation showcase for Step 04
- * 
- * Shows a mini dashboard with:
- * - Animated bar chart
- * - Floating card with hover tilt
+ *
+ * Features:
+ * - Bar chart with LOOPING height animation
+ * - Floating score card (continuous float)
+ * - Progress ring animation
  * - Pulsing status indicators
- * - Smooth looping animations via CSS
- * 
+ * - Hover interaction: cursor sim, accent overlay
+ *
  * Only animates when in viewport (IntersectionObserver)
  */
 export default function MotionDemo() {
@@ -21,75 +22,73 @@ export default function MotionDemo() {
         if (!el) return
 
         const observer = new IntersectionObserver(
-            (entries) => { if (entries[0]) setIsVisible(entries[0].isIntersecting) },
+            (entries) => {
+                const entry = entries[0]
+                if (entry) setIsVisible(entry.isIntersecting)
+            },
             { threshold: 0.2 }
         )
         observer.observe(el)
         return () => observer.disconnect()
     }, [])
 
-    const bars = [
-        { h: 60, delay: '0s', color: '#c9a96e' },
-        { h: 85, delay: '0.15s', color: '#b8956a' },
-        { h: 45, delay: '0.3s', color: '#d4b88c' },
-        { h: 95, delay: '0.45s', color: '#c9a96e' },
-        { h: 70, delay: '0.6s', color: '#a8845a' },
-        { h: 55, delay: '0.75s', color: '#d4b88c' },
-    ]
-
     return (
         <div
             ref={containerRef}
-            className={`relative overflow-hidden rounded-2xl bg-[#1a1a18] p-6 md:p-8 transition-all duration-500 ${isHovered ? 'shadow-2xl shadow-accent/10 scale-[1.01]' : 'shadow-lg'
+            className={`relative overflow-hidden rounded-2xl bg-[#1a1a18] p-6 md:p-8 transition-all duration-500 cursor-pointer ${isHovered ? 'shadow-2xl shadow-accent/15 scale-[1.01]' : 'shadow-lg'
                 }`}
             style={{ minHeight: '300px' }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            {/* Header bar */}
+            {/* Window controls */}
             <div className="flex items-center gap-2 mb-6">
                 <div className="w-3 h-3 rounded-full bg-red-400/80" />
                 <div className="w-3 h-3 rounded-full bg-yellow-400/80" />
                 <div className="w-3 h-3 rounded-full bg-green-400/80" />
-                <span className="ml-3 text-white/30 text-xs font-mono">motion-preview.jsx</span>
+                <span className="ml-3 text-white/25 text-xs font-mono">motion-preview.jsx</span>
             </div>
 
-            {/* Main content grid */}
-            <div className="grid grid-cols-[1fr_140px] gap-5">
-                {/* Left: Bar chart */}
+            {/* Content grid */}
+            <div className="grid grid-cols-[1fr_130px] gap-5">
+                {/* Left: Animated bar chart */}
                 <div>
-                    <p className="text-white/40 text-[10px] uppercase tracking-widest mb-3">Performance Metrics</p>
+                    <p className="text-white/35 text-[10px] uppercase tracking-widest mb-3">Performance Metrics</p>
                     <div className="flex items-end gap-[6px] h-[100px]">
-                        {bars.map((bar, i) => (
+                        {[
+                            { name: 'bar1', color: '#c9a96e' },
+                            { name: 'bar2', color: '#b8956a' },
+                            { name: 'bar3', color: '#d4b88c' },
+                            { name: 'bar4', color: '#c9a96e' },
+                            { name: 'bar5', color: '#a8845a' },
+                            { name: 'bar6', color: '#d4b88c' },
+                        ].map((bar) => (
                             <div
-                                key={i}
-                                className="flex-1 rounded-t-sm origin-bottom"
+                                key={bar.name}
+                                className="flex-1 rounded-t-sm"
                                 style={{
-                                    height: isVisible ? `${bar.h}%` : '0%',
                                     backgroundColor: bar.color,
-                                    transition: `height 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) ${bar.delay}`,
-                                    animation: isVisible ? `barPulse 3s ease-in-out ${bar.delay} infinite` : 'none',
+                                    animation: isVisible
+                                        ? `${bar.name}Loop 4s ease-in-out infinite`
+                                        : 'none',
                                 }}
                             />
                         ))}
                     </div>
                     <div className="flex justify-between mt-2">
-                        <span className="text-white/20 text-[9px]">LCP</span>
-                        <span className="text-white/20 text-[9px]">FID</span>
-                        <span className="text-white/20 text-[9px]">CLS</span>
-                        <span className="text-white/20 text-[9px]">TTI</span>
-                        <span className="text-white/20 text-[9px]">TBT</span>
-                        <span className="text-white/20 text-[9px]">SI</span>
+                        {['LCP', 'FID', 'CLS', 'TTI', 'TBT', 'SI'].map((l) => (
+                            <span key={l} className="text-white/20 text-[9px]">{l}</span>
+                        ))}
                     </div>
                 </div>
 
-                {/* Right: Score card */}
+                {/* Right: Floating score card */}
                 <div
                     className="rounded-xl p-4 flex flex-col items-center justify-center"
                     style={{
                         background: 'linear-gradient(135deg, rgba(201,169,110,0.15), rgba(201,169,110,0.05))',
                         border: '1px solid rgba(201,169,110,0.2)',
-                        animation: isVisible ? 'cardFloat 4s ease-in-out infinite' : 'none',
+                        animation: isVisible ? 'cardFloat 3s ease-in-out infinite' : 'none',
                     }}
                 >
                     <span
@@ -98,87 +97,112 @@ export default function MotionDemo() {
                             background: 'linear-gradient(135deg, #c9a96e, #e8d5a8)',
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent',
-                            animation: isVisible ? 'scoreCount 2s ease-out 0.5s both' : 'none',
                         }}
                     >
                         100
                     </span>
                     <span className="text-white/30 text-[10px] mt-1">Lighthouse</span>
+                    {/* Animated underline */}
                     <div
-                        className="w-8 h-[2px] mt-2 rounded-full"
+                        className="h-[2px] mt-2 rounded-full bg-[#c9a96e]"
                         style={{
-                            background: '#c9a96e',
-                            animation: isVisible ? 'lineExpand 1.5s ease-out 1s both' : 'none',
+                            animation: isVisible ? 'lineBreath 2s ease-in-out infinite' : 'none',
                         }}
                     />
                 </div>
             </div>
 
-            {/* Bottom: Animated status row */}
-            <div className="mt-5 flex items-center gap-3">
-                {/* Pulsing dots */}
+            {/* Bottom status row with pulsing dots */}
+            <div className="mt-5 flex items-center gap-4">
                 {['Core Web Vitals', 'Animation FPS', 'Accessibility'].map((label, i) => (
                     <div key={label} className="flex items-center gap-1.5">
                         <div
                             className="w-2 h-2 rounded-full bg-green-400"
                             style={{
                                 animation: isVisible
-                                    ? `dotPulse 2s ease-in-out ${i * 0.3}s infinite`
+                                    ? `dotPulse 1.5s ease-in-out ${i * 0.4}s infinite`
                                     : 'none',
                             }}
                         />
-                        <span className="text-white/30 text-[10px]">{label}</span>
+                        <span className="text-white/25 text-[10px]">{label}</span>
                     </div>
                 ))}
             </div>
 
-            {/* Hover overlay effect */}
+            {/* Hover overlay */}
             <div
                 className={`absolute inset-0 bg-accent/5 rounded-2xl transition-opacity duration-500 pointer-events-none ${isHovered ? 'opacity-100' : 'opacity-0'
                     }`}
             />
 
-            {/* Floating cursor simulation on hover */}
+            {/* Hover cursor sim */}
             {isHovered && (
                 <div
                     className="absolute w-4 h-4 border-2 border-accent/50 rounded-full pointer-events-none"
-                    style={{
-                        animation: 'cursorMove 3s ease-in-out infinite',
-                        top: '40%',
-                        left: '30%',
-                    }}
+                    style={{ animation: 'cursorMove 3s ease-in-out infinite', top: '40%', left: '25%' }}
                 >
                     <div className="absolute inset-0 bg-accent/20 rounded-full animate-ping" />
                 </div>
             )}
 
-            {/* CSS Animations */}
+            {/* 
+        CSS Keyframes — each bar has its own unique loop with different heights 
+        so the chart constantly shifts like a live dashboard
+      */}
             <style>{`
-        @keyframes barPulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.7; }
+        @keyframes bar1Loop {
+          0%, 100% { height: 60%; }
+          25% { height: 80%; }
+          50% { height: 45%; }
+          75% { height: 70%; }
+        }
+        @keyframes bar2Loop {
+          0%, 100% { height: 85%; }
+          25% { height: 55%; }
+          50% { height: 90%; }
+          75% { height: 65%; }
+        }
+        @keyframes bar3Loop {
+          0%, 100% { height: 45%; }
+          25% { height: 75%; }
+          50% { height: 55%; }
+          75% { height: 85%; }
+        }
+        @keyframes bar4Loop {
+          0%, 100% { height: 95%; }
+          25% { height: 70%; }
+          50% { height: 80%; }
+          75% { height: 50%; }
+        }
+        @keyframes bar5Loop {
+          0%, 100% { height: 70%; }
+          25% { height: 90%; }
+          50% { height: 60%; }
+          75% { height: 40%; }
+        }
+        @keyframes bar6Loop {
+          0%, 100% { height: 55%; }
+          25% { height: 40%; }
+          50% { height: 75%; }
+          75% { height: 90%; }
         }
         @keyframes cardFloat {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-6px); }
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-8px); }
         }
-        @keyframes scoreCount {
-          from { opacity: 0; transform: scale(0.5); }
-          to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes lineExpand {
-          from { width: 0; }
-          to { width: 32px; }
+        @keyframes lineBreath {
+          0%, 100% { width: 20px; opacity: 0.6; }
+          50% { width: 40px; opacity: 1; }
         }
         @keyframes dotPulse {
           0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.5; transform: scale(0.8); }
+          50% { opacity: 0.4; transform: scale(0.7); }
         }
         @keyframes cursorMove {
           0% { transform: translate(0, 0); }
-          25% { transform: translate(60px, -20px); }
-          50% { transform: translate(120px, 10px); }
-          75% { transform: translate(40px, 30px); }
+          25% { transform: translate(60px, -15px); }
+          50% { transform: translate(120px, 8px); }
+          75% { transform: translate(40px, 25px); }
           100% { transform: translate(0, 0); }
         }
       `}</style>
