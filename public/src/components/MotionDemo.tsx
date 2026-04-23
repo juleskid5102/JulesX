@@ -2,12 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 
 /**
  * MotionDemo — Live animation showcase for Step 04
- *
- * CROSS-DEVICE SAFE VERSION:
- * - Bars have STATIC heights (no height animation = no layout thrashing)
- * - All animations use ONLY compositor-safe properties: transform + opacity
- * - No backdrop-filter (causes GPU issues on some machines)
- * - Staggered fade-in on scroll, gentle opacity breathing on bars
+ * 
+ * Semi-transparent glass background + height-based looping bar chart.
  */
 export default function MotionDemo() {
     const containerRef = useRef<HTMLDivElement>(null)
@@ -25,22 +21,24 @@ export default function MotionDemo() {
         return () => observer.disconnect()
     }, [])
 
-    // Fixed bar heights — no height animation at all
     const bars = [
-        { h: 60, color: '#c9a96e', delay: '0s' },
-        { h: 85, color: '#b8956a', delay: '0.5s' },
-        { h: 45, color: '#d4b88c', delay: '1s' },
-        { h: 95, color: '#c9a96e', delay: '1.5s' },
-        { h: 70, color: '#a8845a', delay: '2s' },
-        { h: 55, color: '#d4b88c', delay: '2.5s' },
+        { name: 'bar1', color: '#c9a96e' },
+        { name: 'bar2', color: '#b8956a' },
+        { name: 'bar3', color: '#d4b88c' },
+        { name: 'bar4', color: '#c9a96e' },
+        { name: 'bar5', color: '#a8845a' },
+        { name: 'bar6', color: '#d4b88c' },
     ]
 
     return (
         <div
             ref={containerRef}
-            className={`relative overflow-hidden rounded-2xl p-6 md:p-8 transition-shadow duration-500 bg-[#1e1c18]/90 ${isHovered ? 'shadow-2xl shadow-accent/15' : 'shadow-lg'
+            className={`relative overflow-hidden rounded-2xl p-6 md:p-8 transition-shadow duration-500 ${isHovered ? 'shadow-2xl shadow-accent/15' : 'shadow-lg'
                 }`}
             style={{
+                background: 'rgba(30, 28, 24, 0.65)',
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
                 border: '1px solid rgba(201, 169, 110, 0.12)',
                 minHeight: '280px',
             }}
@@ -56,21 +54,17 @@ export default function MotionDemo() {
             </div>
 
             <div className="grid grid-cols-[1fr_120px] gap-4">
-                {/* Bar chart — STATIC heights, staggered fade-in + gentle opacity pulse */}
+                {/* Bar chart — height-based looping animation */}
                 <div>
                     <p className="text-white/30 text-[10px] uppercase tracking-widest mb-2">Performance Metrics</p>
                     <div className="flex items-end gap-[6px] h-[100px]">
-                        {bars.map((bar, i) => (
+                        {bars.map((bar) => (
                             <div
-                                key={i}
+                                key={bar.name}
                                 className="flex-1 rounded-t-sm"
                                 style={{
-                                    height: `${bar.h}%`,
                                     backgroundColor: bar.color,
-                                    opacity: isVisible ? 1 : 0,
-                                    transform: isVisible ? 'translateY(0)' : 'translateY(10px)',
-                                    transition: `opacity 0.6s ease ${bar.delay}, transform 0.6s ease ${bar.delay}`,
-                                    animation: isVisible ? `barBreath 3s ease-in-out ${bar.delay} infinite` : 'none',
+                                    animation: isVisible ? `${bar.name}Loop 4s ease-in-out infinite` : 'none',
                                 }}
                             />
                         ))}
@@ -82,7 +76,7 @@ export default function MotionDemo() {
                     </div>
                 </div>
 
-                {/* Score card — transform-only float */}
+                {/* Score card */}
                 <div
                     className="rounded-xl p-3 flex flex-col items-center justify-center"
                     style={{
@@ -100,8 +94,8 @@ export default function MotionDemo() {
                         }}
                     >100</span>
                     <span className="text-white/25 text-[9px] mt-0.5">Lighthouse</span>
-                    <div className="w-5 h-[1.5px] mt-1.5 rounded-full bg-[#c9a96e]"
-                        style={{ animation: isVisible ? 'lineGlow 2.5s ease-in-out infinite' : 'none' }}
+                    <div className="h-[1.5px] mt-1.5 rounded-full bg-[#c9a96e]"
+                        style={{ animation: isVisible ? 'lineBreath 2.5s ease-in-out infinite' : 'none' }}
                     />
                 </div>
             </div>
@@ -111,30 +105,62 @@ export default function MotionDemo() {
                 {['Core Web Vitals', 'Animation FPS', 'Accessibility'].map((label, i) => (
                     <div key={label} className="flex items-center gap-1.5">
                         <div className="w-1.5 h-1.5 rounded-full bg-green-400"
-                            style={{ animation: isVisible ? `dotPulse 2s ease-in-out ${i * 0.4}s infinite` : 'none' }}
+                            style={{ animation: isVisible ? `dotPulse 1.8s ease-in-out ${i * 0.3}s infinite` : 'none' }}
                         />
                         <span className="text-white/20 text-[9px]">{label}</span>
                     </div>
                 ))}
             </div>
 
-            {/* Hover glow — opacity only */}
-            <div className={`absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-400 ${isHovered ? 'opacity-100' : 'opacity-0'
-                }`} style={{ background: 'rgba(201,169,110,0.04)' }} />
+            {/* Hover glow */}
+            <div className={`absolute inset-0 rounded-2xl transition-opacity duration-400 pointer-events-none ${isHovered ? 'bg-accent/5 opacity-100' : 'opacity-0'
+                }`} />
 
-            {/* ALL keyframes use ONLY opacity + transform (compositor-safe) */}
+            {/* Keyframes: each bar has unique height loop */}
             <style>{`
-        @keyframes barBreath {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.65; }
+        @keyframes bar1Loop {
+          0%, 100% { height: 60%; }
+          25% { height: 80%; }
+          50% { height: 45%; }
+          75% { height: 70%; }
+        }
+        @keyframes bar2Loop {
+          0%, 100% { height: 85%; }
+          25% { height: 55%; }
+          50% { height: 90%; }
+          75% { height: 65%; }
+        }
+        @keyframes bar3Loop {
+          0%, 100% { height: 45%; }
+          25% { height: 75%; }
+          50% { height: 55%; }
+          75% { height: 85%; }
+        }
+        @keyframes bar4Loop {
+          0%, 100% { height: 95%; }
+          25% { height: 70%; }
+          50% { height: 80%; }
+          75% { height: 50%; }
+        }
+        @keyframes bar5Loop {
+          0%, 100% { height: 70%; }
+          25% { height: 90%; }
+          50% { height: 60%; }
+          75% { height: 40%; }
+        }
+        @keyframes bar6Loop {
+          0%, 100% { height: 55%; }
+          25% { height: 40%; }
+          50% { height: 75%; }
+          75% { height: 90%; }
         }
         @keyframes cardFloat {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-6px); }
         }
-        @keyframes lineGlow {
-          0%, 100% { opacity: 0.5; }
-          50% { opacity: 1; }
+        @keyframes lineBreath {
+          0%, 100% { width: 16px; opacity: 0.5; }
+          50% { width: 36px; opacity: 1; }
         }
         @keyframes dotPulse {
           0%, 100% { opacity: 1; transform: scale(1); }
