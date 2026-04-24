@@ -5,10 +5,14 @@ import Footer from '../components/layout/Footer'
 import { API_BASE, type Project } from '../config/site'
 
 /**
- * PortfolioItem — Case Study Detail
- * Reference: screen.png — editorial 2-column layout
- * Numbered sections (01 Strategy, 02 Development), tech stack cards,
- * Lighthouse score badge, gallery grid, CTA.
+ * PortfolioItem — Chi Tiết Dự Án (Case Study)
+ *
+ * Layout editorial IMAGE-HEAVY theo reference screen.png:
+ *   Hero → Intro ngắn → 01 Strategy (gallery strip 3 ảnh)
+ *   → 02 Design (full gallery) → Tech Stack cards
+ *   → 03 Development (code + lighthouse + video)
+ *   → 04 Motion (dark section)
+ *   → CTA → Prev/Next
  */
 export default function PortfolioItem() {
   const { id } = useParams<{ id: string }>()
@@ -49,11 +53,11 @@ export default function PortfolioItem() {
         const found = mapped.find((p) => p.id === id || p.slug === id)
         setProject(found || null)
       })
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoading(false))
   }, [id])
 
-  // GSAP animations
+  // GSAP scroll-reveal
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     if (!pageRef.current) return
@@ -88,6 +92,7 @@ export default function PortfolioItem() {
     init()
   }, [project])
 
+  /* ── Loading ── */
   if (loading) {
     return (
       <>
@@ -99,6 +104,7 @@ export default function PortfolioItem() {
     )
   }
 
+  /* ── Not Found ── */
   if (!project) {
     return (
       <>
@@ -117,64 +123,309 @@ export default function PortfolioItem() {
   const prevProject = projectIndex > 0 ? allProjects[projectIndex - 1] : null
   const nextProject = projectIndex < allProjects.length - 1 ? allProjects[projectIndex + 1] : null
 
+  /* Gallery split for phases */
+  const g = project.gallery || []
+  const phaseDesignImages = g.slice(0, 3)    // First 3 for Phase 01
+  const phaseDevImages = g.slice(3, 6)       // Next 3 for Phase 02
+  const remainingImages = g.slice(6)         // Rest for gallery
+
   return (
     <>
       <Navbar />
 
       <div ref={pageRef}>
         <main className="pt-20 bg-bg">
-          {/* ─── Hero ─── */}
+
+          {/* ═══════════════════════════════════════
+              HERO — Immersive Cover (like reference)
+              ═══════════════════════════════════════ */}
           <section className="case-reveal">
-            <div className="relative w-full aspect-[16/9] max-h-[70vh] overflow-hidden bg-bg-dark">
+            <div className="relative w-full aspect-[16/9] max-h-[80vh] overflow-hidden bg-bg-dark">
               <img
-                className="w-full h-full object-cover opacity-80"
+                className="w-full h-full object-cover opacity-70"
                 alt={project.title}
                 src={project.image}
                 loading="eager"
               />
-              {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-bg-dark/80 via-bg-dark/20 to-transparent" />
-              {/* Title overlay */}
-              <div className="absolute bottom-0 left-0 right-0 p-8 md:p-16">
-                {project.field && (
-                  <span className="label-caps text-accent mb-4 block">
-                    {project.field}
-                  </span>
-                )}
+              <div className="absolute inset-0 bg-gradient-to-t from-bg-dark via-bg-dark/30 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-8 md:p-16 lg:p-20">
                 <h1
-                  className="font-heading font-bold text-text-inverse leading-[1.05] tracking-[-0.03em]"
-                  style={{ fontSize: 'clamp(2rem, 5vw, 4rem)' }}
+                  className="font-heading font-bold text-text-inverse leading-[1.0] tracking-[-0.03em]"
+                  style={{ fontSize: 'clamp(2.5rem, 7vw, 6rem)' }}
                 >
                   {project.title}
                 </h1>
+                <p className="mt-3 text-text-inverse/50 text-lg font-body italic">
+                  — JulesX
+                </p>
+              </div>
+              {/* Scroll chevron */}
+              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:block">
+                <div className="w-8 h-8 border border-text-inverse/30 rounded-full flex items-center justify-center">
+                  <svg className="w-3 h-3 text-text-inverse/50 animate-bounce" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7" />
+                  </svg>
+                </div>
               </div>
             </div>
           </section>
 
-          {/* ─── Back + Meta ─── */}
-          <section className="px-6 md:px-10 py-10 max-w-7xl mx-auto case-reveal">
-            <Link
-              to="/du-an"
-              className="group inline-flex items-center text-sm font-medium text-text-muted hover:text-accent transition-colors gap-2 mb-10"
+          {/* ═══════════════════════════════════════
+              INTRO — Short description (2-3 lines max)
+              ═══════════════════════════════════════ */}
+          <section className="px-6 md:px-10 py-16 md:py-24 max-w-5xl mx-auto case-reveal">
+            <p
+              className="font-body text-text-muted leading-[1.8] italic"
+              style={{ fontSize: 'clamp(1.125rem, 2.5vw, 1.5rem)' }}
             >
-              <svg className="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-              </svg>
-              Tất cả dự án
-            </Link>
+              {project.overview || project.description}
+            </p>
+          </section>
 
-            {/* Meta row */}
-            <div className="flex flex-wrap gap-8 border-b border-border pb-8">
-              {project.completedAt && (
-                <div>
-                  <span className="label-caps text-text-light block mb-1">Hoàn thành</span>
-                  <span className="text-text font-semibold text-sm">{project.completedAt}</span>
-                </div>
+          {/* ═══════════════════════════════════════
+              01 STRATEGY & DESIGN — Gallery strip
+              ═══════════════════════════════════════ */}
+          <section className="px-6 md:px-10 pb-20 max-w-7xl mx-auto">
+            {/* Phase header — big number + title like reference */}
+            <div className="case-reveal flex items-baseline gap-4 mb-8">
+              <span
+                className="font-heading font-bold text-text leading-none"
+                style={{ fontSize: 'clamp(3.5rem, 6vw, 5.5rem)' }}
+              >
+                01
+              </span>
+              <h2 className="font-heading text-xl md:text-2xl font-bold text-text uppercase tracking-[0.05em]">
+                Chiến Lược & Thiết Kế
+              </h2>
+            </div>
+
+            {/* 3-image strip — landscape / mockup / detail (like reference) */}
+            <div className="case-reveal grid grid-cols-1 md:grid-cols-3 gap-3">
+              {phaseDesignImages.length > 0 ? (
+                phaseDesignImages.map((img, i) => (
+                  <div key={i} className="overflow-hidden aspect-[4/3] bg-bg-alt">
+                    <img
+                      src={img}
+                      alt={`${project.title} — design ${i + 1}`}
+                      className="w-full h-full object-cover hover:scale-[1.03] transition-transform duration-700"
+                      loading="lazy"
+                    />
+                  </div>
+                ))
+              ) : (
+                /* Fallback: use hero image in different crops */
+                <>
+                  <div className="overflow-hidden aspect-[4/3] bg-bg-alt">
+                    <img src={project.image} alt={project.title} className="w-full h-full object-cover object-left hover:scale-[1.03] transition-transform duration-700" loading="lazy" />
+                  </div>
+                  <div className="overflow-hidden aspect-[4/3] bg-bg-alt">
+                    <img src={project.image} alt={project.title} className="w-full h-full object-cover object-center hover:scale-[1.03] transition-transform duration-700" loading="lazy" />
+                  </div>
+                  <div className="overflow-hidden aspect-[4/3] bg-bg-alt">
+                    <img src={project.image} alt={project.title} className="w-full h-full object-cover object-right hover:scale-[1.03] transition-transform duration-700" loading="lazy" />
+                  </div>
+                </>
               )}
+            </div>
+          </section>
+
+          {/* ═══════════════════════════════════════
+              RIGHT COLUMN AREA — Gallery + Tech Stack
+              Mimics the reference right-side with
+              gallery strip above + tech cards below
+              ═══════════════════════════════════════ */}
+          <section className="bg-bg-alt">
+            {/* Top gallery strip — phone mockups style */}
+            {g.length > 0 && (
+              <div className="case-reveal px-6 md:px-10 pt-16 max-w-7xl mx-auto">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {g.slice(0, 4).map((img, i) => (
+                    <div key={i} className="overflow-hidden aspect-[3/4] bg-bg">
+                      <img
+                        src={img}
+                        alt={`${project.title} — showcase ${i + 1}`}
+                        className="w-full h-full object-cover hover:scale-[1.03] transition-transform duration-700"
+                        loading="lazy"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* TECH STACK & INTERACTION — horizontal cards (like reference) */}
+            {project.techTags.length > 0 && (
+              <div className="case-reveal px-6 md:px-10 py-12 max-w-7xl mx-auto">
+                <div className="flex items-center justify-between mb-6 border-t border-b border-border py-3">
+                  <span className="label-caps text-text-muted tracking-[0.2em]">Tech Stack & Interaction</span>
+                  <div className="flex gap-2">
+                    <span className="text-text-light">←</span>
+                    <span className="text-text-light">→</span>
+                  </div>
+                </div>
+                <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+                  {project.techTags.map((tag) => (
+                    <div
+                      key={tag}
+                      className="flex-shrink-0 w-44 border border-border bg-bg p-5 hover:border-accent transition-colors duration-300"
+                    >
+                      {/* Tech icon placeholder */}
+                      <div className="w-full aspect-[16/10] bg-bg-alt mb-3 flex items-center justify-center">
+                        <span className="text-text-light text-xs uppercase tracking-wider">{tag.charAt(0)}</span>
+                      </div>
+                      <p className="label-caps text-text text-center">{tag}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </section>
+
+          {/* ═══════════════════════════════════════
+              02 DEVELOPMENT & MOTION
+              Code editor + Lighthouse + Video (like reference)
+              ═══════════════════════════════════════ */}
+          <section className="px-6 md:px-10 py-20 md:py-28 max-w-7xl mx-auto">
+            {/* Phase header */}
+            <div className="case-reveal flex items-baseline gap-4 mb-8">
+              <span
+                className="font-heading font-bold text-text leading-none"
+                style={{ fontSize: 'clamp(3.5rem, 6vw, 5.5rem)' }}
+              >
+                02
+              </span>
+              <div>
+                <h2 className="font-heading text-xl md:text-2xl font-bold text-text uppercase tracking-[0.05em]">
+                  Phát Triển
+                </h2>
+                <p className="font-heading text-xl md:text-2xl font-bold text-text uppercase tracking-[0.05em]">
+                  & Hiệu Ứng
+                </p>
+              </div>
+            </div>
+
+            {/* 3-column visual grid: code + lighthouse + video (like reference) */}
+            <div className="case-reveal grid grid-cols-1 md:grid-cols-3 gap-3">
+              {/* Code editor visual */}
+              <div className="bg-bg-dark p-6 md:col-span-1 aspect-[4/3] flex flex-col justify-between overflow-hidden">
+                <div className="flex gap-1.5 mb-4">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-400/60"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-400/60"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-400/60"></div>
+                </div>
+                <div className="flex-1 space-y-2 font-mono text-xs">
+                  <p className="text-accent/70">{'// ' + project.title}</p>
+                  <p className="text-text-inverse/40">import <span className="text-green-400/80">{'{ render }'}</span> from <span className="text-accent/60">'react-dom'</span></p>
+                  <p className="text-text-inverse/40">import <span className="text-green-400/80">App</span> from <span className="text-accent/60">'./App'</span></p>
+                  <p className="text-text-inverse/20 mt-2">{'// Performance optimized'}</p>
+                  <p className="text-text-inverse/40">const root = <span className="text-blue-400/70">createRoot</span>(<span className="text-accent/60">document.getElementById</span>(<span className="text-green-400/60">'root'</span>))</p>
+                  <p className="text-text-inverse/40">root.<span className="text-blue-400/70">render</span>({'<'}<span className="text-accent/70">App</span> {'/>'} )</p>
+                  {project.stack && (
+                    <p className="text-text-inverse/20 mt-3">{'// Stack: '}{project.stack}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Lighthouse score badge */}
+              <div className="bg-bg-alt flex flex-col items-center justify-center aspect-[4/3] p-8">
+                {/* Circular score */}
+                <div className="relative w-28 h-28 md:w-32 md:h-32">
+                  <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
+                    <circle cx="60" cy="60" r="54" fill="none" stroke="#E8E2D8" strokeWidth="4" />
+                    <circle cx="60" cy="60" r="54" fill="none" stroke="#22C55E" strokeWidth="4" strokeDasharray="339.3" strokeDashoffset="0" strokeLinecap="round" />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="font-heading text-3xl md:text-4xl font-bold text-green-600">
+                      {project.lighthouse || '100'}
+                    </span>
+                  </div>
+                </div>
+                <p className="text-green-600 font-bold text-sm mt-4 uppercase tracking-wider">Perfect</p>
+                <p className="font-heading text-2xl font-bold text-text mt-1">100/100</p>
+                <p className="label-caps text-text-light mt-2">Lighthouse Score</p>
+              </div>
+
+              {/* Video/motion preview */}
+              <div className="relative overflow-hidden aspect-[4/3] bg-bg-dark group cursor-pointer">
+                {phaseDevImages.length > 0 ? (
+                  <img
+                    src={phaseDevImages[0]}
+                    alt={`${project.title} — development`}
+                    className="w-full h-full object-cover opacity-80 group-hover:scale-[1.05] transition-transform duration-700"
+                    loading="lazy"
+                  />
+                ) : (
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover opacity-60 group-hover:scale-[1.05] transition-transform duration-700"
+                    loading="lazy"
+                  />
+                )}
+                {/* Play button overlay */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-14 h-14 bg-bg/80 rounded-full flex items-center justify-center group-hover:bg-accent transition-colors duration-300">
+                    <svg className="w-5 h-5 text-text ml-1" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom stats row */}
+            <div className="case-reveal grid grid-cols-3 gap-[1px] bg-border mt-3">
+              <div className="bg-bg py-6 text-center">
+                <p className="font-heading text-3xl md:text-4xl font-bold text-text">100%</p>
+                <p className="label-caps text-text-light mt-1">Responsive</p>
+              </div>
+              <div className="bg-bg py-6 text-center">
+                <p className="font-heading text-3xl md:text-4xl font-bold text-text">&lt;1s</p>
+                <p className="label-caps text-text-light mt-1">Load Time</p>
+              </div>
+              <div className="bg-bg py-6 text-center">
+                <p className="font-heading text-3xl md:text-4xl font-bold text-text">A+</p>
+                <p className="label-caps text-text-light mt-1">Security</p>
+              </div>
+            </div>
+          </section>
+
+          {/* ═══════════════════════════════════════
+              EXTRA GALLERY — Remaining images
+              Full-bleed image grid
+              ═══════════════════════════════════════ */}
+          {remainingImages.length > 0 && (
+            <section className="case-reveal">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+                {remainingImages.map((img, i) => (
+                  <div key={i} className="overflow-hidden aspect-[16/10]">
+                    <img
+                      src={img}
+                      alt={`${project.title} — gallery ${i + 1}`}
+                      className="w-full h-full object-cover hover:scale-[1.03] transition-transform duration-700"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* ═══════════════════════════════════════
+              META — Project info sidebar
+              ═══════════════════════════════════════ */}
+          <section className="px-6 md:px-10 py-16 max-w-7xl mx-auto case-reveal">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-8 border-t border-b border-border py-8">
               {project.field && (
                 <div>
                   <span className="label-caps text-text-light block mb-1">Lĩnh vực</span>
                   <span className="text-text font-semibold text-sm">{project.field}</span>
+                </div>
+              )}
+              {project.completedAt && (
+                <div>
+                  <span className="label-caps text-text-light block mb-1">Hoàn thành</span>
+                  <span className="text-text font-semibold text-sm">{project.completedAt}</span>
                 </div>
               )}
               {project.duration && (
@@ -189,152 +440,41 @@ export default function PortfolioItem() {
                   <span className="text-text font-semibold text-sm">{project.designStyle}</span>
                 </div>
               )}
-            </div>
-          </section>
-
-          {/* ─── 01 Overview ─── */}
-          <section className="px-6 md:px-10 py-16 max-w-7xl mx-auto case-reveal">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-              <div className="lg:col-span-4">
-                <span className="font-heading text-5xl font-bold text-border">01</span>
-                <h2 className="font-heading text-xl font-bold text-text mt-2">Strategy & Design</h2>
-              </div>
-              <div className="lg:col-span-8">
-                <p className="text-text-muted text-lg leading-relaxed mb-8">
-                  {project.description}
-                </p>
-                {project.overview && (
-                  <p className="text-text-muted leading-relaxed">
-                    {project.overview}
-                  </p>
-                )}
-              </div>
-            </div>
-          </section>
-
-          {/* ─── Challenge & Solution ─── */}
-          {(project.challenge || project.solution) && (
-            <section className="px-6 md:px-10 py-16 max-w-7xl mx-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-border">
-                {project.challenge && (
-                  <div className="case-reveal bg-bg p-10 md:p-14">
-                    <div className="flex items-center gap-3 mb-6">
-                      <svg className="w-5 h-5 text-accent" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-                      </svg>
-                      <h3 className="font-heading text-lg font-bold text-text">Thách Thức</h3>
-                    </div>
-                    <p className="text-text-muted leading-relaxed">{project.challenge}</p>
-                  </div>
-                )}
-                {project.solution && (
-                  <div className="case-reveal bg-bg p-10 md:p-14">
-                    <div className="flex items-center gap-3 mb-6">
-                      <svg className="w-5 h-5 text-accent" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
-                      </svg>
-                      <h3 className="font-heading text-lg font-bold text-text">Giải Pháp</h3>
-                    </div>
-                    <p className="text-text-muted leading-relaxed">{project.solution}</p>
-                  </div>
-                )}
-              </div>
-            </section>
-          )}
-
-          {/* ─── 02 Development ─── */}
-          <section className="bg-bg-alt px-6 md:px-10 py-20 grain-overlay">
-            <div className="max-w-7xl mx-auto">
-              <div className="case-reveal grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
-                <div className="lg:col-span-4">
-                  <span className="font-heading text-5xl font-bold text-border">02</span>
-                  <h2 className="font-heading text-xl font-bold text-text mt-2">Development & Tech</h2>
-                </div>
-                <div className="lg:col-span-8">
-                  <p className="text-text-muted leading-relaxed">
-                    Xây dựng trên nền tảng công nghệ hiện đại, tối ưu hiệu suất và khả năng mở rộng.
-                    {project.stack && ` Tech stack: ${project.stack}.`}
-                  </p>
-                </div>
-              </div>
-
-              {/* Tech Tags as horizontal cards */}
-              {project.techTags.length > 0 && (
-                <div className="case-reveal flex flex-wrap gap-3 mb-16">
-                  {project.techTags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-5 py-3 border border-border bg-bg text-text text-sm font-semibold hover:border-accent hover:text-accent transition-colors duration-300 cursor-default"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+              {project.liveUrl && (
+                <div>
+                  <span className="label-caps text-text-light block mb-1">Website</span>
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-accent font-semibold text-sm hover:underline inline-flex items-center gap-1"
+                  >
+                    Xem trực tuyến
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                    </svg>
+                  </a>
                 </div>
               )}
-
-              {/* Lighthouse + Stats */}
-              <div className="case-reveal grid grid-cols-2 md:grid-cols-4 gap-[1px] bg-border">
-                {project.lighthouse && (
-                  <div className="bg-bg p-8 text-center">
-                    <p className="font-heading text-4xl font-bold text-accent">{project.lighthouse}</p>
-                    <p className="label-caps text-text-light mt-2">Lighthouse</p>
-                  </div>
-                )}
-                <div className="bg-bg p-8 text-center">
-                  <p className="font-heading text-4xl font-bold text-text">100%</p>
-                  <p className="label-caps text-text-light mt-2">Responsive</p>
-                </div>
-                <div className="bg-bg p-8 text-center">
-                  <p className="font-heading text-4xl font-bold text-text">&lt;1s</p>
-                  <p className="label-caps text-text-light mt-2">Load Time</p>
-                </div>
-                <div className="bg-bg p-8 text-center">
-                  <p className="font-heading text-4xl font-bold text-text">A+</p>
-                  <p className="label-caps text-text-light mt-2">Security</p>
-                </div>
-              </div>
             </div>
           </section>
 
-          {/* ─── Gallery ─── */}
-          {project.gallery && project.gallery.length > 0 && (
-            <section className="px-6 md:px-10 py-20 max-w-7xl mx-auto">
-              <div className="case-reveal mb-12">
-                <p className="label-caps text-accent mb-4">Gallery</p>
-                <h2 className="font-heading text-2xl font-bold text-text">Thiết Kế Đa Nền Tảng</h2>
-              </div>
-              <div className="case-reveal grid grid-cols-1 md:grid-cols-2 gap-4">
-                {project.gallery.map((img, i) => (
-                  <div key={i} className={`overflow-hidden ${i === 0 ? 'md:col-span-2' : ''}`}>
-                    <img
-                      src={img}
-                      alt={`${project.title} — gallery ${i + 1}`}
-                      className="w-full h-auto object-cover grayscale-hover"
-                      loading="lazy"
-                    />
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {/* ─── CTA ─── */}
-          <section className="bg-bg-dark py-24 px-6 grain-overlay">
-            <div className="max-w-3xl mx-auto text-center case-reveal">
+          {/* ═══════════════════════════════════════
+              CTA — Ready for your next build?
+              (like reference: text left, button right, dark bg)
+              ═══════════════════════════════════════ */}
+          <section className="bg-bg-dark px-6 md:px-10 py-20 md:py-28">
+            <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-8 case-reveal">
               <h2
-                className="font-heading font-bold text-text-inverse mb-6 leading-[1.1]"
-                style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)' }}
+                className="font-heading font-bold text-text-inverse leading-[1.1]"
+                style={{ fontSize: 'clamp(1.75rem, 4vw, 3rem)' }}
               >
-                Ready for your next
-                <br />
-                <span className="text-accent">digital build?</span>
+                Sẵn sàng cho dự án<br />
+                <span className="text-accent">tiếp theo?</span>
               </h2>
-              <p className="text-text-inverse/40 mb-10 max-w-md mx-auto leading-relaxed">
-                Hãy chia sẻ ý tưởng — chúng tôi sẵn sàng tư vấn và hiện thực hóa.
-              </p>
               <Link
                 to="/bat-dau-du-an"
-                className="btn-gold btn-press inline-flex"
+                className="btn-gold btn-press inline-flex flex-shrink-0"
               >
                 Bắt Đầu Dự Án
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -344,39 +484,40 @@ export default function PortfolioItem() {
             </div>
           </section>
 
-          {/* ─── Prev / Next ─── */}
-          <section className="border-t border-border px-6 md:px-10 py-12">
-            <div className="max-w-7xl mx-auto flex justify-between">
+          {/* ═══════════════════════════════════════
+              PREV / NEXT — Project Navigation
+              ═══════════════════════════════════════ */}
+          <section className="border-t border-border">
+            <div className="max-w-7xl mx-auto grid grid-cols-2">
               {prevProject ? (
                 <Link
                   to={`/du-an/${prevProject.slug || prevProject.id}`}
-                  className="group flex flex-col items-start gap-2"
+                  className="group flex flex-col gap-3 p-8 md:p-12 border-r border-border hover:bg-bg-alt transition-colors duration-300"
                 >
-                  <span className="label-caps text-text-light">Trước đó</span>
-                  <div className="flex items-center text-sm font-semibold text-text-muted transition-colors group-hover:text-accent gap-2">
-                    <svg className="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                    </svg>
+                  <span className="label-caps text-text-light">← Trước đó</span>
+                  <span className="font-heading text-lg font-bold text-text group-hover:text-accent transition-colors">
                     {prevProject.title}
-                  </div>
+                  </span>
                 </Link>
-              ) : <div />}
+              ) : (
+                <div className="p-8 md:p-12 border-r border-border" />
+              )}
               {nextProject ? (
                 <Link
                   to={`/du-an/${nextProject.slug || nextProject.id}`}
-                  className="group flex flex-col items-end gap-2"
+                  className="group flex flex-col items-end gap-3 p-8 md:p-12 hover:bg-bg-alt transition-colors duration-300"
                 >
-                  <span className="label-caps text-text-light">Tiếp theo</span>
-                  <div className="flex items-center text-sm font-semibold text-text-muted transition-colors group-hover:text-accent gap-2">
+                  <span className="label-caps text-text-light">Tiếp theo →</span>
+                  <span className="font-heading text-lg font-bold text-text group-hover:text-accent transition-colors">
                     {nextProject.title}
-                    <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                    </svg>
-                  </div>
+                  </span>
                 </Link>
-              ) : <div />}
+              ) : (
+                <div className="p-8 md:p-12" />
+              )}
             </div>
           </section>
+
         </main>
         <Footer />
       </div>
