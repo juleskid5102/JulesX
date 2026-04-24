@@ -48,19 +48,21 @@ export default function Navbar() {
   return (
     <nav
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${isVisible
-          ? 'translate-y-0 opacity-100'
-          : '-translate-y-full opacity-0'
+        ? 'translate-y-0 opacity-100'
+        : '-translate-y-full opacity-0'
         } ${hasScrolled
           ? 'glass-nav shadow-[0_1px_0_rgba(232,226,216,0.5)]'
           : 'bg-transparent'
         }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8 h-20 flex items-center justify-between">
-        {/* Logo — with animated underline */}
-        <Link to="/" className="group relative flex items-center gap-3">
-          <span className="font-heading text-xl font-bold tracking-[-0.02em] text-text">
-            Jules<span className="text-accent">X</span>
-          </span>
+        {/* Logo — JulesX wordmark image */}
+        <Link to="/" className="group relative flex items-center">
+          <img
+            src="/images/logo-full.png"
+            alt="JulesX"
+            className="h-8 w-auto"
+          />
           <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-accent transition-all duration-500 group-hover:w-full" />
         </Link>
 
@@ -74,8 +76,8 @@ export default function Navbar() {
                 key={link.href}
                 to={link.href}
                 className={`relative px-5 py-2 rounded-full text-[11px] font-semibold uppercase tracking-[0.15em] transition-all duration-300 ${isActive
-                    ? 'bg-text text-bg shadow-sm'
-                    : 'text-text-muted hover:text-text hover:bg-border-light'
+                  ? 'bg-text text-bg shadow-sm'
+                  : 'text-text-muted hover:text-text hover:bg-border-light'
                   }`}
               >
                 {link.label}
@@ -115,8 +117,8 @@ export default function Navbar() {
       {/* Mobile Menu — Fullscreen overlay with stagger animation */}
       <div
         className={`md:hidden fixed inset-0 bg-bg/[0.98] backdrop-blur-3xl transition-all duration-500 z-[60] ${isOpen
-            ? 'opacity-100 pointer-events-auto'
-            : 'opacity-0 pointer-events-none'
+          ? 'opacity-100 pointer-events-auto'
+          : 'opacity-0 pointer-events-none'
           }`}
       >
         {/* Close button */}

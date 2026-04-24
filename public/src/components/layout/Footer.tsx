@@ -58,15 +58,15 @@ export default function Footer() {
               href="/#lien-he"
               className="text-text-muted text-sm font-medium hover:text-accent transition-colors duration-300"
             >
-              Contact
+              Liên Hệ
             </a>
           </div>
 
           {/* Brand + Social */}
           <div className="flex items-center gap-6">
-            <span className="font-heading font-bold text-text text-sm tracking-[0.05em]">
-              JULESX
-            </span>
+            <Link to="/">
+              <img src="/images/logo-full.png" alt="JulesX" className="h-6 w-auto" />
+            </Link>
             <div className="flex items-center gap-3">
               {socialLinks.map((s) => (
                 <a
