@@ -14,6 +14,96 @@ import { API_BASE, type Project } from '../config/site'
  *   → 04 Motion (dark section)
  *   → CTA → Prev/Next
  */
+
+/* Override hero images with local screenshots */
+const IMAGE_MAP: Record<string, string> = {
+  'd-home': '/images/projects/dhome-hero.png',
+  'dhome': '/images/projects/dhome-hero.png',
+  'mam-cung-thanh-huan': '/images/projects/mamcung-hero.png',
+  'mamcung': '/images/projects/mamcung-hero.png',
+  'ha-vy-portfolio': '/images/projects/havy-hero.png',
+  'havy': '/images/projects/havy-hero.png',
+  'he-thong-quan-ly-phong-kham': '/images/projects/minhkhang-hero.png',
+  'minh-khang-clinic': '/images/projects/minhkhang-hero.png',
+  'minhkhang': '/images/projects/minhkhang-hero.png',
+}
+
+/* Local gallery images per project (6 images each) */
+const GALLERY_MAP: Record<string, string[]> = {
+  'd-home': [
+    '/images/projects/dhome-gallery-1.jpg',
+    '/images/projects/dhome-gallery-2.jpg',
+    '/images/projects/dhome-gallery-3.jpg',
+    '/images/projects/dhome-gallery-4.jpg',
+    '/images/projects/dhome-gallery-5.jpg',
+    '/images/projects/dhome-gallery-6.jpg',
+  ],
+  'dhome': [
+    '/images/projects/dhome-gallery-1.jpg',
+    '/images/projects/dhome-gallery-2.jpg',
+    '/images/projects/dhome-gallery-3.jpg',
+    '/images/projects/dhome-gallery-4.jpg',
+    '/images/projects/dhome-gallery-5.jpg',
+    '/images/projects/dhome-gallery-6.jpg',
+  ],
+  'mam-cung-thanh-huan': [
+    '/images/projects/mamcung-gallery-1.jpg',
+    '/images/projects/mamcung-gallery-2.jpg',
+    '/images/projects/mamcung-gallery-3.jpg',
+    '/images/projects/mamcung-gallery-4.jpg',
+    '/images/projects/mamcung-gallery-5.jpg',
+    '/images/projects/mamcung-gallery-6.jpg',
+  ],
+  'mamcung': [
+    '/images/projects/mamcung-gallery-1.jpg',
+    '/images/projects/mamcung-gallery-2.jpg',
+    '/images/projects/mamcung-gallery-3.jpg',
+    '/images/projects/mamcung-gallery-4.jpg',
+    '/images/projects/mamcung-gallery-5.jpg',
+    '/images/projects/mamcung-gallery-6.jpg',
+  ],
+  'ha-vy-portfolio': [
+    '/images/projects/havy-gallery-1.jpg',
+    '/images/projects/havy-gallery-2.jpg',
+    '/images/projects/havy-gallery-3.jpg',
+    '/images/projects/havy-gallery-4.jpg',
+    '/images/projects/havy-gallery-5.jpg',
+    '/images/projects/havy-gallery-6.jpg',
+  ],
+  'havy': [
+    '/images/projects/havy-gallery-1.jpg',
+    '/images/projects/havy-gallery-2.jpg',
+    '/images/projects/havy-gallery-3.jpg',
+    '/images/projects/havy-gallery-4.jpg',
+    '/images/projects/havy-gallery-5.jpg',
+    '/images/projects/havy-gallery-6.jpg',
+  ],
+  'he-thong-quan-ly-phong-kham': [
+    '/images/projects/minhkhang-gallery-1.jpg',
+    '/images/projects/minhkhang-gallery-2.jpg',
+    '/images/projects/minhkhang-gallery-3.jpg',
+    '/images/projects/minhkhang-gallery-4.jpg',
+    '/images/projects/minhkhang-gallery-5.jpg',
+    '/images/projects/minhkhang-gallery-6.jpg',
+  ],
+  'minh-khang-clinic': [
+    '/images/projects/minhkhang-gallery-1.jpg',
+    '/images/projects/minhkhang-gallery-2.jpg',
+    '/images/projects/minhkhang-gallery-3.jpg',
+    '/images/projects/minhkhang-gallery-4.jpg',
+    '/images/projects/minhkhang-gallery-5.jpg',
+    '/images/projects/minhkhang-gallery-6.jpg',
+  ],
+  'minhkhang': [
+    '/images/projects/minhkhang-gallery-1.jpg',
+    '/images/projects/minhkhang-gallery-2.jpg',
+    '/images/projects/minhkhang-gallery-3.jpg',
+    '/images/projects/minhkhang-gallery-4.jpg',
+    '/images/projects/minhkhang-gallery-5.jpg',
+    '/images/projects/minhkhang-gallery-6.jpg',
+  ],
+}
+
 export default function PortfolioItem() {
   const { id } = useParams<{ id: string }>()
   const [project, setProject] = useState<Project | null>(null)
@@ -34,7 +124,7 @@ export default function PortfolioItem() {
           category: p.category || '',
           designStyle: p.designStyle || '',
           completedAt: p.completedAt || p.date || '',
-          image: p.image || p.thumbnail || '',
+          image: IMAGE_MAP[p.slug || ''] || IMAGE_MAP[p.id] || p.image || p.thumbnail || '',
           featured: p.featured,
           order: p.order,
           field: p.field || '',
@@ -45,7 +135,7 @@ export default function PortfolioItem() {
           duration: p.duration || '',
           stack: p.stack || '',
           lighthouse: p.lighthouse || '',
-          gallery: p.gallery || [],
+          gallery: GALLERY_MAP[p.slug || ''] || GALLERY_MAP[p.id] || p.gallery || [],
           techTags: p.techTags || [],
           liveUrl: p.liveUrl || '',
         }))
@@ -123,7 +213,7 @@ export default function PortfolioItem() {
   const prevProject = projectIndex > 0 ? allProjects[projectIndex - 1] : null
   const nextProject = projectIndex < allProjects.length - 1 ? allProjects[projectIndex + 1] : null
 
-  /* Gallery split for phases */
+  /* Gallery split for phases — use local GALLERY_MAP images */
   const g = project.gallery || []
   const phaseDesignImages = g.slice(0, 3)    // First 3 for Phase 01
   const phaseDevImages = g.slice(3, 6)       // Next 3 for Phase 02
