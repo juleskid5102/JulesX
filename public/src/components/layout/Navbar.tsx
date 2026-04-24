@@ -61,7 +61,7 @@ export default function Navbar() {
           <img
             src="/images/logo-full.png"
             alt="JulesX"
-            className="h-8 w-auto"
+            className="h-11 w-auto"
           />
           <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-accent transition-all duration-500 group-hover:w-full" />
         </Link>

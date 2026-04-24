@@ -156,7 +156,7 @@ export default function DifferentiatorsSection() {
             className="font-heading font-bold text-text tracking-[-0.02em]"
             style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)' }}
           >
-            Performance & Tech
+            Hiệu Suất & Công Nghệ
           </h2>
         </div>
 
