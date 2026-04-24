@@ -5,13 +5,12 @@ import Footer from '../components/layout/Footer'
 import { API_BASE, type Project } from '../config/site'
 
 /**
- * PortfolioItem — Case Study v2
- * Restructured layout (no redundant galleries):
+ * PortfolioItem — Case Study v3
+ * Clean structure, no image stuffing:
  *   Hero → Intro+Meta
- *   → 01 Strategy (text-left + single image-right)
- *   → 02 Design (full-bleed 3-image strip)
- *   → 03 Development (code typing + stats + tech stack)
- *   → Full Gallery (masonry-style)
+ *   → Overview (text + single feature image)
+ *   → Gallery (clean masonry grid — all project screenshots)
+ *   → Development (fixed-height code typing + Lighthouse count-up)
  *   → CTA → Prev/Next
  */
 
@@ -48,13 +47,11 @@ function useCountUp(end: number, duration = 2000, trigger = false) {
   const [val, setVal] = useState(0)
   useEffect(() => {
     if (!trigger) return
-    let start = 0
     const startTime = performance.now()
     const step = (now: number) => {
       const progress = Math.min((now - startTime) / duration, 1)
-      const eased = 1 - Math.pow(1 - progress, 3) // easeOutCubic
-      start = Math.round(eased * end)
-      setVal(start)
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setVal(Math.round(eased * end))
       if (progress < 1) requestAnimationFrame(step)
     }
     requestAnimationFrame(step)
@@ -62,12 +59,12 @@ function useCountUp(end: number, duration = 2000, trigger = false) {
   return val
 }
 
-/* ── Typing Code Animation ── */
+/* ── Code Typing — Fixed height, no layout shift ── */
 function CodeTyping({ title, stack }: { title: string; stack: string }) {
   const [lines, setLines] = useState<string[]>([])
   const elRef = useRef<HTMLDivElement>(null)
 
-  const codeLines = [
+  const codeLines: string[] = [
     `// ${title}`,
     `import { createApp } from 'framework'`,
     `import { router } from './routes'`,
@@ -102,7 +99,6 @@ function CodeTyping({ title, stack }: { title: string; stack: string }) {
             }
           }, 120)
           observer.disconnect()
-          return () => clearInterval(timer)
         }
       },
       { threshold: 0.3 }
@@ -112,37 +108,39 @@ function CodeTyping({ title, stack }: { title: string; stack: string }) {
   }, [])
 
   return (
-    <div ref={elRef} className="bg-[#0D0D0D] p-6 md:p-8 h-full flex flex-col overflow-hidden font-mono text-xs md:text-sm">
+    /* FIXED HEIGHT — no resize during typing */
+    <div ref={elRef} className="bg-[#0D0D0D] p-6 md:p-8 overflow-hidden font-mono text-xs md:text-sm"
+      style={{ height: '420px' }}>
       <div className="flex gap-1.5 mb-5">
         <div className="w-2.5 h-2.5 rounded-full bg-[#FF5F57]" />
         <div className="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]" />
         <div className="w-2.5 h-2.5 rounded-full bg-[#28C840]" />
       </div>
-      <div className="flex-1 space-y-1 overflow-hidden">
+      <div className="space-y-1">
         {lines.map((line, i) => (
-          <p key={i} className="whitespace-pre" style={{ animationDelay: `${i * 50}ms` }}>
+          <p key={i} className="whitespace-pre">
             <span className="text-text-inverse/20 select-none mr-3 inline-block w-5 text-right">{i + 1}</span>
             {line.startsWith('//') ? (
               <span className="text-text-inverse/30">{line}</span>
             ) : line.includes('import') ? (
               <>
                 <span className="text-[#C678DD]">import </span>
-                <span className="text-[#E5C07B]">{line.split('import ')[1]?.split(' from')[0]}</span>
+                <span className="text-[#E5C07B]">{line.split('import ')[1]?.split(' from')[0] ?? ''}</span>
                 <span className="text-text-inverse/50"> from </span>
-                <span className="text-[#98C379]">{line.split("from ")[1]}</span>
+                <span className="text-[#98C379]">{line.split('from ')[1] ?? ''}</span>
               </>
             ) : line.includes(':') && !line.startsWith('//') ? (
               <>
-                <span className="text-[#ABB2BF]">  {line.split(':')[0]?.trim()}</span>
+                <span className="text-[#ABB2BF]">  {line.split(':')[0]?.trim() ?? ''}</span>
                 <span className="text-text-inverse/30">: </span>
-                <span className="text-[#D19A66]">{line.split(':')[1]?.trim()}</span>
+                <span className="text-[#D19A66]">{line.split(':')[1]?.trim() ?? ''}</span>
               </>
             ) : (
               <span className="text-[#ABB2BF]">{line}</span>
             )}
           </p>
         ))}
-        <span className="inline-block w-2 h-4 bg-accent animate-pulse ml-8" />
+        <span className="inline-block w-2 h-4 bg-accent animate-pulse ml-8 mt-1" />
       </div>
     </div>
   )
@@ -158,6 +156,7 @@ export default function PortfolioItem() {
   const statsRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    window.scrollTo(0, 0)
     fetch(`${API_BASE}/api/public/portfolio`)
       .then(async (res) => {
         if (!res.ok) throw new Error('API error')
@@ -205,17 +204,19 @@ export default function PortfolioItem() {
     setTimeout(init, 100)
   }, [project])
 
-  // Stats intersection observer (for count-up)
+  // Stats count-up trigger
   useEffect(() => {
     if (!statsRef.current) return
-    const obs = new IntersectionObserver((entries) => { const e = entries[0]; if (e && e.isIntersecting) { setStatsVisible(true); obs.disconnect() } }, { threshold: 0.3 })
+    const obs = new IntersectionObserver(
+      (entries) => { const e = entries[0]; if (e && e.isIntersecting) { setStatsVisible(true); obs.disconnect() } },
+      { threshold: 0.3 }
+    )
     obs.observe(statsRef.current)
     return () => obs.disconnect()
   }, [project])
 
   const lighthouseVal = useCountUp(parseInt(project?.lighthouse || '100') || 100, 1500, statsVisible)
   const responsiveVal = useCountUp(100, 1200, statsVisible)
-  const loadVal = useCountUp(95, 1400, statsVisible)
 
   if (loading) return (
     <><Navbar /><div className="min-h-screen flex items-center justify-center bg-bg"><div className="w-8 h-8 border-2 border-accent/30 border-t-accent rounded-full animate-spin" /></div></>
@@ -235,12 +236,10 @@ export default function PortfolioItem() {
       <div ref={pageRef}>
         <main className="pt-20 bg-bg">
 
-          {/* ════════════════════════════════════════════
-              HERO — cinematic full-width
-              ════════════════════════════════════════════ */}
+          {/* ════════ HERO ════════ */}
           <section className="relative w-full aspect-[16/9] max-h-[85vh] overflow-hidden bg-bg-dark">
             <img className="w-full h-full object-cover" src={project.image} alt={project.title} loading="eager"
-              style={{ filter: 'brightness(0.55) contrast(1.1)' }} />
+              style={{ filter: 'brightness(0.5) contrast(1.1)' }} />
             <div className="absolute inset-0 bg-gradient-to-t from-bg-dark/90 via-transparent to-bg-dark/30" />
             <div className="absolute bottom-0 left-0 right-0 p-8 md:p-16 lg:p-24">
               <p className="label-caps text-accent mb-3">{project.field || project.category}</p>
@@ -248,13 +247,11 @@ export default function PortfolioItem() {
                 style={{ fontSize: 'clamp(2.5rem, 8vw, 6rem)' }}>
                 {project.title}
               </h1>
-              <p className="mt-4 text-text-inverse/40 text-lg font-body">— JulesX Case Study</p>
+              <p className="mt-4 text-text-inverse/40 text-lg font-body">— JulesX</p>
             </div>
           </section>
 
-          {/* ════════════════════════════════════════════
-              INTRO + META
-              ════════════════════════════════════════════ */}
+          {/* ════════ INTRO + META ════════ */}
           <section className="cs-reveal px-6 md:px-10 py-16 md:py-24 max-w-6xl mx-auto">
             <div className="grid md:grid-cols-[2fr_1fr] gap-12 md:gap-20">
               <div>
@@ -279,74 +276,51 @@ export default function PortfolioItem() {
             </div>
           </section>
 
-          {/* ════════════════════════════════════════════
-              01 ──── CHIẾN LƯỢC & NGHIÊN CỨU
-              Text left + single hero image right
-              ════════════════════════════════════════════ */}
-          <section className="px-6 md:px-10 pb-20 max-w-7xl mx-auto">
-            <div className="cs-reveal flex items-center gap-4 mb-12">
-              <span className="font-heading font-bold text-accent/20" style={{ fontSize: 'clamp(4rem, 8vw, 7rem)', lineHeight: 0.85 }}>01</span>
-              <div className="flex-1 h-[1px] bg-border" />
-              <h2 className="font-heading text-sm md:text-base font-bold text-text uppercase tracking-[0.15em]">Chiến Lược & Nghiên Cứu</h2>
-            </div>
-            <div className="cs-reveal grid md:grid-cols-[1fr_1.5fr] gap-10 items-start">
-              <div>
-                <p className="font-body text-text-muted leading-[1.8]">
-                  {project.solution || 'Nghiên cứu sâu, phân tích người dùng và xác định logic cốt lõi trước khi bắt đầu thiết kế. Mỗi quyết định đều dựa trên dữ liệu và mục tiêu thực tế của khách hàng.'}
-                </p>
-                {project.techTags.length > 0 && (
-                  <div className="mt-8 flex flex-wrap gap-2">
-                    {project.techTags.slice(0, 6).map((tag) => (
-                      <span key={tag} className="border border-border px-3 py-1.5 text-xs font-semibold text-text-muted hover:border-accent hover:text-accent transition-colors duration-300">{tag}</span>
+          {/* ════════ GALLERY — one clean section ════════
+              All project images in a structured grid.
+              No forced sectioning — just "The Work" */}
+          {g.length > 0 && (
+            <section className="cs-reveal bg-bg-alt py-20">
+              <div className="px-6 md:px-10 max-w-7xl mx-auto">
+                <div className="flex items-center gap-4 mb-10">
+                  <h2 className="font-heading text-sm font-bold text-text uppercase tracking-[0.15em]">Hình Ảnh Dự Án</h2>
+                  <div className="flex-1 h-[1px] bg-border" />
+                  <span className="text-text-light text-xs">{g.length} ảnh</span>
+                </div>
+
+                {/* First image — full width hero shot */}
+                <div className="overflow-hidden mb-3">
+                  <img src={g[0]} alt={`${project.title} — tổng quan`}
+                    className="w-full h-auto max-h-[500px] object-cover hover:scale-[1.02] transition-transform duration-700" loading="lazy" />
+                </div>
+
+                {/* Remaining images — 2-column grid with spacing */}
+                {g.length > 1 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {g.slice(1).map((img, i) => (
+                      <div key={i} className="overflow-hidden aspect-[4/3]">
+                        <img src={img} alt={`${project.title} — chi tiết ${i + 1}`}
+                          className="w-full h-full object-cover hover:scale-[1.02] transition-transform duration-700" loading="lazy" />
+                      </div>
                     ))}
                   </div>
                 )}
               </div>
-              <div className="overflow-hidden bg-bg-alt">
-                <img src={g[0] || project.image} alt={`${project.title} strategy`}
-                  className="w-full h-auto object-cover hover:scale-[1.02] transition-transform duration-700" loading="lazy" />
-              </div>
-            </div>
-          </section>
+            </section>
+          )}
 
-          {/* ════════════════════════════════════════════
-              02 ──── THIẾT KẾ GIAO DIỆN
-              Full-bleed 3-image strip
-              ════════════════════════════════════════════ */}
-          <section className="bg-bg-alt py-20">
-            <div className="px-6 md:px-10 max-w-7xl mx-auto">
-              <div className="cs-reveal flex items-center gap-4 mb-12">
-                <span className="font-heading font-bold text-accent/20" style={{ fontSize: 'clamp(4rem, 8vw, 7rem)', lineHeight: 0.85 }}>02</span>
-                <div className="flex-1 h-[1px] bg-border" />
-                <h2 className="font-heading text-sm md:text-base font-bold text-text uppercase tracking-[0.15em]">Thiết Kế Giao Diện</h2>
-              </div>
-            </div>
-            <div className="cs-reveal grid grid-cols-1 md:grid-cols-3 gap-2 px-2">
-              {(g.length >= 3 ? g.slice(0, 3) : [g[0] || project.image, g[1] || project.image, g[2] || project.image]).map((img, i) => (
-                <div key={i} className="overflow-hidden aspect-[4/3]">
-                  <img src={img} alt={`${project.title} design ${i + 1}`}
-                    className="w-full h-full object-cover hover:scale-[1.03] transition-transform duration-700" loading="lazy" />
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* ════════════════════════════════════════════
-              03 ──── PHÁT TRIỂN & KỸ THUẬT
-              Code typing animation + Lighthouse count-up + Full video
-              ════════════════════════════════════════════ */}
+          {/* ════════ TECH & DEVELOPMENT ════════ */}
           <section className="px-6 md:px-10 py-20 max-w-7xl mx-auto">
-            <div className="cs-reveal flex items-center gap-4 mb-12">
-              <span className="font-heading font-bold text-accent/20" style={{ fontSize: 'clamp(4rem, 8vw, 7rem)', lineHeight: 0.85 }}>03</span>
+            <div className="cs-reveal flex items-center gap-4 mb-10">
+              <h2 className="font-heading text-sm font-bold text-text uppercase tracking-[0.15em]">Kỹ Thuật & Hiệu Suất</h2>
               <div className="flex-1 h-[1px] bg-border" />
-              <h2 className="font-heading text-sm md:text-base font-bold text-text uppercase tracking-[0.15em]">Phát Triển & Kỹ Thuật</h2>
             </div>
 
-            {/* Code editor (wide) + Lighthouse (compact) */}
+            {/* Code (2fr) + Lighthouse (1fr) */}
             <div className="cs-reveal grid md:grid-cols-[2fr_1fr] gap-3 mb-3">
               <CodeTyping title={project.title} stack={project.stack} />
-              <div className="bg-bg-alt flex flex-col items-center justify-center p-8">
-                <div className="relative w-32 h-32 mb-4">
+              <div className="bg-bg-alt flex flex-col items-center justify-center p-8" style={{ height: '420px' }}>
+                <div className="relative w-32 h-32 mb-5">
                   <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
                     <circle cx="60" cy="60" r="52" fill="none" stroke="#E8E2D8" strokeWidth="3" />
                     <circle cx="60" cy="60" r="52" fill="none" stroke="#22C55E" strokeWidth="3"
@@ -359,34 +333,28 @@ export default function PortfolioItem() {
                     <span className="font-heading text-4xl font-bold text-green-600">{lighthouseVal}</span>
                   </div>
                 </div>
-                <p className="font-heading text-lg font-bold text-text">Lighthouse Score</p>
-                <p className="text-text-muted text-xs mt-1">Performance · SEO · Accessibility</p>
+                <p className="font-heading text-lg font-bold text-text">Lighthouse</p>
+                <p className="text-text-muted text-xs mt-1">Performance · SEO · A11y</p>
               </div>
             </div>
 
-            {/* Video section — full width cinematic */}
-            <div className="cs-reveal relative overflow-hidden aspect-[21/9] bg-bg-dark group cursor-pointer mb-3">
-              <img src={g[3] || g[0] || project.image} alt={`${project.title} showcase`}
-                className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-[1.03] transition-all duration-700" loading="lazy" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-20 h-20 bg-accent/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-2xl">
-                  <svg className="w-7 h-7 text-bg-dark ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
-                </div>
+            {/* Tech tags */}
+            {project.techTags.length > 0 && (
+              <div className="cs-reveal flex flex-wrap gap-2 mb-6 mt-6">
+                {project.techTags.map((tag) => (
+                  <span key={tag} className="border border-border px-4 py-2 text-xs font-semibold text-text-muted hover:border-accent hover:text-accent transition-colors duration-300">{tag}</span>
+                ))}
               </div>
-              <div className="absolute bottom-6 left-8">
-                <p className="text-text-inverse font-heading font-bold text-lg">Xem Demo Dự Án</p>
-                <p className="text-text-inverse/50 text-sm">Trải nghiệm đầy đủ tính năng</p>
-              </div>
-            </div>
+            )}
 
             {/* Stats with count-up */}
-            <div ref={statsRef} className="cs-reveal grid grid-cols-3 gap-[1px] bg-border">
+            <div ref={statsRef} className="cs-reveal grid grid-cols-3 gap-[1px] bg-border mt-6">
               <div className="bg-bg py-8 text-center">
                 <p className="font-heading text-3xl md:text-4xl font-bold text-text">{responsiveVal}%</p>
                 <p className="label-caps text-text-light mt-2">Responsive</p>
               </div>
               <div className="bg-bg py-8 text-center">
-                <p className="font-heading text-3xl md:text-4xl font-bold text-text">0.{loadVal < 10 ? '0' : ''}{loadVal}s</p>
+                <p className="font-heading text-3xl md:text-4xl font-bold text-text">&lt;1s</p>
                 <p className="label-caps text-text-light mt-2">Tốc Độ Tải</p>
               </div>
               <div className="bg-bg py-8 text-center">
@@ -396,25 +364,7 @@ export default function PortfolioItem() {
             </div>
           </section>
 
-          {/* ════════════════════════════════════════════
-              GALLERY — full-bleed masonry-style
-              ════════════════════════════════════════════ */}
-          {g.length > 3 && (
-            <section className="cs-reveal">
-              <div className={`grid gap-[2px] ${g.length > 4 ? 'grid-cols-2 md:grid-cols-3' : 'grid-cols-2'}`}>
-                {g.slice(3).map((img, i) => (
-                  <div key={i} className={`overflow-hidden ${i === 0 && g.length > 4 ? 'md:row-span-2 aspect-auto' : 'aspect-[4/3]'}`}>
-                    <img src={img} alt={`${project.title} gallery ${i + 1}`}
-                      className="w-full h-full object-cover hover:scale-[1.03] transition-transform duration-700" loading="lazy" />
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {/* ════════════════════════════════════════════
-              CTA — dark section
-              ════════════════════════════════════════════ */}
+          {/* ════════ CTA ════════ */}
           <section className="bg-bg-dark px-6 md:px-10 py-24">
             <div className="max-w-7xl mx-auto cs-reveal text-center md:text-left md:flex md:items-center md:justify-between gap-8">
               <div>
@@ -422,7 +372,7 @@ export default function PortfolioItem() {
                   style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}>
                   Sẵn sàng cho dự án<br /><span className="text-accent">tiếp theo?</span>
                 </h2>
-                <p className="mt-3 text-text-inverse/40 text-sm font-body">Từ ý tưởng đến sản phẩm hoàn chỉnh — chỉ cần bắt đầu.</p>
+                <p className="mt-3 text-text-inverse/40 text-sm font-body">Từ ý tưởng đến sản phẩm hoàn chỉnh.</p>
               </div>
               <Link to="/bat-dau-du-an" className="btn-gold btn-press inline-flex flex-shrink-0 mt-6 md:mt-0">
                 Bắt Đầu Dự Án
@@ -433,15 +383,13 @@ export default function PortfolioItem() {
             </div>
           </section>
 
-          {/* ════════════════════════════════════════════
-              PREV / NEXT
-              ════════════════════════════════════════════ */}
+          {/* ════════ PREV / NEXT ════════ */}
           <section className="border-t border-border">
             <div className="max-w-7xl mx-auto grid grid-cols-2">
               {prev ? (
                 <Link to={`/du-an/${prev.slug || prev.id}`}
                   className="group flex items-center gap-5 p-8 md:p-14 border-r border-border hover:bg-bg-alt transition-colors">
-                  <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0 bg-bg-alt">
+                  <div className="w-14 h-14 rounded-full overflow-hidden flex-shrink-0 bg-bg-alt">
                     <img src={IMAGE_MAP[prev.slug || ''] || prev.image} alt="" className="w-full h-full object-cover" />
                   </div>
                   <div>
@@ -457,7 +405,7 @@ export default function PortfolioItem() {
                     <span className="label-caps text-text-light block mb-1">Tiếp theo →</span>
                     <span className="font-heading font-bold text-text group-hover:text-accent transition-colors">{next.title}</span>
                   </div>
-                  <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0 bg-bg-alt">
+                  <div className="w-14 h-14 rounded-full overflow-hidden flex-shrink-0 bg-bg-alt">
                     <img src={IMAGE_MAP[next.slug || ''] || next.image} alt="" className="w-full h-full object-cover" />
                   </div>
                 </Link>
