@@ -66,7 +66,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4, .font-heading {
+h1,
+h2,
+h3,
+h4,
+.font-heading {
   font-family: 'Space Grotesk', sans-serif;
 }
 
@@ -98,6 +102,40 @@ h1, h2, h3, h4, .font-heading {
   color: #C8A96E;
 }
 
+/* Button Utilities */
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: #D8A556;
+  color: #1A1A1A;
+  padding: 0.875rem 2rem;
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  transition: all 0.3s ease;
+}
+
+.btn-gold:hover {
+  background-color: #C8963A;
+}
+
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* Scrollbar hide for tech-stack carousel */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* ═══════════════════════════════════════════
    Keyframe Animations
    ═══════════════════════════════════════════ */
@@ -107,6 +145,7 @@ h1, h2, h3, h4, .font-heading {
     opacity: 0;
     transform: translateY(40px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -118,6 +157,7 @@ h1, h2, h3, h4, .font-heading {
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -129,6 +169,7 @@ h1, h2, h3, h4, .font-heading {
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -136,18 +177,35 @@ h1, h2, h3, h4, .font-heading {
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 @keyframes draw-line {
-  from { transform: scaleY(0); }
-  to { transform: scaleY(1); }
+  from {
+    transform: scaleY(0);
+  }
+
+  to {
+    transform: scaleY(1);
+  }
 }
 
 @keyframes pulse-gold {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(200, 169, 110, 0.3); }
-  50% { box-shadow: 0 0 0 12px rgba(200, 169, 110, 0); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(200, 169, 110, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 0 12px rgba(200, 169, 110, 0);
+  }
 }
 
 /* ═══════════════════════════════════════════
@@ -184,8 +242,8 @@ h1, h2, h3, h4, .font-heading {
   border: none;
   cursor: pointer;
   transition: background 300ms var(--ease-editorial),
-              color 300ms ease,
-              transform 150ms ease;
+    color 300ms ease,
+    transform 150ms ease;
 }
 
 .btn-primary:hover {
@@ -209,7 +267,7 @@ h1, h2, h3, h4, .font-heading {
   border: 1px solid #E8E2D8;
   cursor: pointer;
   transition: border-color 300ms ease,
-              color 300ms ease;
+    color 300ms ease;
 }
 
 .btn-secondary:hover {
@@ -233,7 +291,7 @@ h1, h2, h3, h4, .font-heading {
   border: none;
   cursor: pointer;
   transition: background 300ms ease,
-              transform 150ms ease;
+    transform 150ms ease;
 }
 
 .btn-gold:hover {
@@ -263,7 +321,7 @@ h1, h2, h3, h4, .font-heading {
   overflow: hidden;
   cursor: pointer;
   transition: transform 300ms var(--ease-editorial),
-              border-color 300ms ease;
+    border-color 300ms ease;
 }
 
 .project-card:hover {
@@ -302,8 +360,8 @@ h1, h2, h3, h4, .font-heading {
   position: relative;
   z-index: 2;
   transition: border-color 400ms ease,
-              color 400ms ease,
-              background 400ms ease;
+    color 400ms ease,
+    background 400ms ease;
 }
 
 .timeline-step:hover .timeline-circle {
@@ -351,12 +409,10 @@ h1, h2, h3, h4, .font-heading {
    ═══════════════════════════════════════════ */
 
 .skeleton-shimmer {
-  background: linear-gradient(
-    90deg,
-    rgba(232, 226, 216, 0.3) 25%,
-    rgba(232, 226, 216, 0.6) 50%,
-    rgba(232, 226, 216, 0.3) 75%
-  );
+  background: linear-gradient(90deg,
+      rgba(232, 226, 216, 0.3) 25%,
+      rgba(232, 226, 216, 0.6) 50%,
+      rgba(232, 226, 216, 0.3) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
 }
@@ -369,7 +425,7 @@ h1, h2, h3, h4, .font-heading {
   opacity: 0;
   transform: translateY(24px);
   transition: opacity 600ms var(--ease-out-expo),
-              transform 600ms var(--ease-out-expo);
+    transform 600ms var(--ease-out-expo);
 }
 
 .reveal.visible {
@@ -381,8 +437,14 @@ h1, h2, h3, h4, .font-heading {
    Utilities
    ═══════════════════════════════════════════ */
 
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 
 /* ═══════════════════════════════════════════
    Lenis Smooth Scroll
@@ -436,10 +498,14 @@ html.lenis body {
    ═══════════════════════════════════════════ */
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+
   .reveal {
     opacity: 1;
     transform: none;
