@@ -37,7 +37,7 @@ export default function PortfolioPreview() {
         }))
         setProjects(list)
       })
-      .catch(() => {})
+      .catch(() => { })
   }, [])
 
   // GSAP scroll animations
@@ -106,7 +106,7 @@ export default function PortfolioPreview() {
         {/* Section header — asymmetric */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
           <div>
-            <p className="label-caps text-accent mb-4">Selected Work</p>
+            <p className="label-caps text-accent mb-4">Dự Án Tiêu Biểu</p>
             <h2
               className="font-heading font-bold text-text tracking-[-0.02em]"
               style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)' }}
@@ -149,7 +149,7 @@ export default function PortfolioPreview() {
                 </h3>
               </div>
               <span className="inline-flex items-center gap-2 text-text text-sm font-semibold uppercase tracking-[0.1em] group-hover:text-accent transition-colors shrink-0 md:mt-2">
-                View
+                Xem
                 <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
