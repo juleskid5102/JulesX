@@ -2,9 +2,13 @@ import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 
 /**
- * CapabilitiesSection — JulesX Editorial (Vietnamese)
- * Services page editorial style: numbered steps, alternating layout,
- * Vietnamese content, clean typography.
+ * CapabilitiesSection — Interactive Hover-Reveal Cards
+ * 
+ * 2×2 grid on warm cream bg.
+ * Default state: number + title only.
+ * Hover: card lifts, gold border appears, description fades in, image slides up.
+ * 
+ * Skills: micro-interactions (hover feedback), gsap-animations (hover timeline)
  */
 
 const capabilities = [
@@ -50,15 +54,23 @@ export default function CapabilitiesSection() {
       const { ScrollTrigger } = await import('gsap/ScrollTrigger')
       gsap.registerPlugin(ScrollTrigger)
 
-      sectionRef.current?.querySelectorAll('.cap-item')?.forEach((el) => {
-        gsap.fromTo(el,
-          { y: 50, opacity: 0 },
-          {
-            y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
-            scrollTrigger: { trigger: el, start: 'top 80%', toggleActions: 'play none none none' },
-          }
-        )
-      })
+      // Reveal header
+      gsap.fromTo(sectionRef.current!.querySelector('.cap-header'),
+        { y: 30, opacity: 0 },
+        {
+          y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' }
+        }
+      )
+
+      // Stagger reveal cards
+      gsap.fromTo(sectionRef.current!.querySelectorAll('.cap-card'),
+        { y: 50, opacity: 0 },
+        {
+          y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top 70%' }
+        }
+      )
     }
 
     init()
@@ -67,12 +79,10 @@ export default function CapabilitiesSection() {
   return (
     <section ref={sectionRef} className="py-24 md:py-32 px-6 md:px-10 bg-bg">
       <div className="max-w-7xl mx-auto">
-        {/* Section header */}
-        <div className="flex items-center gap-4 mb-16">
-          <h2
-            className="font-heading font-bold text-text tracking-[-0.02em]"
-            style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)' }}
-          >
+        {/* Header */}
+        <div className="cap-header flex items-center gap-4 mb-16 opacity-0">
+          <h2 className="font-heading font-bold text-text tracking-[-0.02em]"
+            style={{ fontSize: 'clamp(1.5rem, 3vw, 2.25rem)' }}>
             Năng Lực
           </h2>
           <div className="flex-1 h-[1px] bg-border" />
@@ -81,33 +91,43 @@ export default function CapabilitiesSection() {
           </Link>
         </div>
 
-        {/* Alternating layout — matching Services page style */}
-        <div className="space-y-20">
-          {capabilities.map((cap, i) => {
-            const isReverse = i % 2 !== 0
-            return (
-              <div key={cap.num} className={`cap-item grid md:grid-cols-2 gap-10 md:gap-16 items-center ${isReverse ? 'md:direction-rtl' : ''}`}>
-                {/* Text side */}
-                <div className={`${isReverse ? 'md:order-2 md:text-right' : 'md:order-1'}`} style={{ direction: 'ltr' }}>
-                  <span className="font-heading text-5xl md:text-6xl font-bold text-accent/15 block mb-3">{cap.num}</span>
-                  <h3 className="font-heading text-2xl md:text-3xl font-bold text-text tracking-[-0.02em] mb-1">{cap.title}</h3>
-                  <p className="text-text-light text-xs font-semibold uppercase tracking-[0.15em] mb-4">{cap.subtitle}</p>
-                  <p className="text-text-muted font-body leading-[1.7] text-sm md:text-base">{cap.description}</p>
+        {/* 2×2 Grid — hover-reveal cards */}
+        <div className="grid md:grid-cols-2 gap-4">
+          {capabilities.map((cap) => (
+            <div
+              key={cap.num}
+              className="cap-card group relative bg-bg-elevated border border-border overflow-hidden cursor-default transition-all duration-500 hover:border-accent hover:shadow-[0_12px_40px_rgba(200,169,110,0.08)] hover:-translate-y-1 opacity-0"
+              style={{ minHeight: '280px' }}
+            >
+              {/* Background image — slides up on hover */}
+              <div className="absolute bottom-0 right-0 w-[45%] h-[70%] overflow-hidden opacity-0 group-hover:opacity-20 translate-y-8 group-hover:translate-y-0 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]">
+                <img src={cap.image} alt="" className="w-full h-full object-contain" loading="lazy" />
+              </div>
+
+              {/* Content */}
+              <div className="relative z-10 p-8 md:p-10 h-full flex flex-col justify-between">
+                {/* Top: number + title (always visible) */}
+                <div>
+                  <span className="font-heading text-5xl md:text-6xl font-bold text-border group-hover:text-accent/20 transition-colors duration-500">{cap.num}</span>
+                  <h3 className="font-heading text-2xl md:text-3xl font-bold text-text tracking-[-0.02em] mt-2 group-hover:text-accent transition-colors duration-300">
+                    {cap.title}
+                  </h3>
+                  <p className="text-text-light text-[10px] font-semibold uppercase tracking-[0.2em] mt-1">{cap.subtitle}</p>
                 </div>
-                {/* Image side */}
-                <div className={`${isReverse ? 'md:order-1' : 'md:order-2'} bg-[#1A1A1A] overflow-hidden group`} style={{ direction: 'ltr' }}>
-                  <div className="aspect-[4/3] flex items-center justify-center p-8">
-                    <img
-                      src={cap.image}
-                      alt={cap.title}
-                      className="w-full h-full object-contain opacity-70 group-hover:opacity-90 group-hover:scale-[1.03] transition-all duration-500"
-                      loading="lazy"
-                    />
+
+                {/* Bottom: description — fades in on hover */}
+                <div className="mt-6 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 delay-100">
+                  <p className="text-text-muted font-body text-sm leading-[1.7] max-w-sm">{cap.description}</p>
+                  <div className="mt-4 flex items-center gap-2 text-accent text-xs font-semibold uppercase tracking-[0.15em]">
+                    <span>Tìm hiểu thêm</span>
+                    <svg className="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
                   </div>
                 </div>
               </div>
-            )
-          })}
+            </div>
+          ))}
         </div>
       </div>
     </section>
