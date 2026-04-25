@@ -101,7 +101,27 @@ Khi có bệnh nhân đặt lịch mới, phòng khám nhận thông báo **tứ
 
 <div style="page-break-before: always;"></div>
 
-## 3. BÁO GIÁ
+## 3. SO SÁNH VỚI CÁC NỀN TẢNG KHÁC
+
+| Tiêu chí | **JulesX** (Custom Code) | WordPress / Starter | Sapo / Haravan |
+|----------|:---:|:---:|:---:|
+| **Thiết kế** | ✅ Custom 100% — thiết kế riêng cho phòng khám | ⚠️ Dùng template có sẵn, giống nhiều web khác | ⚠️ Template giống nhau |
+| **Tốc độ** | ✅ Rất nhanh (Lighthouse 90+) | ❌ Chậm (plugin nặng, hosting chia sẻ) | ⚠️ Trung bình |
+| **Bảo mật** | ✅ Code riêng — không lỗ hổng plugin | ❌ Hay bị hack qua plugin cũ | ✅ Đội ngũ nền tảng quản lý |
+| **Phí hàng tháng** | ✅ **0đ** (đã bao gồm server) | ❌ 100-300K/tháng (hosting + domain + SSL) | ❌ 200-500K/tháng (phí nền tảng) |
+| **Hệ thống đặt lịch** | ✅ Tích hợp sẵn, tùy chỉnh theo phòng khám | ❌ Cần mua plugin riêng (~$100-300/năm) | ❌ Không có |
+| **Hồ sơ bệnh nhân** | ✅ Sổ khám, chẩn đoán, đơn thuốc | ❌ Không có | ❌ Không có |
+| **Thông báo 4 kênh** | ✅ App + Dashboard + Telegram + Zalo OA | ❌ Chỉ email | ❌ Chỉ email + SMS (tính phí) |
+| **Cài trên điện thoại** | ✅ Cài như app (PWA) | ❌ Phải mở trình duyệt | ⚠️ Có app riêng (hạn chế) |
+| **Tự quản lý nội dung** | ✅ Admin panel trực quan | ✅ Có (nhưng phức tạp) | ✅ Có |
+| **Cập nhật bảo mật** | ✅ JulesX lo (miễn phí) | ❌ Tự cập nhật (dễ lỗi) | ✅ Nền tảng cập nhật |
+| **Giá tổng** (3 năm) | **5.500.000đ** (1 lần) hoặc **5.900.000đ** (thuê) | ~**12-15 triệu** (hosting + plugin + maintenance) | ~**10-18 triệu** (phí hàng tháng × 36) |
+
+> 💡 **Tóm lại:** WordPress/Sapo phù hợp website bán hàng thông thường. Nhưng **phòng khám cần hệ thống đặt lịch + quản lý bệnh nhân** — JulesX thiết kế riêng cho nhu cầu này, không cần ghép plugin, không phí hàng tháng.
+
+---
+
+## 4. BÁO GIÁ
 
 ### Tính năng (áp dụng cho cả 2 gói)
 
@@ -140,7 +160,7 @@ Giá dịch vụ **đã bao gồm toàn bộ** chi phí vận hành — phòng k
 
 ---
 
-## 4. CAM KẾT TỪ JulesX
+## 5. CAM KẾT TỪ JulesX
 
 - 🔧 **Website luôn hoạt động** — lỗi hệ thống xử lý trong 24h
 - 🔒 **Dữ liệu an toàn** — mã hoá, backup hàng ngày, không ai truy cập trái phép
@@ -150,7 +170,7 @@ Giá dịch vụ **đã bao gồm toàn bộ** chi phí vận hành — phòng k
 
 ---
 
-## 5. LIÊN HỆ TƯ VẤN
+## 6. LIÊN HỆ TƯ VẤN
 
 | | |
 |---|---|

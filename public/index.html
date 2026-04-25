@@ -4,9 +4,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+  <!-- Primary SEO -->
   <title>JulesX — Thiết Kế Website Cao Cấp Theo Trải Nghiệm</title>
   <meta name="description"
-    content="JulesX chuyên thiết kế và xây dựng website mang tính trải nghiệm — phù hợp với từng ngành và mục tiêu kinh doanh." />
+    content="JulesX chuyên thiết kế và xây dựng website mang tính trải nghiệm — phù hợp với từng ngành và mục tiêu kinh doanh. Chiến lược, thiết kế, phát triển." />
+  <link rel="canonical" href="https://julesx.com/" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="JulesX" />
+  <meta name="keywords"
+    content="thiết kế website, web design agency, website cao cấp, JulesX, xây dựng website, thiết kế giao diện, UI/UX, React, Cloudflare, landing page, web app" />
 
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json" />
@@ -22,7 +29,116 @@
     content="JulesX chuyên thiết kế và xây dựng website mang tính trải nghiệm — phù hợp với từng ngành và mục tiêu kinh doanh." />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="vi_VN" />
-  <meta property="og:image" content="/images/og-banner.png" />
+  <meta property="og:url" content="https://julesx.com/" />
+  <meta property="og:image" content="https://julesx.com/images/og-banner.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="JulesX" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="JulesX — Thiết Kế Website Cao Cấp" />
+  <meta name="twitter:description"
+    content="Thiết kế và xây dựng website mang tính trải nghiệm — phù hợp với từng ngành và mục tiêu kinh doanh." />
+  <meta name="twitter:image" content="https://julesx.com/images/og-banner.png" />
+
+  <!-- JSON-LD: Organization + WebSite Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://julesx.com/#organization",
+        "name": "JulesX",
+        "alternateName": "JulesX Digital Studio",
+        "url": "https://julesx.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://julesx.com/images/logo-full.png",
+          "width": 512,
+          "height": 512
+        },
+        "description": "JulesX chuyên thiết kế và xây dựng website mang tính trải nghiệm — phù hợp với từng ngành và mục tiêu kinh doanh.",
+        "foundingDate": "2024",
+        "founder": {
+          "@type": "Person",
+          "name": "Jules"
+        },
+        "areaServed": {
+          "@type": "Country",
+          "name": "Vietnam"
+        },
+        "knowsLanguage": ["vi", "en"],
+        "sameAs": [
+          "https://www.facebook.com/julesx.studio"
+        ],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+84-xxx-xxx-xxx",
+          "contactType": "customer service",
+          "availableLanguage": ["Vietnamese", "English"]
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://julesx.com/#website",
+        "name": "JulesX",
+        "url": "https://julesx.com",
+        "publisher": {
+          "@id": "https://julesx.com/#organization"
+        },
+        "inLanguage": "vi",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://julesx.com/du-an?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://julesx.com/#service",
+        "name": "JulesX — Thiết Kế Website",
+        "url": "https://julesx.com/dich-vu",
+        "provider": {
+          "@id": "https://julesx.com/#organization"
+        },
+        "serviceType": "Web Design & Development",
+        "areaServed": {
+          "@type": "Country",
+          "name": "Vietnam"
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Dịch Vụ Thiết Kế Web",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Thiết Kế Website Landing Page"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Thiết Kế Website Thương Mại Điện Tử"
+              }
+            },
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Service",
+                "name": "Phát Triển Web Application"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+  </script>
 
   <!-- Fonts: Space Grotesk (heading) + Manrope (body) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />

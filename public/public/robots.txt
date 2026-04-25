@@ -1,0 +1,13 @@
+# JulesX — julesx.com
+# Allow all crawlers, disallow admin/auth pages
+
+User-agent: *
+Allow: /
+
+# Disallow auth & internal pages
+Disallow: /dang-nhap
+Disallow: /dang-ky
+Disallow: /theo-doi/
+
+# Sitemap
+Sitemap: https://julesx.com/sitemap.xml
